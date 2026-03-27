@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { CompanyDetailsStep } from "@/components/auth/company-details-step";
 import { MoreInfoStep } from "@/components/auth/more-info-step";
 import { SupplierRegistrationStep } from "@/components/auth/supplier-registration-step";
+import { PricingModal } from "@/components/auth/pricing-modal";
 import type { CompanyDetailsFormData } from "@/lib/validations/institution";
 import type { MoreInfoFormData } from "@/lib/validations/institution";
 import type { SupplierRegistrationFormData } from "@/lib/validations/supplier";
@@ -12,6 +13,7 @@ import type { SupplierRegistrationFormData } from "@/lib/validations/supplier";
 export default function InstitutionOnboardingPage() {
   const router = useRouter();
   const [step, setStep] = useState(1);
+  const [showPricing, setShowPricing] = useState(false);
   const [companyData, setCompanyData] = useState<CompanyDetailsFormData | null>(null);
   const [moreInfoData, setMoreInfoData] = useState<MoreInfoFormData | null>(null);
 
@@ -26,21 +28,20 @@ export default function InstitutionOnboardingPage() {
   };
 
   const handleSupplierSubmit = async (data: SupplierRegistrationFormData) => {
-    // In production: save all data via API
     console.log("All onboarding data:", { companyData, moreInfoData, supplierData: data });
-    router.push("/institution/onboarding/success");
+    setShowPricing(true);
   };
 
   const handleSkip = () => {
     if (step === 2) {
       setStep(3);
     } else if (step === 3) {
-      router.push("/institution/onboarding/success");
+      setShowPricing(true);
     }
   };
 
   return (
-    <>
+    <div className="relative">
       {step === 1 && (
         <CompanyDetailsStep
           onSubmit={handleCompanyDetailsSubmit}
@@ -55,13 +56,21 @@ export default function InstitutionOnboardingPage() {
           defaultValues={moreInfoData ?? undefined}
         />
       )}
-      {step === 3 && (
+      {step >= 3 && (
         <SupplierRegistrationStep
           onSubmit={handleSupplierSubmit}
           onBack={() => setStep(2)}
           onSkip={handleSkip}
         />
       )}
-    </>
+
+      {/* Pricing modal overlays on top of step 3 */}
+      {showPricing && (
+        <PricingModal
+          onContinue={() => router.push("/institution/dashboard")}
+          onReturn={() => setShowPricing(false)}
+        />
+      )}
+    </div>
   );
 }

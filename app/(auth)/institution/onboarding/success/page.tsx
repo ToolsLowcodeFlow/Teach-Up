@@ -5,212 +5,173 @@ import { useRouter } from "next/navigation";
 import { Check } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/context";
 
-interface PricingPlan {
-  id: string;
-  name: string;
-  price: number;
-  features: string[];
-  isPopular: boolean;
-}
-
-const plans: PricingPlan[] = [
+const plans = [
   {
-    id: "basic",
-    name: "Lorem Ipsum Dolores",
-    price: 110,
-    features: [
-      "Lorem ipsum Dolor Sit Erimet. Conectore",
-      "Lorem ipsum Dolor Sit Erimet. Conectore",
-      "Lorem ipsum Dolor Sit Erimet. Conectore",
-    ],
-    isPopular: false,
+    id: "basic", name: "Lorem Ipsum\nDolores", price: 110, isPopular: false,
+    features: ["Lorem Ipsum Dolor Sit Emmet, Consectetur", "Lorem Ipsum Dolor Sit Emmet, Consectetur", "Lorem Ipsum Dolor Sit Emmet, Consectetur", "Lorem Ipsum Dolor Sit Emmet, Consectetur"],
   },
   {
-    id: "professional",
-    name: "Lorem Ipsum Dolores",
-    price: 110,
-    features: [
-      "Lorem ipsum Dolor Sit Erimet. Conectore",
-      "Lorem ipsum Dolor Sit Erimet. Conectore",
-      "Lorem ipsum Dolor Sit Erimet. Conectore",
-    ],
-    isPopular: true,
+    id: "professional", name: "Lorem Ipsum\nDolores", price: 110, isPopular: true,
+    features: ["Lorem Ipsum Dolor Sit Emmet, Consectetur", "Lorem Ipsum Dolor Sit Emmet, Consectetur", "Lorem Ipsum Dolor Sit Emmet, Consectetur", "Lorem Ipsum Dolor Sit Emmet, Consectetur"],
   },
   {
-    id: "enterprise",
-    name: "Lorem Ipsum Dolores",
-    price: 110,
-    features: [
-      "Lorem ipsum Dolor Sit Erimet. Conectore",
-      "Lorem ipsum Dolor Sit Erimet. Conectore",
-      "Lorem ipsum Dolor Sit Erimet. Conectore",
-    ],
-    isPopular: false,
+    id: "enterprise", name: "Lorem Ipsum\nDolores", price: 110, isPopular: false,
+    features: ["Lorem Ipsum Dolor Sit Emmet, Consectetur", "Lorem Ipsum Dolor Sit Emmet, Consectetur", "Lorem Ipsum Dolor Sit Emmet, Consectetur", "Lorem Ipsum Dolor Sit Emmet, Consectetur"],
   },
 ];
 
 export default function OnboardingSuccessPage() {
   const router = useRouter();
   const { t } = useLanguage();
-  const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly");
+  const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("yearly");
 
   return (
-    <div
-      className="w-screen h-screen flex items-center justify-center overflow-hidden"
-      style={{ background: "rgba(0,0,0,0.08)", fontFamily: "'Abel', sans-serif" }}
-    >
-      {/* Modal card */}
-      <div
-        className="bg-white flex flex-col items-center"
-        style={{
-          borderRadius: 20,
-          padding: "clamp(24px, 3vh, 40px) clamp(32px, 4vw, 60px)",
-          maxWidth: 900,
-          width: "90vw",
-          maxHeight: "90vh",
-        }}
-      >
-        {/* Logo */}
-        <div className="flex gap-[8.5px] items-center self-end" style={{ fontSize: "clamp(20px, 1.8vw, 28px)", lineHeight: 1.2, marginBottom: "clamp(8px, 1vh, 16px)" }}>
+    <div className="w-screen h-screen flex flex-col overflow-hidden" style={{ fontFamily: "'Abel', sans-serif" }}>
+
+      {/* Background split */}
+      <div className="absolute inset-0 flex">
+        <div style={{ flex: "0 0 63%", background: "#F7F9FC" }} />
+        <div className="hidden lg:block relative overflow-hidden" style={{ flex: "0 0 37%", background: "#EFF5FE" }}>
+          <div className="absolute pointer-events-none flex flex-col" style={{ left: 0, top: -6, opacity: 0.3 }}>
+            {[0, 1, 2].map((row) => (
+              <div key={row} className="flex" style={{ marginBottom: -2.87 }}>
+                {[0, 1, 2, 3].map((col) => (
+                  <div key={col} style={{ width: 201, height: 201, border: "2.87px solid white", marginRight: -2.87 }} />
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Overlay */}
+      <div className="absolute inset-0" style={{ background: "rgba(80, 100, 140, 0.25)" }} />
+
+      {/* Logo */}
+      <div className="relative z-10 flex justify-end shrink-0" style={{ padding: "20px 36px 0" }}>
+        <div className="flex gap-[6px] items-center" style={{ fontSize: 20, lineHeight: 1.2, opacity: 0.7 }}>
           <span style={{ color: "#0E1117" }}>TEACH</span>
           <span style={{ color: "#2C7AEA" }}>UP</span>
         </div>
+      </div>
 
-        {/* Title */}
-        <h1 style={{ fontSize: "clamp(22px, 2.5vw, 36px)", color: "#0E1117", lineHeight: 1.1, margin: 0, textAlign: "center", marginBottom: "clamp(12px, 1.5vh, 24px)" }}>
-          {t.success.title}
-        </h1>
-
-        {/* Billing Toggle */}
-        <div className="flex items-center justify-center" style={{ gap: "clamp(12px, 1.5vw, 24px)", marginBottom: "clamp(16px, 2vh, 32px)" }}>
-          <button
-            type="button"
-            onClick={() => setBillingCycle("monthly")}
-            className="cursor-pointer"
-            style={{
-              background: "none", border: "none",
-              fontSize: "clamp(11px, 1vw, 14px)", fontFamily: "'Abel', sans-serif",
-              color: billingCycle === "monthly" ? "#0E1117" : "#9CA3AF",
-              whiteSpace: "pre-line", textAlign: "center", lineHeight: 1.3,
-            }}
-          >
-            {t.success.monthlyLabel}
-          </button>
-          <div
-            className="relative shrink-0 cursor-pointer"
-            style={{
-              width: 44, height: 24, borderRadius: 12,
-              background: billingCycle === "yearly" ? "#4C96FF" : "#D1D5DB",
-              transition: "background 0.2s",
-            }}
-            onClick={() => setBillingCycle(billingCycle === "monthly" ? "yearly" : "monthly")}
-          >
-            <div
-              style={{
-                position: "absolute", top: 2, width: 20, height: 20, borderRadius: "50%",
-                background: "#FFFFFF", boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
-                transition: "transform 0.2s",
-                transform: billingCycle === "yearly" ? "translateX(22px)" : "translateX(2px)",
-              }}
-            />
-          </div>
-          <button
-            type="button"
-            onClick={() => setBillingCycle("yearly")}
-            className="cursor-pointer"
-            style={{
-              background: "none", border: "none",
-              fontSize: "clamp(11px, 1vw, 14px)", fontFamily: "'Abel', sans-serif",
-              color: billingCycle === "yearly" ? "#0E1117" : "#9CA3AF",
-              whiteSpace: "pre-line", textAlign: "center", lineHeight: 1.3,
-            }}
-          >
-            {t.success.annualLabel}
-          </button>
-        </div>
-
-        {/* Pricing Cards */}
-        <div className="flex items-start justify-center w-full" style={{ gap: "clamp(12px, 1.5vw, 24px)", marginBottom: "clamp(16px, 2vh, 32px)" }}>
-          {plans.map((plan) => (
-            <div
-              key={plan.id}
-              className="relative flex flex-col"
-              style={{
-                flex: 1,
-                borderRadius: 16,
-                padding: "clamp(16px, 2vh, 28px) clamp(14px, 1.5vw, 24px)",
-                background: plan.isPopular ? "linear-gradient(175deg, #4C96FF 12%, #1667DB 94%)" : "#FFFFFF",
-                border: plan.isPopular ? "none" : "1px solid #EAEBEB",
-                boxShadow: plan.isPopular ? "0 8px 32px rgba(76,150,255,0.25)" : "0 2px 8px rgba(0,0,0,0.04)",
-                transform: plan.isPopular ? "scale(1.05)" : "none",
-                zIndex: plan.isPopular ? 1 : 0,
-              }}
-            >
-              {plan.isPopular && (
-                <div
-                  className="absolute -top-3 left-1/2 -translate-x-1/2 flex items-center justify-center"
-                  style={{ background: "#1667DB", color: "#FFFFFF", fontSize: 11, fontWeight: 600, padding: "3px 14px", borderRadius: 20, whiteSpace: "nowrap" }}
-                >
-                  {t.success.mostPopular}
-                </div>
-              )}
-
-              <p style={{ fontSize: "clamp(14px, 1.2vw, 18px)", color: plan.isPopular ? "#FFFFFF" : "#0E1117", lineHeight: 1.1, marginBottom: "clamp(8px, 1vh, 14px)", fontWeight: 600 }}>
-                {plan.name}
-              </p>
-
-              <div style={{ marginBottom: "clamp(10px, 1.2vh, 18px)" }}>
-                <span style={{ fontSize: "clamp(22px, 2.2vw, 32px)", fontWeight: 700, color: plan.isPopular ? "#FFFFFF" : "#0E1117" }}>
-                  ₪{plan.price}
-                </span>
-                <span style={{ fontSize: "clamp(10px, 0.9vw, 13px)", color: plan.isPopular ? "rgba(255,255,255,0.7)" : "#9CA3AF", marginInlineStart: 4 }}>
-                  {t.success.pricePerYear}
-                </span>
-              </div>
-
-              <div className="flex flex-col" style={{ gap: "clamp(6px, 0.8vh, 10px)" }}>
-                {plan.features.map((feature, i) => (
-                  <div key={i} className="flex items-start" style={{ gap: 8 }}>
-                    <Check size={14} className="shrink-0" style={{ marginTop: 2, color: plan.isPopular ? "#FFFFFF" : "#4C96FF" }} />
-                    <span style={{ fontSize: "clamp(10px, 0.9vw, 13px)", lineHeight: 1.4, color: plan.isPopular ? "rgba(255,255,255,0.85)" : "#647787" }}>
-                      {feature}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* CTA Button — golden */}
-        <button
-          onClick={() => router.push("/institution/dashboard")}
-          className="cursor-pointer"
-          style={{
-            width: "clamp(280px, 40vw, 420px)", height: "clamp(40px, 4.5vh, 50px)",
-            borderRadius: 24, background: "#F59E0B", border: "none",
-            fontSize: "clamp(13px, 1.1vw, 16px)", color: "#FFFFFF", fontFamily: "'Abel', sans-serif",
-            marginBottom: "clamp(10px, 1.2vh, 18px)",
-          }}
+      {/* Modal — centered */}
+      <div className="relative z-10 flex-1 flex items-center justify-center px-4">
+        <div
+          className="bg-white flex flex-col items-center w-full"
+          style={{ borderRadius: 20, padding: "28px 40px 24px", maxWidth: 850, boxShadow: "0 12px 48px rgba(0,0,0,0.10)" }}
         >
-          {t.success.selectPackage}
-        </button>
+          {/* Title */}
+          <h1 style={{ fontSize: 24, color: "#0E1117", lineHeight: 1.25, margin: "0 0 16px", textAlign: "center" }}>
+            {t.success.title}
+          </h1>
 
-        {/* Bottom buttons */}
-        <div className="flex items-center" style={{ gap: 12 }}>
-          <button
-            className="flex items-center justify-center cursor-pointer"
-            style={{ width: 140, height: 36, borderRadius: 10, backgroundImage: "linear-gradient(168deg, #4C96FF 12%, #1667DB 94%)", border: "none", fontSize: 14, color: "#FFFFFF", fontFamily: "'Abel', sans-serif" }}
-          >
-            {t.common.continue}
-          </button>
+          {/* Toggle */}
+          <div className="flex items-center justify-center" style={{ gap: 14, marginBottom: 14 }}>
+            <span style={{ fontSize: 12, color: billingCycle === "monthly" ? "#4C96FF" : "#9CA3AF", lineHeight: 1.3, textAlign: "center", whiteSpace: "pre-line" }}>
+              {t.success.monthlyLabel}
+            </span>
+            <div
+              className="relative shrink-0 cursor-pointer"
+              style={{ width: 36, height: 20, borderRadius: 10, background: billingCycle === "yearly" ? "#4C96FF" : "#D1D5DB" }}
+              onClick={() => setBillingCycle(billingCycle === "monthly" ? "yearly" : "monthly")}
+            >
+              <div style={{ position: "absolute", top: 2, width: 16, height: 16, borderRadius: "50%", background: "#FFF", boxShadow: "0 1px 2px rgba(0,0,0,0.2)", transition: "transform 0.2s", transform: billingCycle === "yearly" ? "translateX(18px)" : "translateX(2px)" }} />
+            </div>
+            <span style={{ fontSize: 12, color: billingCycle === "yearly" ? "#0E1117" : "#9CA3AF", lineHeight: 1.3, textAlign: "center", whiteSpace: "pre-line" }}>
+              {t.success.annualLabel}
+            </span>
+          </div>
+
+          {/* Cards */}
+          <div className="flex items-center justify-center w-full" style={{ gap: 14, marginBottom: 18 }}>
+            {plans.map((plan) => (
+              <div
+                key={plan.id}
+                className="relative flex flex-col"
+                style={{
+                  flex: 1,
+                  borderRadius: 14,
+                  padding: plan.isPopular ? "30px 18px 22px" : "20px 18px 18px",
+                  background: plan.isPopular
+                    ? "linear-gradient(180deg, rgba(76,150,255,0.06) 0%, #FFFFFF 100%)"
+                    : "#FFFFFF",
+                  border: plan.isPopular ? "1.5px solid rgba(76,150,255,0.4)" : "1px solid #EAEBEB",
+                  boxShadow: plan.isPopular
+                    ? "0 4px 20px rgba(76,150,255,0.10)"
+                    : "0 1px 4px rgba(0,0,0,0.03)",
+                }}
+              >
+                {/* Popular badge — star/seal shape */}
+                {plan.isPopular && (
+                  <div className="absolute left-1/2 -translate-x-1/2" style={{ top: -18 }}>
+                    <svg width="48" height="40" viewBox="0 0 48 40" fill="none">
+                      <path d="M24 0L28.5 8L37 4L34 13L44 16L36 22L40 31L30 29L28 38L24 30L20 38L18 29L8 31L12 22L4 16L14 13L11 4L19.5 8L24 0Z" fill="#4C96FF"/>
+                      <text x="24" y="22" textAnchor="middle" fill="white" fontSize="7" fontWeight="600" fontFamily="Abel, sans-serif">popular</text>
+                    </svg>
+                  </div>
+                )}
+
+                {/* Name — centered */}
+                <p style={{ fontSize: 14, color: "#0E1117", lineHeight: 1.2, marginBottom: 8, fontWeight: 600, textAlign: "center", whiteSpace: "pre-line" }}>
+                  {plan.name}
+                </p>
+
+                {/* Price — centered */}
+                <div style={{ marginBottom: 12, textAlign: "center" }}>
+                  <span style={{ fontSize: 20, fontWeight: 700, color: plan.isPopular ? "#4C96FF" : "#0E1117" }}>₪{plan.price}</span>
+                  <span style={{ fontSize: 10, color: "#9CA3AF", marginInlineStart: 3 }}>{t.success.pricePerYear}</span>
+                </div>
+
+                {/* Features */}
+                <div className="flex flex-col" style={{ gap: 6 }}>
+                  {plan.features.map((feature, i) => (
+                    <div key={i} className="flex items-center" style={{ gap: 6 }}>
+                      <span style={{
+                        fontSize: 10, lineHeight: 1.3, flex: 1,
+                        color: plan.isPopular ? "#4C96FF" : "#0E1117",
+                        whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
+                      }}>
+                        {feature}
+                      </span>
+                      <Check size={11} className="shrink-0" style={{ color: plan.isPopular ? "#4C96FF" : "#4C96FF" }} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Golden CTA — inside modal */}
           <button
             onClick={() => router.push("/institution/dashboard")}
-            className="flex items-center justify-center cursor-pointer"
-            style={{ width: 120, height: 36, borderRadius: 10, background: "#FFFFFF", border: "1px solid #EAEBEB", fontSize: 14, color: "#647787", fontFamily: "'Abel', sans-serif" }}
+            className="cursor-pointer"
+            style={{
+              width: "70%", maxWidth: 420, height: 40,
+              borderRadius: 20, background: "linear-gradient(90deg, #F59E0B 0%, #D97706 100%)",
+              border: "none", fontSize: 13, color: "#FFFFFF", fontFamily: "'Abel', sans-serif",
+              marginBottom: 16,
+            }}
           >
-            {t.common.skip}
+            {t.success.selectPackage}
           </button>
+
+          {/* Buttons — inside modal at bottom */}
+          <div className="flex items-center" style={{ gap: 10 }}>
+            <button
+              className="flex items-center justify-center cursor-pointer"
+              style={{ width: 120, height: 32, borderRadius: 8, backgroundImage: "linear-gradient(168deg, #4C96FF 12%, #1667DB 94%)", border: "none", fontSize: 13, color: "#FFFFFF", fontFamily: "'Abel', sans-serif" }}
+            >
+              continuation
+            </button>
+            <button
+              onClick={() => router.push("/institution/dashboard")}
+              className="flex items-center justify-center cursor-pointer"
+              style={{ width: 100, height: 32, borderRadius: 8, background: "#FFFFFF", border: "1px solid #EAEBEB", fontSize: 13, color: "#647787", fontFamily: "'Abel', sans-serif" }}
+            >
+              return
+            </button>
+          </div>
         </div>
       </div>
     </div>
