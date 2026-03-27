@@ -37,11 +37,17 @@ export default function LoginPage() {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).single();
-        switch (profile?.role) {
-          case "admin": router.push("/admin/suppliers"); break;
-          case "institution": router.push("/institution/dashboard"); break;
-          case "supplier": router.push("/supplier/dashboard"); break;
-          default: router.push("/jobs");
+        if (!profile) {
+          // No profile yet — go to role selection
+          router.push("/select-role");
+        } else {
+          switch (profile.role) {
+            case "admin": router.push("/admin/suppliers"); break;
+            case "institution": router.push("/institution/dashboard"); break;
+            case "supplier": router.push("/supplier/dashboard"); break;
+            case "seeker": router.push("/jobs"); break;
+            default: router.push("/select-role");
+          }
         }
       }
     } catch { setError(t.login.genericError); }

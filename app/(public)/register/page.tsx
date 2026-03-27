@@ -10,7 +10,6 @@ import { registerSchema, type RegisterFormData } from "@/lib/validations/auth";
 import { createClient } from "@/lib/supabase/client";
 import { useLanguage } from "@/lib/i18n/context";
 import { AuthLayout } from "@/components/auth/auth-layout";
-import { GoogleButton } from "@/components/auth/google-button";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -41,159 +40,186 @@ export default function RegisterPage() {
   const onSubmit = async (data: RegisterFormData) => {
     setIsLoading(true);
     setError(null);
-
     try {
       const supabase = createClient();
       const { error: authError } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/api/auth/callback`,
-        },
+        options: { emailRedirectTo: `${window.location.origin}/api/auth/callback` },
       });
-
       if (authError) {
-        if (authError.message.includes("already registered")) {
-          setError(t.register.alreadyRegistered);
-        } else {
-          setError(authError.message);
-        }
+        setError(authError.message.includes("already registered") ? t.register.alreadyRegistered : authError.message);
         return;
       }
-
       router.push("/select-role");
-    } catch {
-      setError(t.login.genericError);
-    } finally {
-      setIsLoading(false);
-    }
+    } catch { setError(t.login.genericError); }
+    finally { setIsLoading(false); }
   };
 
   const handleGoogleRegister = async () => {
     const supabase = createClient();
-    await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/api/auth/callback`,
-      },
-    });
+    await supabase.auth.signInWithOAuth({ provider: "google", options: { redirectTo: `${window.location.origin}/api/auth/callback` } });
   };
 
   return (
     <AuthLayout>
-      <div className="bg-white rounded-2xl shadow-lg px-10 py-10 w-full">
-        <h1 className="text-[22px] font-bold text-center text-[#1F2937] mb-1.5">
-          {t.register.title}
-        </h1>
-        <p className="text-[13px] text-[#6B7280] text-center mb-7">
-          {t.register.subtitle}
-        </p>
+      {/* Same card style as login — 587px, white, rounded-20, p-10 */}
+      <div
+        className="bg-white rounded-[20px] w-[587px] max-w-full flex items-center justify-center"
+        style={{ padding: 10, minHeight: 802 }}
+      >
+        <div className="w-[499px] max-w-full flex flex-col gap-[40px] items-center">
+          <div className="w-full flex flex-col gap-[40px] items-start">
+            <form onSubmit={handleSubmit(onSubmit)} className="w-full flex flex-col gap-[40px] items-center">
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-          <div>
-            <label className="block text-[13px] text-[#6B7280] mb-2">
-              {t.register.email}
-            </label>
-            <input
-              type="email"
-              {...register("email")}
-              className={`w-full h-[44px] rounded-lg border bg-white px-4 text-[14px] text-[#1F2937] outline-none transition-colors ${
-                errors.email
-                  ? "border-[#EF4444] focus:ring-2 focus:ring-[#EF4444]/20"
-                  : "border-[#E5E7EB] focus:border-[#4B7BF5] focus:ring-2 focus:ring-[#4B7BF5]/20"
-              }`}
-            />
-            {errors.email && (
-              <p className="text-[12px] text-[#EF4444] mt-1">{errors.email.message}</p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-[13px] text-[#6B7280] mb-2">
-              {t.register.password}
-            </label>
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                {...register("password")}
-                className={`w-full h-[44px] rounded-lg border bg-white px-4 pe-11 text-[14px] text-[#1F2937] outline-none transition-colors ${
-                  errors.password
-                    ? "border-[#EF4444] focus:ring-2 focus:ring-[#EF4444]/20"
-                    : "border-[#E5E7EB] focus:border-[#4B7BF5] focus:ring-2 focus:ring-[#4B7BF5]/20"
-                }`}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute top-1/2 end-3 -translate-y-1/2 text-[#9CA3AF] hover:text-[#6B7280] cursor-pointer"
+              {/* Title */}
+              <div
+                className="w-[418px] max-w-full flex flex-col gap-[6px] items-center text-center"
+                style={{ fontFamily: "'Abel', sans-serif", lineHeight: "normal" }}
               >
-                {showPassword ? <EyeOff className="h-[18px] w-[18px]" /> : <Eye className="h-[18px] w-[18px]" />}
+                <p className="text-[32px] text-[#0E1117] tracking-[-0.64px] min-w-full">
+                  {t.register.title}
+                </p>
+                <p className="text-[18px] text-[#647787] tracking-[-0.36px]">
+                  {t.register.subtitle}
+                </p>
+              </div>
+
+              {/* Fields */}
+              <div className="w-full flex flex-col gap-[30px] items-start">
+
+                {/* Email */}
+                <div className="w-full flex flex-col gap-[11px] items-start">
+                  <p className="text-[18px] text-[#414042] text-start whitespace-nowrap" style={{ fontFamily: "'Abel', sans-serif", lineHeight: 1.1 }}>
+                    {t.register.email}
+                  </p>
+                  <div
+                    className="w-full h-[48px] bg-white rounded-[10px] flex items-center"
+                    style={{ border: errors.email ? "1px solid #EF4444" : "1px solid #F3F3F6" }}
+                  >
+                    <input
+                      type="email"
+                      placeholder="Type here..."
+                      {...register("email")}
+                      className="placeholder:opacity-30 placeholder:text-[#647787] text-start flex-1 h-full"
+                      style={{
+                        border: "none", outline: "none", background: "transparent",
+                        fontFamily: "'Abel', sans-serif", fontSize: 14, color: "#0E1117",
+                        letterSpacing: "-0.28px", lineHeight: "normal",
+                        padding: "0 20px", borderRadius: 10,
+                      }}
+                    />
+                  </div>
+                  {errors.email && <p style={{ fontFamily: "'Abel', sans-serif", fontSize: 12, color: "#EF4444" }}>{errors.email.message}</p>}
+                </div>
+
+                {/* Password */}
+                <div className="w-full flex flex-col gap-[11px] items-start">
+                  <p className="text-[18px] text-[#414042] text-start whitespace-nowrap" style={{ fontFamily: "'Abel', sans-serif", lineHeight: 1.1 }}>
+                    {t.register.password}
+                  </p>
+                  <div
+                    className="w-full h-[48px] bg-white rounded-[10px] flex items-center"
+                    style={{ border: errors.password ? "1px solid #EF4444" : "1px solid #EAEBEB" }}
+                  >
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Type your password here."
+                      {...register("password")}
+                      className="placeholder:text-[#B6B6B6] text-start flex-1 h-full"
+                      style={{
+                        border: "none", outline: "none", background: "transparent",
+                        fontFamily: "'Assistant', sans-serif", fontSize: 14, fontWeight: 400,
+                        color: "#0E1117", letterSpacing: "-0.28px", lineHeight: "normal",
+                        padding: "0 20px", borderRadius: 10,
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="flex p-0 cursor-pointer shrink-0"
+                      style={{ background: "none", border: "none", color: "#B6B6B6", marginInlineEnd: 16 }}
+                    >
+                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
+                  {errors.password && <p style={{ fontFamily: "'Abel', sans-serif", fontSize: 12, color: "#EF4444" }}>{errors.password.message}</p>}
+
+                  {/* Password rules */}
+                  {passwordValue.length > 0 && (
+                    <div className="flex flex-col gap-[6px] mt-[4px]">
+                      {passwordRules.map((rule) => {
+                        const passed = rule.test(passwordValue);
+                        return (
+                          <div key={rule.label} className="flex items-center gap-[8px]" style={{ fontFamily: "'Abel', sans-serif", fontSize: 14, color: passed ? "#22C55E" : "#0E1117" }}>
+                            {passed ? <Check size={14} /> : <X size={14} style={{ color: "#D1D5DB" }} />}
+                            <span>{rule.label}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Error */}
+              {error && (
+                <div className="w-full rounded-[10px] px-4 py-3" style={{ background: "#FEF2F2", color: "#EF4444", fontFamily: "'Abel', sans-serif", fontSize: 14 }}>
+                  {error}
+                </div>
+              )}
+
+              {/* Register button — same gradient style as login */}
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full h-[50px] rounded-[10px] flex items-center justify-center cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+                style={{
+                  backgroundImage: "linear-gradient(175.27deg, rgb(76, 150, 255) 12.19%, rgb(22, 103, 219) 93.76%)",
+                  border: "none", fontFamily: "'Abel', sans-serif", fontSize: 16, color: "#FFFFFF",
+                }}
+              >
+                {isLoading ? t.register.creatingAccount : t.register.createAccount}
               </button>
+            </form>
+
+            {/* "or" divider */}
+            <div className="w-full flex gap-[12px] items-center">
+              <div className="flex-1 h-px bg-[#EAEBEB]" />
+              <span style={{ fontFamily: "'Assistant', sans-serif", fontSize: 13, fontWeight: 400, color: "#696969", letterSpacing: "0.1755px" }}>or</span>
+              <div className="flex-1 h-px bg-[#EAEBEB]" />
             </div>
 
-            {passwordValue.length > 0 && (
-              <div className="mt-2.5 space-y-1.5">
-                {passwordRules.map((rule) => {
-                  const passed = rule.test(passwordValue);
-                  return (
-                    <div
-                      key={rule.label}
-                      className={`flex items-center gap-2 text-[12px] ${
-                        passed ? "text-[#22C55E]" : "text-[#1F2937]"
-                      }`}
-                    >
-                      {passed ? (
-                        <Check className="h-3.5 w-3.5" />
-                      ) : (
-                        <X className="h-3.5 w-3.5 text-[#D1D5DB]" />
-                      )}
-                      <span>{rule.label}</span>
-                    </div>
-                  );
-                })}
+            {/* Google button — same as login */}
+            <button
+              type="button"
+              onClick={handleGoogleRegister}
+              className="w-[499px] max-w-full h-[48px] bg-white border border-[#F3F3F6] rounded-[10px] overflow-hidden px-[10px] py-[12px] flex flex-col items-center justify-center cursor-pointer hover:bg-[#FAFBFC] transition-colors"
+            >
+              <div className="flex gap-[4px] items-center justify-center w-full">
+                <span style={{ fontFamily: "'Abel', sans-serif", fontSize: 14, color: "#0E1117", lineHeight: 1.1 }}>
+                  {t.register.googleButton}
+                </span>
+                <img src="/images/google-icon.png" alt="Google" className="w-[20px] h-[20px] object-cover shrink-0" />
               </div>
-            )}
+            </button>
           </div>
 
-          {error && (
-            <div className="bg-[#FEF2F2] text-[#EF4444] text-[13px] rounded-lg p-3">
-              {error}
-            </div>
-          )}
-
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full h-[46px] bg-[#4B7BF5] hover:bg-[#3A62C4] text-white text-[15px] font-medium rounded-lg transition-colors disabled:opacity-50 cursor-pointer"
-          >
-            {isLoading ? t.register.creatingAccount : t.register.createAccount}
-          </button>
-        </form>
-
-        <div className="mt-7 text-center">
-          <GoogleButton
-            label={t.register.googleButton}
-            onClick={handleGoogleRegister}
-          />
+          {/* Already have account + Terms */}
+          <div className="w-full flex flex-col gap-[12px] items-center">
+            <p style={{ fontFamily: "'Abel', sans-serif", fontSize: 16, color: "#647787", textAlign: "center", lineHeight: 1.1 }}>
+              {t.register.haveAccount}{" "}
+              <Link href="/login" style={{ color: "#4C96FF", textDecoration: "underline" }}>
+                {t.register.loginLink}
+              </Link>
+            </p>
+            <p style={{ fontFamily: "'Abel', sans-serif", fontSize: 14, color: "#647787", textAlign: "center", lineHeight: 1.1 }}>
+              <span>By continuing to use, you agree </span>
+              <span className="underline" style={{ textDecorationSkipInk: "none" }}>to the </span>
+              <span>TEACH UP Terms of Use and Privacy Policy.</span>
+            </p>
+          </div>
         </div>
-
-        <p className="text-[13px] text-[#6B7280] text-center mt-5">
-          {t.register.haveAccount}{" "}
-          <Link href="/login" className="text-[#4B7BF5] font-medium hover:underline">
-            {t.register.loginLink}
-          </Link>
-        </p>
-
-        <p className="text-[11px] text-[#9CA3AF] text-center mt-4 leading-relaxed">
-          {t.common.termsText}{" "}
-          <Link href="/terms" className="text-[#4B7BF5] hover:underline">
-            {t.common.termsLink}
-          </Link>{" "}
-          {t.common.and}{" "}
-          <Link href="/privacy" className="text-[#4B7BF5] hover:underline">
-            {t.common.privacyLink}
-          </Link>
-        </p>
       </div>
     </AuthLayout>
   );

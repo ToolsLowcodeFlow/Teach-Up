@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Upload, Plus, ImageIcon } from "lucide-react";
 import { moreInfoSchema, type MoreInfoFormData } from "@/lib/validations/institution";
 import { useLanguage } from "@/lib/i18n/context";
-import { OnboardingLayout } from "./onboarding-layout";
+import { OnboardingSplitLayout } from "./onboarding-split-layout";
 
 interface MoreInfoStepProps {
   onSubmit: (data: MoreInfoFormData) => void;
@@ -15,18 +15,10 @@ interface MoreInfoStepProps {
   defaultValues?: Partial<MoreInfoFormData>;
 }
 
-export function MoreInfoStep({
-  onSubmit,
-  onSkip,
-  defaultValues,
-}: MoreInfoStepProps) {
+export function MoreInfoStep({ onSubmit, onBack, onSkip, defaultValues }: MoreInfoStepProps) {
   const { t } = useLanguage();
-  const [logoPreview, setLogoPreview] = useState<string | null>(
-    defaultValues?.company_logo_url ?? null
-  );
-  const [socialLinks, setSocialLinks] = useState<string[]>(
-    defaultValues?.social_media_links ?? [""]
-  );
+  const [logoPreview, setLogoPreview] = useState<string | null>(defaultValues?.company_logo_url ?? null);
+  const [socialLinks, setSocialLinks] = useState<string[]>(defaultValues?.social_media_links ?? [""]);
 
   const { register, handleSubmit, setValue } = useForm<MoreInfoFormData>({
     resolver: zodResolver(moreInfoSchema),
@@ -52,7 +44,6 @@ export function MoreInfoStep({
   };
 
   const addSocialLink = () => setSocialLinks([...socialLinks, ""]);
-
   const updateSocialLink = (index: number, value: string) => {
     const updated = [...socialLinks];
     updated[index] = value;
@@ -65,106 +56,162 @@ export function MoreInfoStep({
     onSubmit(data);
   };
 
-  const inputClass =
-    "w-full h-[44px] rounded-lg border border-[#E5E7EB] bg-white px-4 text-[14px] text-[#1F2937] outline-none focus:border-[#4B7BF5] focus:ring-2 focus:ring-[#4B7BF5]/20 transition-colors";
+  const inputStyle: React.CSSProperties = {
+    width: "100%",
+    height: "clamp(40px, 4vh, 48px)",
+    borderRadius: 10,
+    padding: "0 20px",
+    border: "1px solid #F3F3F6",
+    background: "#FFFFFF",
+    outline: "none",
+    fontFamily: "'Abel', sans-serif",
+    fontSize: "clamp(13px, 1vw, 14px)",
+    color: "#0E1117",
+  };
 
   return (
-    <OnboardingLayout step={{ current: 3, total: 4 }}>
-      <h1 className="text-[24px] font-bold text-[#1F2937] text-center mb-2">
-        {t.moreInfo.title}
-      </h1>
-      <p className="text-[13px] text-[#6B7280] text-center mb-10 leading-relaxed max-w-md mx-auto">
-        {t.moreInfo.subtitle}
-      </p>
+    <OnboardingSplitLayout step={{ current: 3, total: 4 }}>
+      <form onSubmit={handleSubmit(onFormSubmit)} className="flex flex-col justify-between" style={{ maxWidth: 520, height: "100%" }}>
 
-      <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
-        {/* Company Logo */}
-        <div>
-          <label className="block text-[13px] text-[#6B7280] mb-2 text-end">
-            {t.moreInfo.companyLogo}
-          </label>
-          <div className="flex flex-col items-center gap-3">
-            <div className="w-24 h-24 rounded-lg border-2 border-dashed border-[#D1D5DB] flex items-center justify-center bg-[#F9FAFB] overflow-hidden">
-              {logoPreview ? (
-                <img src={logoPreview} alt="Logo" className="w-full h-full object-cover" />
-              ) : (
-                <ImageIcon className="w-8 h-8 text-[#D1D5DB]" />
-              )}
-            </div>
-            <div className="text-[11px] text-[#9CA3AF]">290 X 288</div>
-            <label className="cursor-pointer">
-              <span className="inline-flex items-center gap-2 text-[13px] text-[#4B7BF5] border border-[#4B7BF5] rounded-lg px-4 py-2 hover:bg-[#F5F8FF] transition-colors">
-                <Upload className="w-4 h-4" />
-                {t.moreInfo.changeImage}
-              </span>
-              <input type="file" accept="image/*" className="hidden" onChange={handleLogoUpload} />
+        {/* Top — Title + Fields */}
+        <div className="flex flex-col" style={{ gap: "clamp(8px, 1.3vh, 24px)" }}>
+
+          {/* Title + Subtitle */}
+          <div className="flex flex-col" style={{ gap: 8 }}>
+            <h1 style={{ fontSize: "clamp(26px, 2.8vw, 40px)", color: "#0E1117", lineHeight: 1.1, margin: 0, fontFamily: "'Abel', sans-serif" }}>
+              {t.moreInfo.title}
+            </h1>
+            <p style={{ fontSize: "clamp(12px, 0.9vw, 14px)", color: "#647787", lineHeight: 1.4, margin: 0, fontFamily: "'Abel', sans-serif" }}>
+              {t.moreInfo.subtitle}
+            </p>
+          </div>
+
+          {/* Company Logo */}
+          <div className="flex flex-col" style={{ gap: 6 }}>
+            <label style={{ fontFamily: "'Abel', sans-serif", fontSize: "clamp(14px, 1.2vw, 18px)", color: "#414042", lineHeight: 1.1 }}>
+              {t.moreInfo.companyLogo}
             </label>
+            <div className="flex flex-col items-center" style={{ gap: 8 }}>
+              <div
+                className="flex flex-col items-center justify-center"
+                style={{ width: 110, height: "clamp(60px, 8vh, 100px)", borderRadius: 10, border: "1.5px dashed #D1D5DB", background: "#FAFBFC" }}
+              >
+                {logoPreview ? (
+                  <img src={logoPreview} alt="Logo" style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 10 }} />
+                ) : (
+                  <>
+                    <ImageIcon size={24} style={{ color: "#D1D5DB" }} />
+                    <span style={{ fontSize: 11, color: "#9CA3AF", marginTop: 4, fontFamily: "'Abel', sans-serif" }}>290X288</span>
+                  </>
+                )}
+              </div>
+              <label className="cursor-pointer">
+                <span
+                  className="flex items-center justify-center"
+                  style={{ height: 32, padding: "0 16px", borderRadius: 8, border: "1px solid #EAEBEB", background: "#FFFFFF", fontFamily: "'Abel', sans-serif", fontSize: 13, color: "#414042" }}
+                >
+                  {t.moreInfo.changeImage}
+                </span>
+                <input type="file" accept="image/*" className="hidden" onChange={handleLogoUpload} />
+              </label>
+            </div>
+          </div>
+
+          {/* Company Website */}
+          <div className="flex flex-col" style={{ gap: 6 }}>
+            <label style={{ fontFamily: "'Abel', sans-serif", fontSize: "clamp(14px, 1.2vw, 18px)", color: "#414042", lineHeight: 1.1 }}>
+              {t.moreInfo.companyWebsite}
+            </label>
+            <input
+              type="url"
+              {...register("website")}
+              placeholder="Type here..."
+              className="placeholder:opacity-30 placeholder:text-[#647787]"
+              style={inputStyle}
+            />
+          </div>
+
+          {/* Social Media Links */}
+          <div className="flex flex-col" style={{ gap: 6 }}>
+            <label style={{ fontFamily: "'Abel', sans-serif", fontSize: "clamp(14px, 1.2vw, 18px)", color: "#414042", lineHeight: 1.1 }}>
+              {t.moreInfo.socialMediaLinks}
+            </label>
+            <div className="flex flex-col" style={{ gap: 8 }}>
+              {socialLinks.map((link, index) => (
+                <input
+                  key={index}
+                  type="url"
+                  value={link}
+                  onChange={(e) => updateSocialLink(index, e.target.value)}
+                  placeholder="Type here..."
+                  className="placeholder:opacity-30 placeholder:text-[#647787]"
+                  style={inputStyle}
+                />
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={addSocialLink}
+              className="flex items-center cursor-pointer self-end"
+              style={{ gap: 4, background: "none", border: "none", fontFamily: "'Abel', sans-serif", fontSize: 14, color: "#4C96FF", padding: 0 }}
+            >
+              Add another field <Plus size={14} />
+            </button>
+          </div>
+
+          {/* Company Description */}
+          <div className="flex flex-col" style={{ gap: 6 }}>
+            <label style={{ fontFamily: "'Abel', sans-serif", fontSize: "clamp(14px, 1.2vw, 18px)", color: "#414042", lineHeight: 1.1 }}>
+              {t.moreInfo.companyDescription}
+            </label>
+            <textarea
+              {...register("description")}
+              placeholder="Type here..."
+              className="placeholder:opacity-30 placeholder:text-[#647787]"
+              style={{
+                width: "100%",
+                height: "clamp(60px, 8vh, 120px)",
+                borderRadius: 10,
+                padding: "12px 20px",
+                border: "1px solid #F3F3F6",
+                background: "#FFFFFF",
+                outline: "none",
+                fontFamily: "'Abel', sans-serif",
+                fontSize: "clamp(13px, 1vw, 14px)",
+                color: "#0E1117",
+                resize: "none",
+              }}
+            />
           </div>
         </div>
 
-        {/* Company Website */}
-        <div>
-          <label className="block text-[13px] text-[#6B7280] mb-2 text-end">
-            {t.moreInfo.companyWebsite}
-          </label>
-          <input type="url" {...register("website")} className={inputClass} />
-        </div>
-
-        {/* Social Media Links */}
-        <div>
-          <label className="block text-[13px] text-[#6B7280] mb-2 text-end">
-            {t.moreInfo.socialMediaLinks}
-          </label>
-          <div className="space-y-2">
-            {socialLinks.map((link, index) => (
-              <input
-                key={index}
-                type="url"
-                value={link}
-                onChange={(e) => updateSocialLink(index, e.target.value)}
-                className={inputClass}
-              />
-            ))}
-          </div>
-          <button
-            type="button"
-            onClick={addSocialLink}
-            className="mt-2 inline-flex items-center gap-1 text-[13px] text-[#4B7BF5] hover:text-[#3A62C4] transition-colors cursor-pointer"
-          >
-            <Plus className="w-4 h-4" />
-            {t.moreInfo.addAnotherLink}
-          </button>
-        </div>
-
-        {/* Company Description */}
-        <div>
-          <label className="block text-[13px] text-[#6B7280] mb-2 text-end">
-            {t.moreInfo.companyDescription}
-          </label>
-          <textarea
-            rows={4}
-            {...register("description")}
-            className="w-full rounded-lg border border-[#E5E7EB] bg-white px-4 py-3 text-[14px] text-[#1F2937] outline-none focus:border-[#4B7BF5] focus:ring-2 focus:ring-[#4B7BF5]/20 transition-colors resize-none"
-          />
-        </div>
-
-        {/* Actions */}
-        <div className="flex items-center gap-3 pt-6">
+        {/* Bottom — Buttons */}
+        <div className="flex items-center shrink-0" style={{ gap: 16, paddingTop: "clamp(8px, 1vh, 16px)" }}>
           <button
             type="submit"
-            className="h-[44px] px-10 bg-[#4B7BF5] hover:bg-[#3A62C4] text-white text-[14px] font-medium rounded-lg transition-colors cursor-pointer"
+            className="flex items-center justify-center cursor-pointer"
+            style={{
+              width: 162, height: 40, borderRadius: 10,
+              backgroundImage: "linear-gradient(168.47deg, rgb(76, 150, 255) 12.19%, rgb(22, 103, 219) 93.76%)",
+              border: "none", fontSize: 16, color: "#FFFFFF", fontFamily: "'Abel', sans-serif",
+            }}
           >
-            {t.common.continue}
+            continuation
           </button>
           <button
             type="button"
-            onClick={onSkip}
-            className="h-[44px] px-10 border border-[#E5E7EB] text-[#6B7280] text-[14px] font-medium rounded-lg hover:bg-[#F9FAFB] transition-colors cursor-pointer"
+            onClick={onBack}
+            className="flex items-center justify-center cursor-pointer"
+            style={{
+              width: 140, height: 40, borderRadius: 10,
+              background: "#FFFFFF", border: "1px solid #EAEBEB",
+              fontSize: 16, color: "#647787", fontFamily: "'Abel', sans-serif",
+            }}
           >
-            {t.common.skip}
+            return
           </button>
         </div>
       </form>
-    </OnboardingLayout>
+    </OnboardingSplitLayout>
   );
 }

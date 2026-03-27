@@ -6,9 +6,9 @@ import {
   companyDetailsSchema,
   type CompanyDetailsFormData,
 } from "@/lib/validations/institution";
-import { EMPLOYER_TYPES, NUMBER_OF_EMPLOYEES } from "@/lib/constants";
+import { EMPLOYER_TYPES } from "@/lib/constants";
 import { useLanguage } from "@/lib/i18n/context";
-import { OnboardingLayout } from "./onboarding-layout";
+import { OnboardingSplitLayout } from "./onboarding-split-layout";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
 
@@ -43,122 +43,156 @@ export function CompanyDetailsStep({
 
   const privacyAccepted = watch("privacy_accepted");
 
-  const inputClass =
-    "w-full h-[44px] rounded-lg border border-[#E5E7EB] bg-white px-4 text-[14px] text-[#1F2937] outline-none focus:border-[#4B7BF5] focus:ring-2 focus:ring-[#4B7BF5]/20 transition-colors";
-  const selectClass =
-    "w-full h-[44px] rounded-lg border border-[#E5E7EB] bg-white px-4 text-[14px] text-[#1F2937] outline-none focus:border-[#4B7BF5] focus:ring-2 focus:ring-[#4B7BF5]/20 transition-colors appearance-none cursor-pointer";
+  const inputStyle: React.CSSProperties = {
+    width: "100%",
+    height: "clamp(40px, 4vh, 48px)",
+    borderRadius: 10,
+    padding: "0 20px",
+    border: "1px solid #F3F3F6",
+    background: "#FFFFFF",
+    outline: "none",
+    fontFamily: "'Abel', sans-serif",
+    fontSize: "clamp(13px, 1vw, 14px)",
+    color: "#0E1117",
+  };
 
   return (
-    <OnboardingLayout step={{ current: 2, total: 4 }}>
-      <h1 className="text-[24px] font-bold text-[#1F2937] text-center mb-10">
-        {t.companyDetails.title}
-      </h1>
+    <OnboardingSplitLayout step={{ current: 2, total: 4 }}>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-between" style={{ maxWidth: 520, height: "100%" }}>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <div>
-          <label className="block text-[13px] text-[#6B7280] mb-2 text-end">
-            {t.companyDetails.companyName}
-          </label>
-          <input
-            {...register("company_name")}
-            className={`${inputClass} ${errors.company_name ? "border-[#EF4444]" : ""}`}
-          />
+        {/* Top — Title + Fields */}
+        <div className="flex flex-col" style={{ gap: "clamp(20px, 3vh, 40px)" }}>
+
+          {/* Title */}
+          <h1 style={{ fontSize: "clamp(28px, 3vw, 42px)", color: "#0E1117", lineHeight: 1.1, margin: 0, fontFamily: "'Abel', sans-serif" }}>
+            {t.companyDetails.title}
+          </h1>
+
+          {/* Form fields */}
+          <div className="flex flex-col" style={{ gap: "clamp(14px, 1.8vh, 24px)" }}>
+
+            {/* Company Name */}
+            <div className="flex flex-col" style={{ gap: 6 }}>
+              <label style={{ fontFamily: "'Abel', sans-serif", fontSize: "clamp(14px, 1.2vw, 18px)", color: "#414042", lineHeight: 1.1 }}>
+                {t.companyDetails.companyName}
+              </label>
+              <input
+                {...register("company_name")}
+                placeholder="Type here..."
+                className="placeholder:opacity-30 placeholder:text-[#647787]"
+                style={{ ...inputStyle, borderColor: errors.company_name ? "#EF4444" : "#F3F3F6" }}
+              />
+            </div>
+
+            {/* Phone */}
+            <div className="flex flex-col" style={{ gap: 6 }}>
+              <label style={{ fontFamily: "'Abel', sans-serif", fontSize: "clamp(14px, 1.2vw, 18px)", color: "#414042", lineHeight: 1.1 }}>
+                {t.companyDetails.phone}
+              </label>
+              <input
+                type="tel"
+                {...register("phone")}
+                placeholder="Type here..."
+                className="placeholder:opacity-30 placeholder:text-[#647787]"
+                style={{ ...inputStyle, borderColor: errors.phone ? "#EF4444" : "#F3F3F6" }}
+              />
+            </div>
+
+            {/* Number of Employees */}
+            <div className="flex flex-col" style={{ gap: 6 }}>
+              <label style={{ fontFamily: "'Abel', sans-serif", fontSize: "clamp(14px, 1.2vw, 18px)", color: "#414042", lineHeight: 1.1 }}>
+                {t.companyDetails.numberOfEmployees}
+              </label>
+              <input
+                {...register("number_of_employees")}
+                placeholder="Type here..."
+                className="placeholder:opacity-30 placeholder:text-[#647787]"
+                style={{ ...inputStyle, borderColor: errors.number_of_employees ? "#EF4444" : "#F3F3F6" }}
+              />
+            </div>
+
+            {/* Employer Type — dropdown with chevron */}
+            <div className="flex flex-col" style={{ gap: 6 }}>
+              <label style={{ fontFamily: "'Abel', sans-serif", fontSize: "clamp(14px, 1.2vw, 18px)", color: "#414042", lineHeight: 1.1 }}>
+                {t.companyDetails.employerType}
+              </label>
+              <div className="relative">
+                <select
+                  value={watch("employer_type")}
+                  onChange={(e) => setValue("employer_type", e.target.value, { shouldValidate: true })}
+                  style={{
+                    ...inputStyle,
+                    borderColor: errors.employer_type ? "#EF4444" : "#EAEBEB",
+                    appearance: "none",
+                    cursor: "pointer",
+                    paddingInlineStart: 36,
+                  }}
+                >
+                  <option value="">{t.companyDetails.choose}</option>
+                  {EMPLOYER_TYPES.map((item) => (
+                    <option key={item.value} value={item.value}>{item.label}</option>
+                  ))}
+                </select>
+                {/* Chevron on start side */}
+                <svg
+                  width="10" height="6" viewBox="0 0 10 6" fill="none"
+                  className="absolute top-1/2 -translate-y-1/2"
+                  style={{ insetInlineStart: 14 }}
+                >
+                  <path d="M1 1L5 5L9 1" stroke="#647787" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+            </div>
+
+            {/* Privacy checkbox */}
+            <div className="flex items-center" style={{ gap: 10 }}>
+              <label
+                htmlFor="privacy"
+                style={{ fontFamily: "'Abel', sans-serif", fontSize: "clamp(12px, 1vw, 14px)", color: "#647787", cursor: "pointer", lineHeight: 1.4 }}
+              >
+                {t.companyDetails.privacyCheckbox}{" "}
+                <Link href="/privacy" style={{ color: "#4C96FF", textDecoration: "underline" }} target="_blank">
+                  {t.companyDetails.privacyLink}
+                </Link>
+              </label>
+              <Checkbox
+                id="privacy"
+                checked={privacyAccepted === true}
+                onCheckedChange={(checked) =>
+                  setValue("privacy_accepted", checked === true ? true : (undefined as unknown as true), { shouldValidate: true })
+                }
+              />
+            </div>
+          </div>
         </div>
 
-        <div>
-          <label className="block text-[13px] text-[#6B7280] mb-2 text-end">
-            {t.companyDetails.phone}
-          </label>
-          <input
-            type="tel"
-            {...register("phone")}
-            className={`${inputClass} ${errors.phone ? "border-[#EF4444]" : ""}`}
-          />
-        </div>
-
-        <div>
-          <label className="block text-[13px] text-[#6B7280] mb-2 text-end">
-            {t.companyDetails.numberOfEmployees}
-          </label>
-          <select
-            value={watch("number_of_employees")}
-            onChange={(e) =>
-              setValue("number_of_employees", e.target.value, { shouldValidate: true })
-            }
-            className={`${selectClass} ${errors.number_of_employees ? "border-[#EF4444]" : ""}`}
-          >
-            <option value="">{t.companyDetails.select}</option>
-            {NUMBER_OF_EMPLOYEES.map((item) => (
-              <option key={item.value} value={item.value}>
-                {item.label}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label className="block text-[13px] text-[#6B7280] mb-2 text-end">
-            {t.companyDetails.employerType}
-          </label>
-          <select
-            value={watch("employer_type")}
-            onChange={(e) =>
-              setValue("employer_type", e.target.value, { shouldValidate: true })
-            }
-            className={`${selectClass} ${errors.employer_type ? "border-[#EF4444]" : ""}`}
-          >
-            <option value="">{t.companyDetails.choose}</option>
-            {EMPLOYER_TYPES.map((item) => (
-              <option key={item.value} value={item.value}>
-                {item.label}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Privacy Policy */}
-        <div className="flex items-start gap-3">
-          <Checkbox
-            id="privacy"
-            checked={privacyAccepted === true}
-            onCheckedChange={(checked) =>
-              setValue(
-                "privacy_accepted",
-                checked === true ? true : (undefined as unknown as true),
-                { shouldValidate: true }
-              )
-            }
-            className="mt-0.5"
-          />
-          <label htmlFor="privacy" className="text-[13px] text-[#6B7280] cursor-pointer leading-relaxed">
-            {t.companyDetails.privacyCheckbox}{" "}
-            <Link
-              href="/privacy"
-              className="text-[#4B7BF5] hover:underline"
-              target="_blank"
-            >
-              {t.companyDetails.privacyLink}
-            </Link>
-          </label>
-        </div>
-
-        {/* Actions */}
-        <div className="flex items-center gap-3 pt-6">
+        {/* Bottom — Buttons */}
+        <div className="flex items-center" style={{ gap: 16 }}>
           <button
             type="submit"
             disabled={!isValid}
-            className="h-[44px] px-10 bg-[#4B7BF5] hover:bg-[#3A62C4] text-white text-[14px] font-medium rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+            className="flex items-center justify-center cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+            style={{
+              width: 162, height: 40, borderRadius: 10,
+              backgroundImage: "linear-gradient(168.47deg, rgb(76, 150, 255) 12.19%, rgb(22, 103, 219) 93.76%)",
+              border: "none", fontSize: 16, color: "#FFFFFF", fontFamily: "'Abel', sans-serif",
+            }}
           >
-            {t.common.continue}
+            continuation
           </button>
           <button
             type="button"
-            className="h-[44px] px-10 border border-[#E5E7EB] text-[#6B7280] text-[14px] font-medium rounded-lg hover:bg-[#F9FAFB] transition-colors cursor-pointer"
+            className="flex items-center justify-center cursor-pointer"
+            style={{
+              width: 140, height: 40, borderRadius: 10,
+              background: "#FFFFFF", border: "1px solid #EAEBEB",
+              fontSize: 16, color: "#647787", fontFamily: "'Abel', sans-serif",
+            }}
           >
-            {t.common.skip}
+            return
           </button>
         </div>
       </form>
-    </OnboardingLayout>
+    </OnboardingSplitLayout>
   );
 }

@@ -10,7 +10,7 @@ import {
 } from "@/lib/validations/supplier";
 import { AREAS_OF_ACTIVITY } from "@/lib/constants";
 import { useLanguage } from "@/lib/i18n/context";
-import { OnboardingLayout } from "./onboarding-layout";
+import { OnboardingSplitLayout } from "./onboarding-split-layout";
 
 interface SupplierRegistrationStepProps {
   onSubmit: (data: SupplierRegistrationFormData) => void;
@@ -18,28 +18,14 @@ interface SupplierRegistrationStepProps {
   onSkip: () => void;
 }
 
-export function SupplierRegistrationStep({
-  onSubmit,
-  onBack,
-  onSkip,
-}: SupplierRegistrationStepProps) {
+export function SupplierRegistrationStep({ onSubmit, onBack, onSkip }: SupplierRegistrationStepProps) {
   const { t } = useLanguage();
   const [serviceImages, setServiceImages] = useState<Record<number, string>>({});
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    setValue,
-    watch,
-  } = useForm<SupplierRegistrationFormData>({
+  const { register, handleSubmit, control, setValue, watch } = useForm<SupplierRegistrationFormData>({
     resolver: zodResolver(supplierRegistrationSchema),
     defaultValues: {
-      area_of_activity: "",
-      contact_name: "",
-      phone: "",
-      email: "",
-      age_group: "",
+      area_of_activity: "", contact_name: "", phone: "", email: "", age_group: "",
       services: [{ service_type: "", service_name: "", description: "", image_url: "" }],
     },
   });
@@ -59,163 +45,181 @@ export function SupplierRegistrationStep({
     }
   };
 
-  const inputClass =
-    "w-full h-[44px] rounded-lg border border-[#E5E7EB] bg-white px-4 text-[14px] text-[#1F2937] outline-none focus:border-[#4B7BF5] focus:ring-2 focus:ring-[#4B7BF5]/20 transition-colors";
-  const selectClass =
-    "w-full h-[44px] rounded-lg border border-[#E5E7EB] bg-white px-4 text-[14px] text-[#1F2937] outline-none focus:border-[#4B7BF5] focus:ring-2 focus:ring-[#4B7BF5]/20 transition-colors appearance-none cursor-pointer";
+  const inputStyle: React.CSSProperties = {
+    width: "100%", height: "clamp(36px, 3.5vh, 44px)", borderRadius: 10, padding: "0 20px",
+    border: "1px solid #F3F3F6", background: "#FFFFFF", outline: "none",
+    fontFamily: "'Abel', sans-serif", fontSize: "clamp(12px, 1vw, 14px)", color: "#0E1117",
+  };
+  const selectStyle: React.CSSProperties = { ...inputStyle, appearance: "none" as const, cursor: "pointer", paddingInlineStart: 36 };
+  const labelStyle: React.CSSProperties = { fontFamily: "'Abel', sans-serif", fontSize: "clamp(13px, 1.1vw, 16px)", color: "#414042", lineHeight: 1.1 };
 
   return (
-    <OnboardingLayout step={{ current: 4, total: 4 }}>
-      <h1 className="text-[24px] font-bold text-[#1F2937] text-center mb-2">
-        {t.supplierRegistration.title}
-      </h1>
-      <p className="text-[13px] text-[#6B7280] text-center mb-10 leading-relaxed max-w-md mx-auto">
-        {t.supplierRegistration.subtitle}
-      </p>
+    <OnboardingSplitLayout step={{ current: 4, total: 4 }}>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-between" style={{ maxWidth: 520, height: "100%" }}>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-        <div>
-          <label className="block text-[13px] text-[#6B7280] mb-2 text-end">
-            {t.supplierRegistration.areaOfActivity}
-          </label>
-          <select
-            value={watch("area_of_activity")}
-            onChange={(e) => setValue("area_of_activity", e.target.value, { shouldValidate: true })}
-            className={selectClass}
-          >
-            <option value="">{t.supplierRegistration.choose}</option>
-            {AREAS_OF_ACTIVITY.map((item) => (
-              <option key={item.value} value={item.value}>{item.label}</option>
-            ))}
-          </select>
-        </div>
+        {/* Top — Title + Fields */}
+        <div className="flex flex-col" style={{ gap: "clamp(6px, 1vh, 16px)" }}>
 
-        <div>
-          <label className="block text-[13px] text-[#6B7280] mb-2 text-end">
-            {t.supplierRegistration.contactName}
-          </label>
-          <input {...register("contact_name")} className={inputClass} />
-        </div>
+          {/* Title + Subtitle */}
+          <div className="flex flex-col" style={{ gap: 6 }}>
+            <h1 style={{ fontSize: "clamp(22px, 2.5vw, 36px)", color: "#0E1117", lineHeight: 1.1, margin: 0, fontFamily: "'Abel', sans-serif" }}>
+              {t.supplierRegistration.title}
+            </h1>
+            <p style={{ fontSize: "clamp(11px, 0.85vw, 13px)", color: "#647787", lineHeight: 1.4, margin: 0, fontFamily: "'Abel', sans-serif" }}>
+              {t.supplierRegistration.subtitle}
+            </p>
+          </div>
 
-        <div>
-          <label className="block text-[13px] text-[#6B7280] mb-2 text-end">
-            {t.supplierRegistration.phoneNumber}
-          </label>
-          <input type="tel" {...register("phone")} className={inputClass} />
-        </div>
-
-        <div>
-          <label className="block text-[13px] text-[#6B7280] mb-2 text-end">
-            {t.supplierRegistration.emailAddress}
-          </label>
-          <input type="email" {...register("email")} className={inputClass} />
-        </div>
-
-        <div>
-          <label className="block text-[13px] text-[#6B7280] mb-2 text-end">
-            {t.supplierRegistration.agePrices}
-          </label>
-          <select
-            value={watch("age_group") ?? ""}
-            onChange={(e) => setValue("age_group", e.target.value)}
-            className={selectClass}
-          >
-            <option value="">{t.supplierRegistration.choose}</option>
-            <option value="children">Children</option>
-            <option value="youth">Youth</option>
-            <option value="adults">Adults</option>
-            <option value="all">All Ages</option>
-          </select>
-        </div>
-
-        {/* Services */}
-        {fields.map((field, index) => (
-          <div key={field.id} className="space-y-5 border-t border-[#E5E7EB] pt-5">
-            <div>
-              <label className="block text-[13px] text-[#6B7280] mb-2 text-end">
-                {t.supplierRegistration.serviceType}
-              </label>
+          {/* Area of Activity — dropdown */}
+          <div className="flex flex-col" style={{ gap: 4 }}>
+            <label style={labelStyle}>{t.supplierRegistration.areaOfActivity}</label>
+            <div className="relative">
               <select
-                value={watch(`services.${index}.service_type`)}
-                onChange={(e) => setValue(`services.${index}.service_type`, e.target.value, { shouldValidate: true })}
-                className={selectClass}
+                value={watch("area_of_activity")}
+                onChange={(e) => setValue("area_of_activity", e.target.value, { shouldValidate: true })}
+                style={selectStyle}
               >
                 <option value="">{t.supplierRegistration.choose}</option>
-                <option value="tutoring">Tutoring</option>
-                <option value="consulting">Consulting</option>
-                <option value="training">Training</option>
-                <option value="workshops">Workshops</option>
-                <option value="other">Other</option>
+                {AREAS_OF_ACTIVITY.map((item) => (
+                  <option key={item.value} value={item.value}>{item.label}</option>
+                ))}
               </select>
+              <svg width="10" height="6" viewBox="0 0 10 6" fill="none" className="absolute top-1/2 -translate-y-1/2" style={{ insetInlineStart: 14 }}>
+                <path d="M1 1L5 5L9 1" stroke="#647787" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
             </div>
-
-            <div>
-              <label className="block text-[13px] text-[#6B7280] mb-2 text-end">
-                {t.supplierRegistration.serviceName}
-              </label>
-              <input {...register(`services.${index}.service_name`)} className={inputClass} />
-              <button type="button" className="mt-1 text-[12px] text-[#4B7BF5] hover:underline cursor-pointer">
-                {t.supplierRegistration.serviceDetails}
-              </button>
-            </div>
-
-            <div>
-              <label className="block text-[13px] text-[#6B7280] mb-2 text-end">
-                {t.supplierRegistration.description}
-              </label>
-              <textarea
-                rows={3}
-                {...register(`services.${index}.description`)}
-                className="w-full rounded-lg border border-[#E5E7EB] bg-white px-4 py-3 text-[14px] text-[#1F2937] outline-none focus:border-[#4B7BF5] focus:ring-2 focus:ring-[#4B7BF5]/20 transition-colors resize-none"
-              />
-            </div>
-
-            <div>
-              <label className="cursor-pointer">
-                <span className="inline-flex items-center gap-2 text-[13px] text-[#4B7BF5] hover:text-[#3A62C4] transition-colors">
-                  <Upload className="w-4 h-4" />
-                  {t.supplierRegistration.addImageToPost}
-                </span>
-                <input type="file" accept="image/*" className="hidden" onChange={(e) => handleServiceImageUpload(index, e)} />
-              </label>
-              {serviceImages[index] && (
-                <div className="mt-2 w-40 h-28 rounded-lg overflow-hidden border border-[#E5E7EB]">
-                  <img src={serviceImages[index]} alt="Service" className="w-full h-full object-cover" />
-                </div>
-              )}
-            </div>
-
-            {fields.length > 1 && (
-              <button type="button" onClick={() => remove(index)} className="inline-flex items-center gap-1 text-[13px] text-[#EF4444] hover:text-[#DC2626] cursor-pointer">
-                <Trash2 className="w-4 h-4" />
-                {t.supplierRegistration.removeService}
-              </button>
-            )}
           </div>
-        ))}
 
-        <button
-          type="button"
-          onClick={() => append({ service_type: "", service_name: "", description: "", image_url: "" })}
-          className="inline-flex items-center gap-1 text-[13px] text-[#4B7BF5] hover:text-[#3A62C4] transition-colors cursor-pointer"
-        >
-          <Plus className="w-4 h-4" />
-          {t.supplierRegistration.addAnotherService}
-        </button>
+          {/* Contact Name */}
+          <div className="flex flex-col" style={{ gap: 4 }}>
+            <label style={labelStyle}>{t.supplierRegistration.contactName}</label>
+            <input {...register("contact_name")} placeholder="Type here..." className="placeholder:opacity-30 placeholder:text-[#647787]" style={inputStyle} />
+          </div>
 
-        {/* Actions */}
-        <div className="flex items-center gap-3 pt-6">
-          <button type="button" onClick={onBack} className="text-[13px] text-[#6B7280] hover:text-[#1F2937] cursor-pointer">
-            {t.supplierRegistration.hopping}
+          {/* Phone */}
+          <div className="flex flex-col" style={{ gap: 4 }}>
+            <label style={labelStyle}>{t.supplierRegistration.phoneNumber}</label>
+            <input type="tel" {...register("phone")} placeholder="Type here..." className="placeholder:opacity-30 placeholder:text-[#647787]" style={inputStyle} />
+          </div>
+
+          {/* Email */}
+          <div className="flex flex-col" style={{ gap: 4 }}>
+            <label style={labelStyle}>{t.supplierRegistration.emailAddress}</label>
+            <input type="email" {...register("email")} placeholder="Type here..." className="placeholder:opacity-30 placeholder:text-[#647787]" style={inputStyle} />
+          </div>
+
+          {/* Age Prices — dropdown */}
+          <div className="flex flex-col" style={{ gap: 4 }}>
+            <label style={labelStyle}>{t.supplierRegistration.agePrices}</label>
+            <div className="relative">
+              <select value={watch("age_group") ?? ""} onChange={(e) => setValue("age_group", e.target.value)} style={selectStyle}>
+                <option value="">{t.supplierRegistration.choose}</option>
+                <option value="children">Children</option>
+                <option value="youth">Youth</option>
+                <option value="adults">Adults</option>
+                <option value="all">All Ages</option>
+              </select>
+              <svg width="10" height="6" viewBox="0 0 10 6" fill="none" className="absolute top-1/2 -translate-y-1/2" style={{ insetInlineStart: 14 }}>
+                <path d="M1 1L5 5L9 1" stroke="#647787" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+          </div>
+
+          {/* Services */}
+          {fields.map((field, index) => (
+            <div key={field.id} className="flex flex-col" style={{ gap: "clamp(4px, 0.8vh, 10px)", borderTop: index > 0 ? "1px solid #F3F3F6" : "none", paddingTop: index > 0 ? 8 : 0 }}>
+              {/* Service Type — dropdown */}
+              <div className="flex flex-col" style={{ gap: 4 }}>
+                <label style={labelStyle}>{t.supplierRegistration.serviceType}</label>
+                <div className="relative">
+                  <select
+                    value={watch(`services.${index}.service_type`)}
+                    onChange={(e) => setValue(`services.${index}.service_type`, e.target.value, { shouldValidate: true })}
+                    style={selectStyle}
+                  >
+                    <option value="">{t.supplierRegistration.choose}</option>
+                    <option value="tutoring">Tutoring</option>
+                    <option value="consulting">Consulting</option>
+                    <option value="training">Training</option>
+                    <option value="workshops">Workshops</option>
+                    <option value="other">Other</option>
+                  </select>
+                  <svg width="10" height="6" viewBox="0 0 10 6" fill="none" className="absolute top-1/2 -translate-y-1/2" style={{ insetInlineStart: 14 }}>
+                    <path d="M1 1L5 5L9 1" stroke="#647787" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+
+              {/* Service Name */}
+              <div className="flex flex-col" style={{ gap: 4 }}>
+                <label style={labelStyle}>{t.supplierRegistration.serviceName}</label>
+                <input {...register(`services.${index}.service_name`)} placeholder="Type here..." className="placeholder:opacity-30 placeholder:text-[#647787]" style={inputStyle} />
+                <button type="button" style={{ background: "none", border: "none", fontFamily: "'Abel', sans-serif", fontSize: 12, color: "#4C96FF", cursor: "pointer", padding: 0, alignSelf: "flex-end" }}>
+                  {t.supplierRegistration.serviceDetails}
+                </button>
+              </div>
+
+              {/* Description */}
+              <div className="flex flex-col" style={{ gap: 4 }}>
+                <label style={labelStyle}>{t.supplierRegistration.description}</label>
+                <textarea
+                  {...register(`services.${index}.description`)}
+                  placeholder="Type here..."
+                  className="placeholder:opacity-30 placeholder:text-[#647787]"
+                  style={{ ...inputStyle, height: "clamp(50px, 6vh, 80px)", padding: "10px 20px", resize: "none" }}
+                />
+              </div>
+
+              {/* Image upload + remove */}
+              <div className="flex items-center justify-between">
+                <label className="cursor-pointer flex items-center" style={{ gap: 4, fontFamily: "'Abel', sans-serif", fontSize: 13, color: "#4C96FF" }}>
+                  <Upload size={14} /> {t.supplierRegistration.addImageToPost}
+                  <input type="file" accept="image/*" className="hidden" onChange={(e) => handleServiceImageUpload(index, e)} />
+                </label>
+                {serviceImages[index] && (
+                  <img src={serviceImages[index]} alt="" style={{ width: 48, height: 36, borderRadius: 6, objectFit: "cover" }} />
+                )}
+                {fields.length > 1 && (
+                  <button type="button" onClick={() => remove(index)} style={{ background: "none", border: "none", color: "#EF4444", cursor: "pointer", fontSize: 12, display: "flex", alignItems: "center", gap: 4 }}>
+                    <Trash2 size={12} /> Remove
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
+
+          {/* Add another service */}
+          <button
+            type="button"
+            onClick={() => append({ service_type: "", service_name: "", description: "", image_url: "" })}
+            style={{ background: "none", border: "none", fontFamily: "'Abel', sans-serif", fontSize: 14, color: "#4C96FF", cursor: "pointer", padding: 0, alignSelf: "flex-end", display: "flex", alignItems: "center", gap: 4 }}
+          >
+            Add another service <Plus size={14} />
           </button>
-          <button type="submit" className="h-[44px] px-10 bg-[#4B7BF5] hover:bg-[#3A62C4] text-white text-[14px] font-medium rounded-lg transition-colors cursor-pointer">
-            {t.common.continue}
+        </div>
+
+        {/* Bottom — Buttons */}
+        <div className="flex items-center shrink-0" style={{ gap: 16, paddingTop: "clamp(8px, 1vh, 16px)" }}>
+          <button type="button" onClick={onBack} style={{ background: "none", border: "none", fontFamily: "'Abel', sans-serif", fontSize: 14, color: "#647787", cursor: "pointer" }}>
+            hopping
           </button>
-          <button type="button" onClick={onSkip} className="h-[44px] px-10 border border-[#E5E7EB] text-[#6B7280] text-[14px] font-medium rounded-lg hover:bg-[#F9FAFB] transition-colors cursor-pointer">
-            {t.common.skip}
+          <button
+            type="submit"
+            className="flex items-center justify-center cursor-pointer"
+            style={{ width: 162, height: 40, borderRadius: 10, backgroundImage: "linear-gradient(168.47deg, rgb(76, 150, 255) 12.19%, rgb(22, 103, 219) 93.76%)", border: "none", fontSize: 16, color: "#FFFFFF", fontFamily: "'Abel', sans-serif" }}
+          >
+            continuation
+          </button>
+          <button
+            type="button"
+            onClick={onSkip}
+            className="flex items-center justify-center cursor-pointer"
+            style={{ width: 140, height: 40, borderRadius: 10, background: "#FFFFFF", border: "1px solid #EAEBEB", fontSize: 16, color: "#647787", fontFamily: "'Abel', sans-serif" }}
+          >
+            return
           </button>
         </div>
       </form>
-    </OnboardingLayout>
+    </OnboardingSplitLayout>
   );
 }
