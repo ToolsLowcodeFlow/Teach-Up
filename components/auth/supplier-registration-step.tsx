@@ -55,10 +55,10 @@ export function SupplierRegistrationStep({ onSubmit, onBack, onSkip }: SupplierR
 
   return (
     <OnboardingSplitLayout step={{ current: 4, total: 4 }}>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-between" style={{ maxWidth: 520, height: "100%" }}>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col" style={{ maxWidth: 520, height: "100%" }}>
 
-        {/* Top — Title + Fields */}
-        <div className="flex flex-col" style={{ gap: "clamp(6px, 1vh, 16px)" }}>
+        {/* Top — Title + Fields (scrollable) */}
+        <div className="flex-1 flex flex-col overflow-y-auto" style={{ gap: "clamp(6px, 1vh, 16px)", paddingBottom: 8, scrollbarWidth: "thin", scrollbarColor: "#D1D5DB transparent" }}>
 
           {/* Title + Subtitle */}
           <div className="flex flex-col" style={{ gap: 6 }}>

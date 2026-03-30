@@ -28,7 +28,7 @@ export function OnboardingSplitLayout({ children, step }: OnboardingSplitLayoutP
         </div>
 
         {/* Main — fills remaining height, children stretch to fill */}
-        <div className="flex-1 flex" style={{ padding: "1vh 4vw 2vh" }}>
+        <div className="flex-1 flex min-h-0" style={{ padding: "1vh 4vw 2vh" }}>
           {children}
         </div>
       </div>
