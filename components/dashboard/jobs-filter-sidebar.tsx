@@ -2,28 +2,8 @@
 
 import { useState } from "react";
 import { ChevronDown, Search } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/i18n/context";
-
-interface FilterDropdownProps {
-  label: string;
-  placeholder?: boolean;
-}
-
-function FilterDropdown({ label, placeholder }: FilterDropdownProps) {
-  return (
-    <button
-      style={{ padding: "12px 16px" }}
-      className={cn(
-        "flex w-full items-center justify-between rounded-[10px] border border-border-light bg-white text-sm tracking-tight transition-colors hover:border-primary/30",
-        placeholder ? "text-muted-foreground/30" : "text-foreground"
-      )}
-    >
-      <span>{label}</span>
-      <ChevronDown className="h-3 w-3 shrink-0 text-muted-foreground" />
-    </button>
-  );
-}
+import { DropdownSelect } from "./dropdown-select";
 
 interface RangeSliderProps {
   label: string;
@@ -100,8 +80,8 @@ export function JobsFilterSidebar() {
             <ChevronDown className="h-3 w-3 shrink-0 text-muted-foreground/30" />
           </div>
 
-          <FilterDropdown label={t.dashboard.role} />
-          <FilterDropdown label={t.dashboard.fieldOfKnowledge} />
+          <DropdownSelect label={t.dashboard.role} options={["Option 1", "Option 2", "Option 3"]} />
+          <DropdownSelect label={t.dashboard.fieldOfKnowledge} options={["Option 1", "Option 2", "Option 3"]} />
 
           <RangeSlider
             label={t.dashboard.experienceYears}
@@ -109,10 +89,10 @@ export function JobsFilterSidebar() {
             onChange={setExperience}
           />
 
-          <FilterDropdown label={t.dashboard.scopeOfWork} />
-          <FilterDropdown label={t.dashboard.searchByRegion} placeholder />
-          <FilterDropdown label={t.dashboard.languages} />
-          <FilterDropdown label={t.dashboard.training} />
+          <DropdownSelect label={t.dashboard.scopeOfWork} options={["Option 1", "Option 2", "Option 3"]} />
+          <DropdownSelect label={t.dashboard.searchByRegion} options={["Option 1", "Option 2", "Option 3"]} placeholder />
+          <DropdownSelect label={t.dashboard.languages} options={["Option 1", "Option 2", "Option 3"]} />
+          <DropdownSelect label={t.dashboard.training} options={["Option 1", "Option 2", "Option 3"]} />
 
           <RangeSlider
             label={t.dashboard.salary}

@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { ChevronDown, Upload, CheckCircle2, X } from "lucide-react";
+import { Upload, CheckCircle2, X } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/context";
+import { DropdownSelect } from "./dropdown-select";
 
 interface FormFieldProps {
   label: string;
@@ -31,12 +32,7 @@ function TextInput({ placeholder }: { placeholder: string }) {
 }
 
 function SelectInput({ placeholder }: { placeholder: string }) {
-  return (
-    <button style={{ padding: "14px 16px" }} className="flex w-full items-center justify-between rounded-lg border border-border-light bg-white text-sm text-muted-foreground/60">
-      <span>{placeholder}</span>
-      <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
-    </button>
-  );
+  return <DropdownSelect label={placeholder} options={["Option 1", "Option 2", "Option 3"]} />;
 }
 
 interface CreateJobModalProps {

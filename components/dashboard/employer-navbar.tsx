@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { ChevronDown, MessageSquareText, Bell, Heart, Globe } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/i18n/context";
+import { useState } from "react";
 
 interface EmployerNavbarProps {
   onPostJob?: () => void;
@@ -13,6 +14,7 @@ interface EmployerNavbarProps {
 export function EmployerNavbar({ onPostJob }: EmployerNavbarProps) {
   const pathname = usePathname();
   const { t, locale, toggleLocale } = useLanguage();
+  const [avatarMenu, setAvatarMenu] = useState(false);
 
   const navLinks = [
     { label: t.dashboard.myJobs, href: "/institution/dashboard" },
@@ -70,9 +72,9 @@ export function EmployerNavbar({ onPostJob }: EmployerNavbarProps) {
           </button>
 
           <div className="flex items-center gap-1">
-            <button className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gray-100">
+            <Link href="/institution/dashboard/favorites" className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gray-100">
               <Heart className="h-5 w-5 text-foreground" />
-            </button>
+            </Link>
             <button className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gray-100">
               <Bell className="h-5 w-5 text-foreground" />
             </button>
@@ -89,14 +91,39 @@ export function EmployerNavbar({ onPostJob }: EmployerNavbarProps) {
             {t.dashboard.jobPosting}
           </button>
 
-          <button className="flex items-center gap-2">
-            <div className="h-8 w-8 overflow-hidden rounded-full bg-muted-foreground/20">
-              <div className="flex h-full w-full items-center justify-center text-xs text-muted-foreground">
-                U
+          <div className="relative">
+            <button onClick={() => setAvatarMenu(!avatarMenu)} className="flex items-center gap-2">
+              <div className="h-8 w-8 overflow-hidden rounded-full bg-muted-foreground/20">
+                <div className="flex h-full w-full items-center justify-center text-xs text-muted-foreground">
+                  U
+                </div>
               </div>
-            </div>
-            <ChevronDown className="h-3 w-3 text-foreground" />
-          </button>
+              <ChevronDown className="h-3 w-3 text-foreground" />
+            </button>
+            {avatarMenu && (
+              <>
+                <div className="fixed inset-0 z-10" onClick={() => setAvatarMenu(false)} />
+                <div
+                  style={{ padding: "12px 16px" }}
+                  className="absolute inset-e-0 top-10 z-20 flex min-w-40 flex-col gap-2 rounded-xl border border-border-light bg-white shadow-lg"
+                >
+                  <Link
+                    href="/institution/dashboard/profile"
+                    onClick={() => setAvatarMenu(false)}
+                    className="whitespace-nowrap py-1 text-sm text-foreground transition-colors hover:text-primary"
+                  >
+                    {t.profile.personalArea}
+                  </Link>
+                  <button
+                    onClick={() => setAvatarMenu(false)}
+                    className="whitespace-nowrap py-1 text-start text-sm text-danger transition-colors hover:text-danger/70"
+                  >
+                    {t.profile.disengagement}
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </header>
