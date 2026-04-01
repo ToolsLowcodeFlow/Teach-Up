@@ -43,25 +43,25 @@ export default function SelectRolePage() {
 
         {/* Main — vertically centered */}
         <div className="flex-1 flex items-center" style={{ padding: "0 4vw" }}>
-          <div className="flex flex-col" style={{ gap: "clamp(16px, 2.5vh, 40px)", maxWidth: 620 }}>
+          <div className="flex flex-col" style={{ gap: "clamp(12px, 1.8vh, 28px)", maxWidth: 580 }}>
 
             {/* Title + Subtitle */}
-            <div className="flex flex-col" style={{ gap: "clamp(10px, 1.5vh, 20px)" }}>
-              <h1 style={{ fontSize: "clamp(28px, 3.3vw, 50px)", color: "#0E1117", lineHeight: 1.1, margin: 0 }}>
+            <div className="flex flex-col" style={{ gap: "clamp(8px, 1vh, 14px)" }}>
+              <h1 style={{ fontSize: "clamp(24px, 2.2vw, 36px)", color: "#0E1117", lineHeight: 1.1, margin: 0 }}>
                 {t.selectRole.title}
               </h1>
-              <p style={{ fontSize: "clamp(20px, 2.2vw, 36px)", color: "#0E1117", lineHeight: 1.1, margin: 0 }}>
+              <p style={{ fontSize: "clamp(16px, 1.5vw, 24px)", color: "#0E1117", lineHeight: 1.2, margin: 0 }}>
                 {t.selectRole.subtitle}
               </p>
             </div>
 
             {/* Prompt */}
-            <p style={{ fontSize: "clamp(14px, 1.4vw, 22px)", color: "#647787", lineHeight: 1.3, margin: 0 }}>
+            <p style={{ fontSize: "clamp(13px, 1.1vw, 18px)", color: "#647787", lineHeight: 1.3, margin: 0 }}>
               {t.selectRole.prompt}
             </p>
 
             {/* Cards */}
-            <div className="flex flex-col" style={{ gap: "clamp(12px, 1.5vh, 24px)" }}>
+            <div className="flex flex-col" style={{ gap: "clamp(10px, 1.2vh, 18px)" }}>
 
               {/* Card 1 */}
               <button
@@ -69,26 +69,26 @@ export default function SelectRolePage() {
                 onClick={() => setSelectedRole("seeker")}
                 className="flex items-center text-start cursor-pointer transition-all"
                 style={{
-                  padding: "clamp(16px, 2vh, 30px) clamp(20px, 2.5vw, 40px)",
+                  padding: "clamp(14px, 1.6vh, 24px) clamp(16px, 2vw, 30px)",
                   background: "#FFFFFF",
-                  borderRadius: 20,
+                  borderRadius: 16,
                   boxShadow: "0px 4px 24px 0px rgba(0,0,0,0.08)",
                   border: selectedRole === "seeker" ? "2px solid #4C96FF" : "2px solid transparent",
-                  gap: "clamp(20px, 3vw, 50px)",
+                  gap: "clamp(16px, 2vw, 30px)",
                 }}
               >
-                <div className="relative shrink-0" style={{ width: "clamp(56px, 5.5vw, 82px)", height: "clamp(56px, 5.5vw, 82px)" }}>
+                <div className="relative shrink-0" style={{ width: "clamp(48px, 4.5vw, 66px)", height: "clamp(48px, 4.5vw, 66px)" }}>
                   <img src="/images/ellipse-blue-ring.svg" alt="" className="absolute inset-0 w-full h-full" />
                   <div
                     className="absolute rounded-full overflow-hidden flex items-center justify-center"
-                    style={{ left: "19.5%", top: "19.5%", width: "61%", height: "61%", background: "linear-gradient(140deg, #4C96FF 12%, #1667DB 94%)", border: "0.86px solid white", boxShadow: "0 0 0 10px rgba(255,255,255,0.61)" }}
+                    style={{ left: "19.5%", top: "19.5%", width: "61%", height: "61%", background: "linear-gradient(140deg, #4C96FF 12%, #1667DB 94%)", border: "0.86px solid white", boxShadow: "0 0 0 8px rgba(255,255,255,0.61)" }}
                   >
                     <img src="/images/icon-message-text-blue.svg" alt="" style={{ width: "52%", height: "52%" }} />
                   </div>
                 </div>
-                <div className="flex flex-col" style={{ gap: 4 }}>
-                  <p style={{ fontSize: "clamp(16px, 1.5vw, 24px)", color: "#0E1117", lineHeight: 1.1, margin: 0 }}>{t.selectRole.seekerTitle}</p>
-                  <p style={{ fontSize: "clamp(12px, 1vw, 16px)", color: "#0E1117", lineHeight: 1.4, margin: 0, opacity: 0.6 }}>{t.selectRole.seekerDesc}</p>
+                <div className="flex flex-col" style={{ gap: 3 }}>
+                  <p style={{ fontSize: "clamp(14px, 1.2vw, 20px)", color: "#0E1117", lineHeight: 1.1, margin: 0 }}>{t.selectRole.seekerTitle}</p>
+                  <p style={{ fontSize: "clamp(11px, 0.85vw, 14px)", color: "#0E1117", lineHeight: 1.4, margin: 0, opacity: 0.6 }}>{t.selectRole.seekerDesc}</p>
                 </div>
               </button>
 
@@ -98,26 +98,26 @@ export default function SelectRolePage() {
                 onClick={() => setSelectedRole("institution")}
                 className="flex items-center text-start cursor-pointer transition-all"
                 style={{
-                  padding: "clamp(16px, 2vh, 30px) clamp(20px, 2.5vw, 40px)",
+                  padding: "clamp(14px, 1.6vh, 24px) clamp(16px, 2vw, 30px)",
                   background: "#FFFFFF",
-                  borderRadius: 20,
+                  borderRadius: 16,
                   boxShadow: "0px 4px 24px 0px rgba(0,0,0,0.08)",
                   border: selectedRole === "institution" ? "2px solid #4C96FF" : "2px solid transparent",
-                  gap: "clamp(20px, 3vw, 50px)",
+                  gap: "clamp(16px, 2vw, 30px)",
                 }}
               >
-                <div className="relative shrink-0" style={{ width: "clamp(56px, 5.5vw, 82px)", height: "clamp(56px, 5.5vw, 82px)" }}>
+                <div className="relative shrink-0" style={{ width: "clamp(48px, 4.5vw, 66px)", height: "clamp(48px, 4.5vw, 66px)" }}>
                   <img src="/images/ellipse-purple-ring.svg" alt="" className="absolute inset-0 w-full h-full" />
                   <div
                     className="absolute rounded-full overflow-hidden flex items-center justify-center"
-                    style={{ left: "19.5%", top: "19.5%", width: "61%", height: "61%", background: "#AC4CFF", border: "0.86px solid white", boxShadow: "0 0 0 10px rgba(255,255,255,0.61)" }}
+                    style={{ left: "19.5%", top: "19.5%", width: "61%", height: "61%", background: "#AC4CFF", border: "0.86px solid white", boxShadow: "0 0 0 8px rgba(255,255,255,0.61)" }}
                   >
                     <img src="/images/icon-message-text-purple.svg" alt="" style={{ width: "52%", height: "52%" }} />
                   </div>
                 </div>
-                <div className="flex flex-col" style={{ gap: 4 }}>
-                  <p style={{ fontSize: "clamp(16px, 1.5vw, 24px)", color: "#0E1117", lineHeight: 1.1, margin: 0 }}>{t.selectRole.institutionTitle}.</p>
-                  <p style={{ fontSize: "clamp(12px, 1vw, 16px)", color: "#0E1117", lineHeight: 1.4, margin: 0, opacity: 0.6 }}>{t.selectRole.institutionDesc}</p>
+                <div className="flex flex-col" style={{ gap: 3 }}>
+                  <p style={{ fontSize: "clamp(14px, 1.2vw, 20px)", color: "#0E1117", lineHeight: 1.1, margin: 0 }}>{t.selectRole.institutionTitle}.</p>
+                  <p style={{ fontSize: "clamp(11px, 0.85vw, 14px)", color: "#0E1117", lineHeight: 1.4, margin: 0, opacity: 0.6 }}>{t.selectRole.institutionDesc}</p>
                 </div>
               </button>
             </div>
@@ -142,22 +142,22 @@ export default function SelectRolePage() {
 
       {/* RIGHT — Blue panel (fills to edge) */}
       <div className="hidden lg:block shrink-0 overflow-hidden relative h-full" style={{ width: "37%", background: "#EFF5FE" }}>
-        <img src="/images/ellipse1.svg" alt="" className="absolute pointer-events-none" style={{ right: -400, top: "70%", width: 781, height: 329 }} />
-        <img src="/images/ellipse2.svg" alt="" className="absolute pointer-events-none" style={{ left: -200, top: -319, width: 749, height: 749 }} />
-        <div className="absolute pointer-events-none flex flex-col" style={{ left: -30, top: -6, opacity: 0.43 }}>
-          {[0, 1, 2].map((row) => (
-            <div key={row} className="flex" style={{ marginBottom: -2.87 }}>
+        <img src="/images/ellipse1.svg" alt="" className="absolute pointer-events-none" style={{ right: -300, top: "70%", width: 600, height: 250 }} />
+        <img src="/images/ellipse2.svg" alt="" className="absolute pointer-events-none" style={{ left: -150, top: -250, width: 550, height: 550 }} />
+        <div className="absolute pointer-events-none flex flex-col" style={{ left: -20, top: -4, opacity: 0.43 }}>
+          {[0, 1, 2, 3].map((row) => (
+            <div key={row} className="flex" style={{ marginBottom: -2 }}>
               {[0, 1, 2, 3].map((col) => (
-                <div key={col} style={{ width: 201, height: 201, border: "2.87px solid white", marginRight: -2.87, background: (row === 0 && col === 1) || (row === 2 && col === 3) ? "white" : "transparent" }} />
+                <div key={col} style={{ width: 140, height: 140, border: "2px solid white", marginRight: -2, background: (row === 0 && col === 1) || (row === 2 && col === 3) ? "white" : "transparent" }} />
               ))}
             </div>
           ))}
         </div>
-        <div className="absolute pointer-events-none flex flex-col" style={{ left: -30, top: 588, opacity: 0.43 }}>
-          {[0, 1, 2].map((row) => (
-            <div key={row} className="flex" style={{ marginBottom: -2.87 }}>
+        <div className="absolute pointer-events-none flex flex-col" style={{ left: -20, top: 420, opacity: 0.43 }}>
+          {[0, 1, 2, 3].map((row) => (
+            <div key={row} className="flex" style={{ marginBottom: -2 }}>
               {[0, 1, 2, 3].map((col) => (
-                <div key={col} style={{ width: 201, height: 201, border: "2.87px solid white", marginRight: -2.87, background: (row === 1 && col === 1) ? "white" : "transparent" }} />
+                <div key={col} style={{ width: 140, height: 140, border: "2px solid white", marginRight: -2, background: (row === 1 && col === 1) ? "white" : "transparent" }} />
               ))}
             </div>
           ))}

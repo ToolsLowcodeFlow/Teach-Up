@@ -27,7 +27,7 @@ export function OnboardingSplitLayout({ children, step }: OnboardingSplitLayoutP
           )}
         </div>
 
-        {/* Main — fills remaining height, children stretch to fill */}
+        {/* Main — fills remaining height */}
         <div className="flex-1 flex min-h-0" style={{ padding: "1vh 4vw 2vh" }}>
           {children}
         </div>
@@ -35,22 +35,22 @@ export function OnboardingSplitLayout({ children, step }: OnboardingSplitLayoutP
 
       {/* RIGHT — Blue panel */}
       <div className="hidden lg:block shrink-0 overflow-hidden relative h-full" style={{ width: "37%", background: "#EFF5FE" }}>
-        <img src="/images/ellipse1.svg" alt="" className="absolute pointer-events-none" style={{ right: -400, top: "70%", width: 781, height: 329 }} />
-        <img src="/images/ellipse2.svg" alt="" className="absolute pointer-events-none" style={{ left: -200, top: -319, width: 749, height: 749 }} />
-        <div className="absolute pointer-events-none flex flex-col" style={{ left: -30, top: -6, opacity: 0.43 }}>
-          {[0, 1, 2].map((row) => (
-            <div key={row} className="flex" style={{ marginBottom: -2.87 }}>
+        <img src="/images/ellipse1.svg" alt="" className="absolute pointer-events-none" style={{ right: -300, top: "70%", width: 600, height: 250 }} />
+        <img src="/images/ellipse2.svg" alt="" className="absolute pointer-events-none" style={{ left: -150, top: -250, width: 550, height: 550 }} />
+        <div className="absolute pointer-events-none flex flex-col" style={{ left: -20, top: -4, opacity: 0.43 }}>
+          {[0, 1, 2, 3].map((row) => (
+            <div key={row} className="flex" style={{ marginBottom: -2 }}>
               {[0, 1, 2, 3].map((col) => (
-                <div key={col} style={{ width: 201, height: 201, border: "2.87px solid white", marginRight: -2.87, background: (row === 0 && col === 1) || (row === 2 && col === 3) ? "white" : "transparent" }} />
+                <div key={col} style={{ width: 140, height: 140, border: "2px solid white", marginRight: -2, background: (row === 0 && col === 1) || (row === 2 && col === 3) ? "white" : "transparent" }} />
               ))}
             </div>
           ))}
         </div>
-        <div className="absolute pointer-events-none flex flex-col" style={{ left: -30, top: 588, opacity: 0.43 }}>
-          {[0, 1, 2].map((row) => (
-            <div key={row} className="flex" style={{ marginBottom: -2.87 }}>
+        <div className="absolute pointer-events-none flex flex-col" style={{ left: -20, top: 420, opacity: 0.43 }}>
+          {[0, 1, 2, 3].map((row) => (
+            <div key={row} className="flex" style={{ marginBottom: -2 }}>
               {[0, 1, 2, 3].map((col) => (
-                <div key={col} style={{ width: 201, height: 201, border: "2.87px solid white", marginRight: -2.87, background: (row === 1 && col === 1) ? "white" : "transparent" }} />
+                <div key={col} style={{ width: 140, height: 140, border: "2px solid white", marginRight: -2, background: (row === 1 && col === 1) ? "white" : "transparent" }} />
               ))}
             </div>
           ))}

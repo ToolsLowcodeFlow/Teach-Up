@@ -9,7 +9,7 @@ export function LanguageSwitcher() {
   return (
     <button
       onClick={toggleLocale}
-      className="lang-switcher-global fixed top-4 left-4 z-[100] flex items-center gap-2 bg-white/95 backdrop-blur-sm rounded-full px-3 py-1.5 text-sm font-medium shadow-md hover:shadow-lg transition-all cursor-pointer"
+      className="lang-switcher-global fixed top-4 right-4 z-100 flex items-center gap-2 bg-white/95 backdrop-blur-sm rounded-full px-3 py-1.5 text-sm font-medium shadow-md hover:shadow-lg transition-all cursor-pointer"
       style={{
         border: "1px solid #EAEBEB",
         color: "#414042",

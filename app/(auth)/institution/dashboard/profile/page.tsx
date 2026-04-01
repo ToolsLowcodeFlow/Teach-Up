@@ -29,17 +29,17 @@ export default function ProfilePage() {
       </h1>
 
       {/* Tabs */}
-      <div style={{ marginBottom: 32, padding: "8px" }} className="inline-flex items-center gap-2 rounded-full border border-border-light bg-white shadow-sm">
+      <div style={{ marginBottom: 32, padding: "6px" }} className="inline-flex items-center gap-1.5 rounded-xl bg-[#F7F9FC]">
         {tabs.map((tab) => (
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
-            style={{ padding: "10px 28px" }}
+            style={{ padding: "12px 40px" }}
             className={cn(
-              "rounded-full text-sm transition-colors",
+              "rounded-xl text-sm transition-colors",
               activeTab === tab.key
-                ? "bg-primary text-white shadow-md"
-                : "text-foreground hover:bg-[#F7F9FC]"
+                ? "bg-primary text-white"
+                : "text-foreground hover:bg-gray-200"
             )}
           >
             {tab.label}
@@ -48,6 +48,7 @@ export default function ProfilePage() {
       </div>
 
       {/* Content */}
+      {activeTab === "company" && (
       <div className="flex flex-col gap-8 lg:flex-row lg:gap-8">
         {/* Left: Company details */}
         <div className="flex-1">
@@ -181,9 +182,169 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
+      )}
+
+      {/* More information tab */}
+      {activeTab === "more" && (
+      <div className="flex flex-col gap-5 lg:max-w-lg">
+        {/* Company website */}
+        <div className="flex flex-col gap-2">
+          <label className="text-sm text-foreground">{t.profile.companyWebsite}</label>
+          <input
+            type="text"
+            defaultValue="www.cnjvnkcv.co.il"
+            style={{ padding: "14px 16px" }}
+            className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground focus:border-primary/30 focus:bg-white focus:outline-none"
+          />
+        </div>
+
+        {/* Social media links */}
+        <div className="flex flex-col gap-2">
+          <label className="text-sm text-foreground">{t.profile.socialMediaLinks}</label>
+          <input
+            type="text"
+            placeholder={t.createJob.typePlaceholder}
+            style={{ padding: "14px 16px" }}
+            className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:bg-white focus:outline-none"
+          />
+          <button className="self-end text-sm text-primary underline transition-colors hover:text-primary-dark">
+            {t.profile.addAnotherField}
+          </button>
+        </div>
+
+        {/* Company description */}
+        <div className="flex flex-col gap-2">
+          <label className="text-sm text-foreground">{t.profile.companyDescription}</label>
+          <textarea
+            placeholder={t.createJob.typePlaceholder}
+            rows={5}
+            style={{ padding: "14px 16px" }}
+            className="w-full resize-none rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:bg-white focus:outline-none"
+          />
+        </div>
+      </div>
+      )}
+
+      {/* Supplier database tab */}
+      {activeTab === "supplier" && (
+      <div className="flex flex-col gap-8 lg:flex-row lg:gap-12">
+        {/* Left: Services details */}
+        <div className="flex-1">
+          <h2 style={{ marginBottom: 20 }} className="text-lg text-primary">
+            {t.profile.servicesDetails}
+          </h2>
+          <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-2">
+              <label className="text-sm text-foreground">{t.profile.serviceName}</label>
+              <input
+                type="text"
+                defaultValue="Lorem Ipsum"
+                style={{ padding: "14px 16px" }}
+                className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground focus:border-primary/30 focus:bg-white focus:outline-none"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-sm text-foreground">{t.profile.description}</label>
+              <input
+                type="text"
+                defaultValue="Lorem Ipsum"
+                style={{ padding: "14px 16px" }}
+                className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground focus:border-primary/30 focus:bg-white focus:outline-none"
+              />
+            </div>
+            <button className="self-start text-sm text-primary underline transition-colors hover:text-primary-dark">
+              {t.profile.addAnotherService}
+            </button>
+            <button
+              style={{ padding: "10px 20px" }}
+              className="self-start rounded-lg border border-border-light text-sm text-foreground transition-colors hover:bg-gray-50"
+            >
+              {t.profile.additionalUpload}
+            </button>
+            {/* Image preview */}
+            <div className="relative w-40">
+              <div className="h-28 w-40 overflow-hidden rounded-lg bg-muted-foreground/20">
+                <img src="/images/avatar-woman.jpg" alt="Upload" className="h-full w-full object-cover" />
+              </div>
+              <button className="absolute -bottom-2 -start-2 flex h-6 w-6 items-center justify-center rounded-full bg-danger text-white">
+                <span className="text-xs">&#x1F5D1;</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Right: Areas + Contact details */}
+        <div className="flex-1">
+          <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-2">
+              <label className="text-sm text-foreground">{t.profile.areasOfActivity}</label>
+              <button
+                style={{ padding: "14px 16px" }}
+                className="flex w-full items-center justify-between rounded-lg border border-border bg-[#F7F9FC] text-sm text-muted-foreground/60"
+              >
+                <span>{t.createJob.choicePlaceholder}</span>
+                <ChevronDown className="h-4 w-4 text-muted-foreground" />
+              </button>
+            </div>
+
+            <h3 style={{ marginTop: 8 }} className="text-lg text-primary">
+              {t.profile.contactDetails}
+            </h3>
+
+            <div className="flex flex-col gap-2">
+              <label className="text-sm text-foreground">{t.profile.contactName}</label>
+              <input
+                type="text"
+                defaultValue="Lorem Ipsum"
+                style={{ padding: "14px 16px" }}
+                className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground focus:border-primary/30 focus:bg-white focus:outline-none"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-sm text-foreground">{t.profile.phoneNumber}</label>
+              <input
+                type="text"
+                defaultValue="Lorem Ipsum"
+                style={{ padding: "14px 16px" }}
+                className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground focus:border-primary/30 focus:bg-white focus:outline-none"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-sm text-foreground">{t.profile.emailAddress}</label>
+              <input
+                type="text"
+                defaultValue="Lorem Ipsum"
+                style={{ padding: "14px 16px" }}
+                className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground focus:border-primary/30 focus:bg-white focus:outline-none"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-sm text-foreground">{t.profile.ageGroups}</label>
+              <button
+                style={{ padding: "14px 16px" }}
+                className="flex w-full items-center justify-between rounded-lg border border-border bg-[#F7F9FC] text-sm text-muted-foreground/60"
+              >
+                <span>{t.createJob.choicePlaceholder}</span>
+                <ChevronDown className="h-4 w-4 text-muted-foreground" />
+              </button>
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-sm text-foreground">{t.profile.serviceType}</label>
+              <button
+                style={{ padding: "14px 16px" }}
+                className="flex w-full items-center justify-between rounded-lg border border-border bg-[#F7F9FC] text-sm text-muted-foreground/60"
+              >
+                <span>{t.createJob.choicePlaceholder}</span>
+                <ChevronDown className="h-4 w-4 text-muted-foreground" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      )}
 
       {/* Footer buttons */}
-      <div style={{ marginTop: 32 }} className="flex items-center gap-3">
+      <div style={{ marginTop: 32 }} className="flex items-center justify-end gap-3">
         <button
           style={{ padding: "10px 24px" }}
           className="rounded-lg bg-primary text-sm text-white transition-colors hover:bg-primary-dark"
@@ -192,7 +353,7 @@ export default function ProfilePage() {
         </button>
         <button
           style={{ padding: "10px 24px" }}
-          className="rounded-lg border border-border-light text-sm text-foreground transition-colors hover:bg-gray-50"
+          className="rounded-lg border border-foreground/30 text-sm text-foreground transition-colors hover:bg-gray-50"
         >
           {t.profile.cancelChanges}
         </button>

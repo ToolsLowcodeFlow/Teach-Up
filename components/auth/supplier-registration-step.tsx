@@ -58,7 +58,7 @@ export function SupplierRegistrationStep({ onSubmit, onBack, onSkip }: SupplierR
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col" style={{ maxWidth: 520, height: "100%" }}>
 
         {/* Top — Title + Fields (scrollable) */}
-        <div className="flex-1 flex flex-col overflow-y-auto" style={{ gap: "clamp(6px, 1vh, 16px)", paddingBottom: 8, scrollbarWidth: "thin", scrollbarColor: "#D1D5DB transparent" }}>
+        <div className="flex-1 flex flex-col overflow-y-auto" style={{ gap: "clamp(6px, 1vh, 16px)", paddingBottom: 8, paddingRight: 12, scrollbarWidth: "thin", scrollbarColor: "#D1D5DB transparent" }}>
 
           {/* Title + Subtitle */}
           <div className="flex flex-col" style={{ gap: 6 }}>
@@ -200,8 +200,8 @@ export function SupplierRegistrationStep({ onSubmit, onBack, onSkip }: SupplierR
 
         {/* Bottom — Buttons */}
         <div className="flex items-center shrink-0" style={{ gap: 16, paddingTop: "clamp(8px, 1vh, 16px)" }}>
-          <button type="button" onClick={onBack} style={{ background: "none", border: "none", fontFamily: "'Abel', sans-serif", fontSize: 14, color: "#647787", cursor: "pointer" }}>
-            hopping
+          <button type="button" onClick={onSkip} style={{ background: "none", border: "none", fontFamily: "'Abel', sans-serif", fontSize: 14, color: "#647787", cursor: "pointer" }}>
+            {t.supplierRegistration.hopping}
           </button>
           <button
             type="submit"

@@ -1,0 +1,100 @@
+"use client";
+
+const features = [
+  {
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+    ),
+    title: "Smart agent for finding guides",
+    description: "This is a dummy paragraph text that aims to fill a space in the website design and demonstrate how.",
+  },
+  {
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="white" strokeWidth="2" strokeLinecap="round"/><path d="M22 4 12 14.01l-3-3" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+    ),
+    title: "Jobs that receive truly relevant applications",
+    description: "This is a dummy paragraph text that aims to fill a space in the website design and demonstrate how.",
+  },
+  {
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z" stroke="white" strokeWidth="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" stroke="white" strokeWidth="2"/></svg>
+    ),
+    title: "Targeted job advertising for the target audience",
+    description: "This is a dummy paragraph text that aims to fill a space in the website design and demonstrate how.",
+  },
+  {
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6" stroke="white" strokeWidth="2"/><path d="m21 21-4.35-4.35" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>
+    ),
+    title: "The largest database of education professionals in Israel",
+    description: "This is a dummy paragraph text that aims to fill a space in the website design and demonstrate how.",
+  },
+];
+
+export function EasyWaySection() {
+  return (
+    <section style={{ padding: "60px 40px" }} className="flex flex-col items-center bg-[#F7F9FC]">
+      {/* Title */}
+      <div style={{ marginBottom: 20 }} className="text-center">
+        <h2 className="max-w-2xl text-4xl leading-tight text-foreground">
+          The easy way to find education and teaching professionals.
+        </h2>
+      </div>
+
+      {/* Subtitle */}
+      <p style={{ marginBottom: 28 }} className="mx-auto max-w-xl text-center text-sm leading-relaxed text-muted-foreground">
+        On our portal, you can expose your jobs to a large and focused audience of educators, in a simple, convenient and professional way.
+      </p>
+
+      {/* CTA button */}
+      <div style={{ marginBottom: 48 }} className="flex justify-center">
+        <button
+          style={{ padding: "14px 48px" }}
+          className="rounded-xl bg-primary text-sm text-white transition-colors hover:bg-primary-dark"
+        >
+          Start posting a job
+        </button>
+      </div>
+
+      {/* Feature cards */}
+      <div className="relative mx-auto max-w-5xl">
+        {/* Background grid behind cards */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden" style={{ opacity: 0.25 }}>
+          <div className="flex h-full flex-wrap">
+            {Array.from({ length: 24 }, (_, i) => (
+              <div key={i} style={{ width: 200, height: 200, border: "1px solid white", background: i === 2 || i === 9 || i === 17 ? "rgba(255,255,255,0.5)" : "transparent" }} />
+            ))}
+          </div>
+        </div>
+        <div className="relative grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {features.map((feature, i) => (
+          <div
+            key={i}
+            style={{ padding: "48px 20px 36px" }}
+            className="flex flex-col items-center rounded-2xl border border-border-light bg-linear-to-b from-[#F0F4FA] to-white text-center"
+          >
+            {/* Icon with glow ring */}
+            <div style={{ marginBottom: 28 }} className="relative flex h-14 w-14 items-center justify-center">
+              <div className="absolute inset-0 rounded-full bg-primary/10" style={{ transform: "scale(1.6)" }} />
+              <div className="absolute inset-0 rounded-full bg-primary/5" style={{ transform: "scale(2.1)" }} />
+              <div className="relative flex h-14 w-14 items-center justify-center rounded-full bg-primary shadow-lg shadow-primary/20">
+                {feature.icon}
+              </div>
+            </div>
+
+            {/* Title */}
+            <h3 style={{ marginBottom: 10 }} className="text-base font-medium leading-tight text-foreground">
+              {feature.title}
+            </h3>
+
+            {/* Description */}
+            <p className="text-xs leading-relaxed text-muted-foreground">
+              {feature.description}
+            </p>
+          </div>
+        ))}
+        </div>
+      </div>
+    </section>
+  );
+}
