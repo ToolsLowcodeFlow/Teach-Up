@@ -24,10 +24,10 @@ export function PublicNavbar() {
               <Link href="/about#contact" className="text-sm text-foreground transition-colors hover:text-primary">
                 {t.home.contactUs}
               </Link>
-              <Link href="/about#suppliers" className="text-sm text-foreground transition-colors hover:text-primary">
+              <Link href="/supplier-database" className="text-sm text-foreground transition-colors hover:text-primary">
                 {t.home.supplierDatabase}
               </Link>
-              <Link href="/about#prices" className="text-sm text-foreground transition-colors hover:text-primary">
+              <Link href="/prices" className="text-sm text-foreground transition-colors hover:text-primary">
                 {t.home.prices}
               </Link>
             </nav>

@@ -48,31 +48,53 @@ function FaqItem({ faq, index }: { faq: typeof faqs[0]; index: number }) {
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-[#F7F9FC]">
+    <div className="min-h-screen bg-background">
       <PublicNavbar />
 
       {/* Hero */}
-      <section className="relative min-h-[600px] overflow-hidden bg-linear-to-b from-[#D6E4FF] via-primary-light to-[#F7F9FC]">
+      <section className="relative flex flex-col overflow-hidden bg-[#EFF5FE]" style={{ minHeight: "100vh" }}>
+        {/* Background gradient blobs - full section coverage */}
+        <div
+          className="pointer-events-none absolute"
+          style={{
+            width: "60%",
+            height: "100%",
+            top: 0,
+            right: 0,
+            background: "radial-gradient(ellipse at 80% 30%, rgba(76,150,255,0.18) 0%, transparent 60%)",
+          }}
+        />
+        <div
+          className="pointer-events-none absolute"
+          style={{
+            width: "50%",
+            height: "100%",
+            bottom: 0,
+            left: 0,
+            background: "radial-gradient(ellipse at 20% 80%, rgba(76,150,255,0.14) 0%, transparent 60%)",
+          }}
+        />
+
         {/* Grid boxes - left side */}
-        <div className="pointer-events-none absolute left-[-200px] top-[100px]" style={{ opacity: 0.3 }}>
+        <div className="pointer-events-none absolute top-[100px]" style={{ opacity: 0.55, left: -416 }}>
           <div className="flex flex-col">
             {[0, 1, 2].map((row) => (
-              <div key={row} className="flex" style={{ marginBottom: -2 }}>
+              <div key={row} className="flex" style={{ marginBottom: -3 }}>
                 {[0, 1, 2, 3].map((col) => (
-                  <div key={col} style={{ width: 200, height: 200, border: "2px solid white", marginRight: -2 }} />
+                  <div key={col} style={{ width: 201, height: 201, border: "2.87px solid white", marginRight: -3 }} />
                 ))}
               </div>
             ))}
           </div>
         </div>
 
-        {/* Grid boxes - right side (partial) */}
-        <div className="pointer-events-none absolute right-[-200px] top-[100px]" style={{ opacity: 0.3 }}>
+        {/* Grid boxes - right side */}
+        <div className="pointer-events-none absolute top-[100px]" style={{ opacity: 0.55, right: -260 }}>
           <div className="flex flex-col">
             {[0, 1, 2].map((row) => (
-              <div key={row} className="flex" style={{ marginBottom: -2 }}>
+              <div key={row} className="flex" style={{ marginBottom: -3 }}>
                 {[0, 1, 2, 3].map((col) => (
-                  <div key={col} style={{ width: 200, height: 200, border: "2px solid white", marginRight: -2 }} />
+                  <div key={col} style={{ width: 201, height: 201, border: "2.87px solid white", marginRight: -3 }} />
                 ))}
               </div>
             ))}
@@ -80,26 +102,104 @@ export default function AboutPage() {
         </div>
 
         {/* Content */}
-        <div style={{ padding: "110px 40px 60px" }} className="relative flex flex-col gap-10 lg:flex-row lg:items-start">
-          {/* Left: Handshake image */}
-          <div className="flex items-start justify-center lg:w-[40%]">
-            <div className="h-72 w-full max-w-sm overflow-hidden rounded-3xl lg:h-96">
-              <img src="/images/about-handshake.png" alt="Handshake" className="h-full w-full object-cover" />
+        <div className="relative mx-auto flex max-w-[1310px] flex-col items-center gap-8 px-10 lg:flex-row lg:items-center" style={{ marginTop: "auto", marginBottom: "auto" }}>
+          {/* Left: Handshake image with blue card */}
+          <div className="flex items-center justify-center lg:w-[42%]" style={{ marginTop: 30 }}>
+            <div className="relative aspect-[480/440] w-full max-w-[480px]" style={{ maxHeight: "min(480px, 62vh)" }}>
+              {/* Back blue card - lighter, slightly more tilted */}
+              <div
+                className="absolute border-2 border-white/30"
+                style={{
+                  background: "linear-gradient(160deg, #A8D8FF 0%, #7CBDF7 100%)",
+                  width: "76%",
+                  height: "76%",
+                  top: "7%",
+                  left: "14%",
+                  transform: "rotate(8deg)",
+                  borderRadius: 28,
+                }}
+              />
+              {/* Front blue card - vibrant, slightly tilted */}
+              <div
+                className="absolute overflow-hidden border-2 border-white/50"
+                style={{
+                  background: "linear-gradient(160deg, #5AABF5 0%, #3D8BF0 100%)",
+                  width: "76%",
+                  height: "76%",
+                  top: "12%",
+                  left: "10%",
+                  transform: "rotate(4deg)",
+                  borderRadius: 28,
+                  boxShadow: "0 8px 32px rgba(76, 150, 255, 0.2)",
+                }}
+              >
+                {/* White radiating stripes */}
+                <svg className="absolute inset-0 h-full w-full" viewBox="0 0 290 260" fill="none" preserveAspectRatio="none">
+                  <line x1="65" y1="48" x2="30" y2="22" stroke="white" strokeWidth="2.5" strokeLinecap="round" opacity="0.6" />
+                  <line x1="48" y1="72" x2="15" y2="60" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
+                  <line x1="80" y1="32" x2="68" y2="8" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.45" />
+                  <line x1="220" y1="48" x2="252" y2="20" stroke="white" strokeWidth="2.5" strokeLinecap="round" opacity="0.6" />
+                  <line x1="235" y1="72" x2="265" y2="52" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
+                  <line x1="205" y1="36" x2="218" y2="8" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.4" />
+                  <line x1="65" y1="205" x2="28" y2="230" stroke="white" strokeWidth="2.5" strokeLinecap="round" opacity="0.55" />
+                  <line x1="48" y1="190" x2="15" y2="200" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.45" />
+                  <line x1="80" y1="225" x2="60" y2="248" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.4" />
+                  <line x1="228" y1="205" x2="260" y2="232" stroke="white" strokeWidth="2.5" strokeLinecap="round" opacity="0.55" />
+                  <line x1="242" y1="185" x2="270" y2="200" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.45" />
+                  <line x1="208" y1="222" x2="220" y2="248" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.4" />
+                </svg>
+              </div>
+              {/* Sparkle decorations */}
+              <svg className="absolute z-20" style={{ top: "5%", left: "8%" }} width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M10 0L12 8L20 10L12 12L10 20L8 12L0 10L8 8L10 0Z" fill="white" fillOpacity="0.85" />
+              </svg>
+              <svg className="absolute z-20" style={{ top: "9%", right: "4%" }} width="16" height="16" viewBox="0 0 20 20" fill="none">
+                <path d="M10 0L12 8L20 10L12 12L10 20L8 12L0 10L8 8L10 0Z" fill="white" fillOpacity="0.7" />
+              </svg>
+              <svg className="absolute z-20" style={{ bottom: "5%", left: "7%" }} width="18" height="18" viewBox="0 0 20 20" fill="none">
+                <path d="M10 0L12 8L20 10L12 12L10 20L8 12L0 10L8 8L10 0Z" fill="white" fillOpacity="0.75" />
+              </svg>
+              <svg className="absolute z-20" style={{ bottom: "16%", right: "2%" }} width="14" height="14" viewBox="0 0 20 20" fill="none">
+                <path d="M10 0L12 8L20 10L12 12L10 20L8 12L0 10L8 8L10 0Z" fill="white" fillOpacity="0.6" />
+              </svg>
+              <svg className="absolute z-20" style={{ top: "30%", left: "6%" }} width="12" height="12" viewBox="0 0 20 20" fill="none">
+                <path d="M10 0L12 8L20 10L12 12L10 20L8 12L0 10L8 8L10 0Z" fill="white" fillOpacity="0.55" />
+              </svg>
+              <svg className="absolute z-20" style={{ top: "20%", right: "10%" }} width="10" height="10" viewBox="0 0 20 20" fill="none">
+                <path d="M10 0L12 8L20 10L12 12L10 20L8 12L0 10L8 8L10 0Z" fill="white" fillOpacity="0.5" />
+              </svg>
+              {/* Handshake image - positioned inside front card */}
+              <img
+                src="/images/about-handshake.png"
+                alt="Handshake"
+                className="absolute z-10 object-contain"
+                style={{
+                  width: "76%",
+                  height: "76%",
+                  top: "12%",
+                  left: "10%",
+                  transform: "rotate(4deg)",
+                }}
+              />
             </div>
           </div>
 
           {/* Right: Text */}
-          <div className="flex flex-1 flex-col items-start">
-            <span style={{ marginBottom: 8 }} className="text-xl text-primary">about</span>
-            <h1 style={{ marginBottom: 32 }} className="text-4xl leading-none text-foreground lg:text-6xl">
-              Nice to meet you!
-            </h1>
-            <p style={{ marginBottom: 24 }} className="text-sm leading-relaxed text-muted-foreground">
-              Lorem Ipsum Dolor Sit Amet, Consector Adipiscing Elite Golar Monferrer Sobert Lorem Shabdach Yehol, Lorem Ipsum Dolor Sit Amet, Consector Adipiscing Elite Golar Monferrer Sobert Lorem Shabdach Yehol, Lorem Ipsum Dolor Sit Amet, Consector Adipiscing Elite Golar Monferrer Sobert Lorem Shabdach Yehol, Lorem Ipsum Dolor Sit Amet, Consector Adipiscing Elite Golar Monferrer Sobert Lorem Shabdach Yehol, Lorem Shabdach Yehol, Lorem Ipsum Dolor Sit Aemmm.
-            </p>
-            <p className="text-sm leading-relaxed text-muted-foreground">
-              Lorem Ipsum Dolor Sit Emmet, Consecteur Adipiscing Elite Goler Monferrer Sobert Lorem Shabdach Yehol, Lorem Ipsum Dolor Sit Emmet, Consecteur Adipiscing Elite Goler Monferrer Sobert Lorem Shabdach Yehol, Lorem Ipsum Dolor Sit Emmet, Consecteur Adipiscing Elite Goler Monferrer Sobert Lorem Shabdach Yehol,
-            </p>
+          <div className="flex flex-1 flex-col gap-[clamp(16px,2.5vh,40px)] lg:max-w-[566px]">
+            <span className="self-end text-[clamp(18px,1.6vw,28px)] leading-[1.1] text-primary">About</span>
+            <div className="flex flex-col" style={{ gap: "clamp(16px,2.5vh,35px)" }}>
+              <h1 style={{ fontSize: "clamp(32px,4.5vw,72px)" }} className="leading-none text-foreground">
+                Nice to meet you!
+              </h1>
+              <div className="flex flex-col" style={{ gap: "clamp(14px,2vh,30px)" }}>
+                <p style={{ fontSize: "clamp(13px,1.2vw,18px)" }} className="leading-[1.3] text-foreground">
+                  Lorem Ipsum Dolor Sit Amet, Consector Adipiscing Elite Golar Monferrer Sobert Lorem Shabdach Yehol, Lorem Ipsum Dolor Sit Amet, Consector Adipiscing Elite Golar Monferrer Sobert Lorem Shabdach Yehol, Lorem Ipsum Dolor Sit Amet, Consector Adipiscing Elite Golar Monferrer Sobert Lorem Shabdach Yehol, Lorem Ipsum Dolor Sit Amet, Consector Adipiscing Elite Golar Monferrer Sobert Lorem Shabdach Yehol, Lorem Shabdach Yehol, Lorem Ipsum Dolor Sit Aemmm.
+                </p>
+                <p style={{ fontSize: "clamp(13px,1.2vw,18px)" }} className="leading-[1.3] text-foreground">
+                  Lorem Ipsum Dolor Sit Emmet, Consecteur Adipiscing Elite Goler Monferrer Sobert Lorem Shabdach Yehol, Lorem Ipsum Dolor Sit Emmet, Consecteur Adipiscing Elite Goler Monferrer Sobert Lorem Shabdach Yehol, Lorem Ipsum Dolor Sit Emmet, Consecteur Adipiscing Elite Goler Monferrer Sobert Lorem Shabdach Yehol,
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -108,29 +208,86 @@ export default function AboutPage() {
       <EasyWaySection />
 
       {/* Stats */}
-      <section style={{ padding: "60px 40px" }} className="flex flex-col items-center bg-white">
-        <h2 style={{ marginBottom: 16 }} className="text-center text-3xl leading-tight text-foreground">
-          Lorem Ipsum Dolores
-        </h2>
-        <p style={{ marginBottom: 40 }} className="max-w-lg text-center text-sm leading-relaxed text-muted-foreground">
-          Lorem Ipsum Dolor Sit Emmet, Consectetur Adipiscing Elite Goler Monferrer Sobert Lorem Shabdach Yehol, Lakoris Art Sale Litz, And Shebaget Lore Salgak.
-        </p>
-        <div className="grid w-full max-w-4xl grid-cols-2 gap-5 lg:grid-cols-4">
-          {stats.map((stat, i) => (
-            <div
-              key={i}
-              style={{ padding: "28px 16px" }}
-              className="flex flex-col items-center rounded-2xl bg-primary text-center text-white"
-            >
-              <span className="text-3xl font-medium">{stat.number}</span>
-              <span className="mt-2 text-xs opacity-80">{stat.label}</span>
-            </div>
-          ))}
+      <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-[#EFF5FE]" style={{ padding: "80px 40px" }}>
+        {/* Background gradient blobs */}
+        <div
+          className="pointer-events-none absolute"
+          style={{
+            width: 800,
+            height: 800,
+            top: -350,
+            right: -100,
+            background: "radial-gradient(circle, rgba(76,150,255,0.15) 0%, transparent 70%)",
+            borderRadius: "50%",
+          }}
+        />
+        <div
+          className="pointer-events-none absolute"
+          style={{
+            width: 800,
+            height: 400,
+            bottom: -50,
+            left: -300,
+            background: "radial-gradient(ellipse, rgba(76,150,255,0.12) 0%, transparent 70%)",
+            borderRadius: "50%",
+          }}
+        />
+        {/* Grid boxes - left side */}
+        <div className="pointer-events-none absolute top-[100px]" style={{ opacity: 0.55, left: -416 }}>
+          <div className="flex flex-col">
+            {[0, 1, 2].map((row) => (
+              <div key={`sl${row}`} className="flex" style={{ marginBottom: -3 }}>
+                {[0, 1, 2, 3].map((col) => (
+                  <div key={`sl${row}${col}`} style={{ width: 201, height: 201, border: "2.87px solid white", marginRight: -3 }} />
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+        {/* Grid boxes - right side */}
+        <div className="pointer-events-none absolute top-[100px]" style={{ opacity: 0.55, right: -260 }}>
+          <div className="flex flex-col">
+            {[0, 1, 2].map((row) => (
+              <div key={`sr${row}`} className="flex" style={{ marginBottom: -3 }}>
+                {[0, 1, 2, 3].map((col) => (
+                  <div key={`sr${row}${col}`} style={{ width: 201, height: 201, border: "2.87px solid white", marginRight: -3 }} />
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="relative z-10 flex flex-col items-center" style={{ gap: 50 }}>
+          <div className="flex max-w-[632px] flex-col items-center text-center" style={{ gap: 24 }}>
+            <h2 className="text-[40px] leading-[1.1] text-foreground">
+              Lorem Ipsum Dolores
+            </h2>
+            <p className="text-base leading-[1.2] text-muted-foreground">
+              Lorem Ipsum Dolor Sit Emmet, Consecteur Adipiscing Elite Goler Monferrer Sobert Lorem Shabteq Yahol, Leknutz Arir Gek Litz, And Shebagat Livm Solgak.
+            </p>
+          </div>
+          <div className="grid w-full max-w-[1199px] grid-cols-2 gap-[30px] lg:grid-cols-4">
+            {stats.map((stat, i) => (
+              <div
+                key={i}
+                className="flex flex-col items-center justify-center rounded-[10px] border border-white text-center"
+                style={{
+                  height: 135,
+                  padding: "34px 40px",
+                  backgroundImage: "linear-gradient(183deg, rgb(255,255,255) 5%, rgba(119,191,255,0) 260%)",
+                  gap: 20,
+                }}
+              >
+                <span className="text-[36px] leading-none text-foreground">{stat.number}</span>
+                <span className="text-lg leading-none text-foreground">{stat.label}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* FAQ */}
-      <section style={{ padding: "60px 40px" }} className="flex flex-col items-center bg-[#F7F9FC]">
+      <section style={{ padding: "60px 40px" }} className="flex flex-col items-center bg-background">
         <h2 style={{ marginBottom: 32 }} className="text-center text-3xl leading-tight text-foreground">
           Frequently Asked Questions
         </h2>

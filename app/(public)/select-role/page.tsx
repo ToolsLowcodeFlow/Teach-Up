@@ -144,7 +144,7 @@ export default function SelectRolePage() {
       <div className="hidden lg:block shrink-0 overflow-hidden relative h-full" style={{ width: "37%", background: "#EFF5FE" }}>
         <img src="/images/ellipse1.svg" alt="" className="absolute pointer-events-none" style={{ right: -300, top: "70%", width: 600, height: 250 }} />
         <img src="/images/ellipse2.svg" alt="" className="absolute pointer-events-none" style={{ left: -150, top: -250, width: 550, height: 550 }} />
-        <div className="absolute pointer-events-none flex flex-col" style={{ left: -20, top: -4, opacity: 0.43 }}>
+        <div className="absolute pointer-events-none flex flex-col" style={{ left: -20, top: -4, opacity: 0.55 }}>
           {[0, 1, 2, 3].map((row) => (
             <div key={row} className="flex" style={{ marginBottom: -2 }}>
               {[0, 1, 2, 3].map((col) => (
@@ -153,7 +153,7 @@ export default function SelectRolePage() {
             </div>
           ))}
         </div>
-        <div className="absolute pointer-events-none flex flex-col" style={{ left: -20, top: 420, opacity: 0.43 }}>
+        <div className="absolute pointer-events-none flex flex-col" style={{ left: -20, top: 420, opacity: 0.55 }}>
           {[0, 1, 2, 3].map((row) => (
             <div key={row} className="flex" style={{ marginBottom: -2 }}>
               {[0, 1, 2, 3].map((col) => (
