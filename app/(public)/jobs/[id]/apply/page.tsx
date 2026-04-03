@@ -18,9 +18,16 @@ export default function JobApplyPage() {
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center"
-      style={{ fontFamily: "'Abel', sans-serif", background: "rgba(0,0,0,0.49)", backdropFilter: "blur(4px)" }}
+      style={{ fontFamily: "'Abel', sans-serif" }}
     >
-      <div className="absolute inset-0" onClick={() => router.back()} />
+      {/* Blurred jobs page background */}
+      <iframe
+        src="/jobs"
+        className="absolute inset-0 h-full w-full border-none"
+        style={{ filter: "blur(6px)", pointerEvents: "none", opacity: 0.7 }}
+        tabIndex={-1}
+      />
+      <div className="absolute inset-0" style={{ background: "rgba(0,0,0,0.35)" }} onClick={() => router.back()} />
 
       <div
         className="relative z-10 flex overflow-hidden rounded-[20px] bg-white"
@@ -75,19 +82,20 @@ export default function JobApplyPage() {
               className="flex items-center justify-between rounded-[10px] border border-border-light"
               style={{ padding: "14px 16px", background: "linear-gradient(180deg, #FFFDF7 0%, #FFF8E8 100%)" }}
             >
-              <Trash2 size={16} className="cursor-pointer text-red-400 hover:text-red-600" />
               <div className="flex items-center gap-2">
-                <div className="flex flex-col items-end">
+                <Link2 size={14} className="text-muted-foreground" />
+                <div className="flex flex-col">
                   <span className="text-xs text-primary">May Bozo&apos;s resume file</span>
                   <span className="text-[10px] text-muted-foreground">142 KB</span>
                 </div>
-                <Link2 size={14} className="text-muted-foreground" />
               </div>
+              <Trash2 size={16} className="cursor-pointer text-red-400 hover:text-red-600" />
             </div>
           </div>
 
           {/* Submit button */}
           <button
+            onClick={() => router.push(`${window.location.pathname}/success`)}
             className="w-full cursor-pointer rounded-[10px] text-base text-white"
             style={{
               height: 50,
@@ -101,9 +109,9 @@ export default function JobApplyPage() {
           </button>
         </div>
 
-        {/* RIGHT — Sidebar */}
+        {/* RIGHT — Sidebar full height */}
         <div className="flex shrink-0 flex-col border-l border-border-light" style={{ width: 280, padding: "24px 20px" }}>
-          <div className="flex flex-col rounded-2xl bg-white" style={{ padding: "22px 16px", gap: 14, boxShadow: "0 4px 24px rgba(0,0,0,0.08)" }}>
+          <div className="flex flex-1 flex-col rounded-2xl bg-white" style={{ padding: "22px 16px", gap: 14, boxShadow: "0 4px 24px rgba(0,0,0,0.08)" }}>
             <h3 className="text-center text-[18px] text-foreground" style={{ lineHeight: 1.2 }}>Candidacy status</h3>
             <p className="text-center text-xs leading-[1.4] text-muted-foreground">
               This is a dummy paragraph text that is intended to fill space in the website design and demonstrate how the actual text will look.

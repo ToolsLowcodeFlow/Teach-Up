@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ChevronDown, ChevronLeft, ChevronRight, Search, Heart, MapPin, Bell, MessageSquare, Globe } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/context";
 import { PublicFooter } from "@/components/home/public-footer";
 
-const jobCards = Array.from({ length: 12 }, (_, i) => ({
+const allJobCards = Array.from({ length: 12 }, (_, i) => ({
   id: i + 1,
   title: "Computer Science Teacher",
   badge: "with at least 4 years of experience",
@@ -16,14 +16,30 @@ const jobCards = Array.from({ length: 12 }, (_, i) => ({
   company: i === 8 ? "Anonymous" : "Company Name",
   date: "08/12/2025",
   isNew: i < 3,
+  status: "",
 }));
 
-function JobCard({ job }: { job: (typeof jobCards)[0] }) {
+const myJobCards = Array.from({ length: 9 }, (_, i) => ({
+  id: i + 100,
+  title: "Computer Science Teacher",
+  badge: "with at least 4 years of experience",
+  description: "This is a dummy paragraph text that aims to fill a space in the website design and demonstrate how the actual text will look. It can be...",
+  locations: ["Jaffa", "Tel Aviv"],
+  salary: "30,000 - 50,000",
+  company: i >= 6 ? "Anonymous" : "Company Name",
+  date: "08/12/2025",
+  isNew: false,
+  status: i < 3 ? "nomination sent" : i < 6 ? "Invitation" : "sent",
+}));
+
+type JobCardType = (typeof allJobCards)[0];
+
+function JobCard({ job }: { job: JobCardType }) {
   const [liked, setLiked] = useState(false);
   const router = useRouter();
   return (
     <div
-      onClick={() => router.push(`/jobs/${job.id}`)}
+      onClick={() => router.push(`/jobs/${job.id}${job.status ? `?applied=true&outcome=${job.status === "nomination sent" ? "accepted" : "rejected"}` : ""}`)}
       className="flex cursor-pointer flex-col overflow-hidden rounded-[16px] bg-white transition-shadow hover:shadow-md"
       style={{ boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}
     >
@@ -47,6 +63,18 @@ function JobCard({ job }: { job: (typeof jobCards)[0] }) {
             <Heart size={16} fill={liked ? "#FF676A" : "none"} className={liked ? "text-[#FF676A]" : "text-[#C0C0C0]"} />
           </button>
         </div>
+        {job.status && (
+          <span
+            className="self-start rounded-full text-[10px] text-white"
+            style={{
+              padding: "4px 12px",
+              marginBottom: 8,
+              background: job.status === "Invitation" ? "#20AB7F" : job.status === "nomination sent" ? "#4C96FF" : "#FF8C42",
+            }}
+          >
+            {job.status}
+          </span>
+        )}
         <p className="text-xs leading-[1.3] text-muted-foreground" style={{ marginBottom: 10 }}>{job.description}</p>
 
         {/* Location tags */}
@@ -130,9 +158,20 @@ function FilterDropdown({
 }
 
 export default function JobsPage() {
+  const router = useRouter();
   const { locale, toggleLocale } = useLanguage();
-  const [activeTab, setActiveTab] = useState<"all" | "my">("all");
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get("tab");
+  const [activeTab, setActiveTab] = useState<"all" | "my" | "my-empty">(tabParam === "my" ? "my" : tabParam === "my-empty" ? "my-empty" : "all");
   const [currentPage, setCurrentPage] = useState(1);
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [avatarMenuOpen, setAvatarMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (tabParam === "my") setActiveTab("my");
+    else if (tabParam === "my-empty") setActiveTab("my-empty");
+    else if (tabParam === "all") setActiveTab("all");
+  }, [tabParam]);
   const [filters, setFilters] = useState({
     role: "", field: "", experience: "", scope: "", language: "", training: "", salary: 50000,
   });
@@ -156,9 +195,15 @@ export default function JobsPage() {
               <span className="text-[#2C7AEA]">UP</span>
             </div>
             <nav className="flex items-center gap-8 text-base">
-              <a className="cursor-pointer text-foreground" style={{ borderBottom: "2px solid #4C96FF", paddingBottom: 2 }}>Job search</a>
-              <a className="cursor-pointer text-muted-foreground hover:text-foreground">My jobs</a>
-              <a className="cursor-pointer text-muted-foreground hover:text-foreground">Contact us</a>
+              <a onClick={() => setActiveTab("all")} className="relative cursor-pointer pb-5" style={{ color: activeTab === "all" ? "#0E1117" : "#647787" }}>
+                Job search
+                {activeTab === "all" && <span className="absolute left-1/2 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-primary" style={{ bottom: -8 }} />}
+              </a>
+              <a onClick={() => setActiveTab("my")} className="relative cursor-pointer pb-5" style={{ color: (activeTab === "my" || activeTab === "my-empty") ? "#0E1117" : "#647787" }}>
+                My jobs
+                {(activeTab === "my" || activeTab === "my-empty") && <span className="absolute left-1/2 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-primary" style={{ bottom: -8 }} />}
+              </a>
+              <a onClick={() => router.push("/contact")} className="cursor-pointer pb-5 text-muted-foreground hover:text-foreground">Contact us</a>
             </nav>
           </div>
 
@@ -169,22 +214,66 @@ export default function JobsPage() {
               <span>{locale === "en" ? "עב" : "EN"}</span>
             </button>
             <div className="flex items-center gap-4">
-              <button className="flex cursor-pointer items-center justify-center border-none bg-transparent text-muted-foreground hover:text-foreground">
+              <button onClick={() => router.push("/favorites")} className="flex cursor-pointer items-center justify-center border-none bg-transparent text-muted-foreground hover:text-foreground">
                 <Heart size={18} />
               </button>
-              <button className="flex cursor-pointer items-center justify-center border-none bg-transparent text-muted-foreground hover:text-foreground">
-                <Bell size={18} />
-              </button>
-              <button className="flex cursor-pointer items-center justify-center border-none bg-transparent text-muted-foreground hover:text-foreground">
+              <div className="relative">
+                <button onClick={() => setNotifOpen(!notifOpen)} className="flex cursor-pointer items-center justify-center border-none bg-transparent text-muted-foreground hover:text-foreground">
+                  <Bell size={18} />
+                </button>
+                {notifOpen && (
+                  <>
+                    <div className="fixed inset-0 z-50" onClick={() => setNotifOpen(false)} />
+                    <div className="absolute right-0 top-10 z-50 flex w-[420px] flex-col rounded-2xl bg-white shadow-xl" style={{ padding: "20px 0" }}>
+                      <h3 className="text-center text-lg text-foreground" style={{ marginBottom: 16 }}>Notifications</h3>
+                      {[
+                        { msg: "We wanted to inform you that Tel Aviv University has updated your application status.", time: "4 hours ago", logo: "/images/chat-company-logo.png", anon: false },
+                        { msg: "We wanted to let you know that there is a new update from an anonymous source regarding your application status.", time: "4 hours ago", logo: "", anon: true },
+                        { msg: "We wanted to inform you that Tel Aviv University has updated your application status.", time: "4 hours ago", logo: "/images/chat-company-logo.png", anon: false },
+                        { msg: "We wanted to inform you that Tel Aviv University has updated your application status.", time: "4 hours ago", logo: "/images/chat-company-logo.png", anon: false },
+                      ].map((notif, i) => (
+                        <div key={i} className="flex items-start gap-3 border-b border-border-light" style={{ padding: "14px 20px" }}>
+                          <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl" style={{ background: notif.anon ? "#E8EEF5" : "#0E1117", padding: notif.anon ? 0 : 6 }}>
+                            {notif.anon ? (
+                              <svg width="20" height="20" viewBox="0 0 24 24" fill="#9CA3AF"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" /></svg>
+                            ) : (
+                              <img src={notif.logo} alt="" className="h-full w-full object-contain" />
+                            )}
+                          </div>
+                          <div className="flex flex-1 flex-col gap-1">
+                            <p className="text-sm leading-[1.3] text-foreground">{notif.msg}</p>
+                            <span className="text-xs text-muted-foreground">{notif.time}</span>
+                          </div>
+                          <button className="shrink-0 cursor-pointer border-none bg-transparent text-xs text-primary underline">View status</button>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+              <button onClick={() => router.push("/messages")} className="flex cursor-pointer items-center justify-center border-none bg-transparent text-muted-foreground hover:text-foreground">
                 <MessageSquare size={18} />
               </button>
             </div>
-            <button className="flex cursor-pointer items-center gap-1.5 border-none bg-transparent">
-              <div className="h-9 w-9 overflow-hidden rounded-full border border-border-light">
-                <img src="/images/job-avatar.png" alt="Profile" className="h-full w-full object-cover" />
-              </div>
-              <ChevronDown size={14} className="text-muted-foreground" />
-            </button>
+            <div className="relative flex items-center gap-1">
+              <button onClick={() => router.push("/profile")} className="flex cursor-pointer items-center border-none bg-transparent">
+                <div className="h-9 w-9 overflow-hidden rounded-full border border-border-light transition-opacity hover:opacity-80">
+                  <img src="/images/job-avatar.png" alt="Profile" className="h-full w-full object-cover" />
+                </div>
+              </button>
+              <button onClick={() => setAvatarMenuOpen(!avatarMenuOpen)} className="flex cursor-pointer items-center justify-center border-none bg-transparent text-muted-foreground hover:text-foreground">
+                <ChevronDown size={14} />
+              </button>
+              {avatarMenuOpen && (
+                <>
+                  <div className="fixed inset-0 z-50" onClick={() => setAvatarMenuOpen(false)} />
+                  <div className="absolute right-0 top-12 z-50 flex min-w-36 flex-col gap-1 rounded-xl border border-border-light bg-white shadow-lg" style={{ padding: "12px 16px" }}>
+                    <button onClick={() => { setAvatarMenuOpen(false); router.push("/profile"); }} className="flex w-full whitespace-nowrap py-2 text-start text-sm text-foreground transition-colors hover:text-primary">Personal area</button>
+                    <button className="flex w-full whitespace-nowrap py-2 text-start text-sm text-red-400 transition-colors hover:text-red-600" onClick={() => setAvatarMenuOpen(false)}>Disengagement</button>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </header>
@@ -196,15 +285,25 @@ export default function JobsPage() {
           <div className="flex items-center gap-4">
             <button
               onClick={() => setActiveTab("all")}
-              className="cursor-pointer border-none bg-transparent text-base"
-              style={{ color: activeTab === "all" ? "#0E1117" : "#647787", fontWeight: activeTab === "all" ? 600 : 400 }}
+              className="cursor-pointer border-none bg-transparent"
+              style={{
+                color: activeTab === "all" ? "#0E1117" : "#647787",
+                fontSize: activeTab === "all" ? 24 : 16,
+                textDecoration: activeTab === "all" ? "none" : "underline",
+                textUnderlineOffset: 4,
+              }}
             >
               All jobs
             </button>
             <button
               onClick={() => setActiveTab("my")}
-              className="cursor-pointer border-none bg-transparent text-base"
-              style={{ color: activeTab === "my" ? "#0E1117" : "#647787" }}
+              className="cursor-pointer border-none bg-transparent"
+              style={{
+                color: (activeTab === "my" || activeTab === "my-empty") ? "#0E1117" : "#647787",
+                fontSize: (activeTab === "my" || activeTab === "my-empty") ? 24 : 16,
+                textDecoration: (activeTab === "my" || activeTab === "my-empty") ? "none" : "underline",
+                textUnderlineOffset: 4,
+              }}
             >
               My jobs
             </button>
@@ -219,35 +318,69 @@ export default function JobsPage() {
         <div className="flex gap-8">
           {/* Job cards grid */}
           <div className="flex-1">
-            <div className="grid grid-cols-3 gap-5">
-              {jobCards.map((job) => (
-                <JobCard key={job.id} job={job} />
-              ))}
-            </div>
+            {activeTab === "my-empty" ? (
+              <div className="flex flex-col items-center justify-center" style={{ minHeight: 500, gap: 20 }}>
+                {/* Empty state illustration */}
+                <svg width="160" height="140" viewBox="0 0 160 140" fill="none">
+                  <ellipse cx="80" cy="120" rx="60" ry="10" fill="#EEF2F7" />
+                  <rect x="45" y="30" width="70" height="85" rx="8" fill="#E4EBF5" />
+                  <rect x="55" y="42" width="50" height="6" rx="3" fill="#C8D4E4" />
+                  <rect x="55" y="54" width="40" height="6" rx="3" fill="#C8D4E4" />
+                  <rect x="55" y="66" width="45" height="6" rx="3" fill="#C8D4E4" />
+                  <rect x="55" y="78" width="35" height="6" rx="3" fill="#C8D4E4" />
+                  <circle cx="110" cy="45" r="20" fill="#D6E4FF" />
+                  <path d="M103 45L108 50L118 40" stroke="#4C96FF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                  <rect x="105" y="85" width="30" height="35" rx="4" fill="#4C96FF" opacity="0.15" />
+                  <path d="M115 95L120 100L130 90" stroke="#4C96FF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
 
-            {/* Pagination */}
-            <div className="flex items-center justify-center gap-2" style={{ padding: "30px 0" }}>
-              <button className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-border-light bg-white">
-                <ChevronLeft size={14} className="text-muted-foreground" />
-              </button>
-              {[1, 2, 3].map((p) => (
+                <h2 className="text-center text-[20px] leading-[1.2] text-foreground">
+                  No nominations have been submitted yet.
+                </h2>
+                <p className="max-w-sm text-center text-sm leading-[1.5] text-muted-foreground">
+                  The jobs you have applied for will be displayed here. To start managing your applications, you can go to Job Search and apply for your first job.
+                </p>
                 <button
-                  key={p}
-                  onClick={() => setCurrentPage(p)}
-                  className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-none text-sm"
-                  style={{ background: currentPage === p ? "#4C96FF" : "transparent", color: currentPage === p ? "white" : "#0E1117" }}
+                  onClick={() => setActiveTab("all")}
+                  className="cursor-pointer rounded-[10px] text-base text-white"
+                  style={{
+                    padding: "12px 32px",
+                    border: "none",
+                    backgroundImage: "linear-gradient(168deg, #4C96FF 12%, #1667DB 94%)",
+                  }}
                 >
-                  {p}
+                  Beyond job search
                 </button>
-              ))}
-              <span className="text-sm text-muted-foreground">...</span>
-              <button onClick={() => setCurrentPage(8)} className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-none text-sm text-foreground">
-                8
-              </button>
-              <button className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-border-light bg-white">
-                <ChevronRight size={14} className="text-muted-foreground" />
-              </button>
-            </div>
+              </div>
+            ) : (<>
+              <div className="grid grid-cols-3 gap-5">
+                {(activeTab === "all" ? allJobCards : myJobCards).map((job) => (
+                  <JobCard key={job.id} job={job} />
+                ))}
+              </div>
+              <div className="flex items-center justify-center gap-2" style={{ padding: "30px 0" }}>
+                <button className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-border-light bg-white">
+                  <ChevronLeft size={14} className="text-muted-foreground" />
+                </button>
+                {[1, 2, 3].map((p) => (
+                  <button
+                    key={p}
+                    onClick={() => setCurrentPage(p)}
+                    className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-none text-sm"
+                    style={{ background: currentPage === p ? "#4C96FF" : "transparent", color: currentPage === p ? "white" : "#0E1117" }}
+                  >
+                    {p}
+                  </button>
+                ))}
+                <span className="text-sm text-muted-foreground">...</span>
+                <button onClick={() => setCurrentPage(8)} className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-none text-sm text-foreground">
+                  8
+                </button>
+                <button className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-border-light bg-white">
+                  <ChevronRight size={14} className="text-muted-foreground" />
+                </button>
+              </div>
+            </>)}
           </div>
 
           {/* Filters sidebar - right side */}
@@ -280,13 +413,23 @@ export default function JobsPage() {
                 onChange={(v) => setFilters((p) => ({ ...p, field: v }))}
               />
 
-              {/* Years of experience */}
-              <FilterDropdown
-                label="Search by years of experience"
-                options={["0-1 years", "1-3 years", "3-5 years", "5-10 years", "10+ years"]}
-                value={filters.experience}
-                onChange={(v) => setFilters((p) => ({ ...p, experience: v }))}
-              />
+              {/* Years of experience - slider */}
+              <div className="flex flex-col" style={{ gap: 8 }}>
+                <span className="text-xs text-foreground">Search by years of experience</span>
+                <input
+                  type="range"
+                  min="0"
+                  max="30"
+                  value={filters.experience || 0}
+                  onChange={(e) => setFilters((p) => ({ ...p, experience: e.target.value }))}
+                  className="w-full"
+                  style={{ accentColor: "#4C96FF" }}
+                />
+                <div className="flex items-center justify-between text-[10px] text-muted-foreground">
+                  <span>0 years</span>
+                  <span>{filters.experience || 0} years</span>
+                </div>
+              </div>
 
               {/* Scope of work */}
               <FilterDropdown
