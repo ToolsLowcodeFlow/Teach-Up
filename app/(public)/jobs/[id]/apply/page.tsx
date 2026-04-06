@@ -3,9 +3,12 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronRight, Link2, Trash2 } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/context";
 
 export default function JobApplyPage() {
   const router = useRouter();
+  const { locale, direction } = useLanguage();
+  const isHe = locale === "he";
   const [coverLetter, setCoverLetter] = useState(
     "Lorem Ipsum Dolor Sit Emmet, Consector Adipiscing Elite Goler Monferrer Sobert Lorem Shabdach Yehol, Lorem Ipsum Dolor Sit Emmet, Consector Adipiscing Elite Goler Monferrer Sobert Lorem Shabdach Yehol, Lorem Ipsum Dolor Sit Emmet, Consector Adipiscing Elite Goler Monferrer Sobert Lorem Shabdach Yehol, Lorem Ipsum Dolor Sit Emmet, Consector Adipiscing Elite Goler Monferrer Sobert Lorem Shabdach Yehol, Lorem Ipsum Dolor Habinbhams."
   );

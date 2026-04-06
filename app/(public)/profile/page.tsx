@@ -2,8 +2,9 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronDown, Eye, EyeOff, Heart, Bell, MessageSquare, Globe } from "lucide-react";
+import { ChevronDown, Eye, EyeOff } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/context";
+import { SeekerNavbar } from "@/components/seeker/seeker-navbar";
 
 function ProfDropdown({ label, value, open, setOpen, options, onSelect, onClear, hasTag }: {
   label: string; value: string; open: boolean; setOpen: (v: boolean) => void;
@@ -41,11 +42,10 @@ function ProfDropdown({ label, value, open, setOpen, options, onSelect, onClear,
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { locale, toggleLocale } = useLanguage();
+  const { locale, direction, t } = useLanguage();
+  const isHe = locale === "he";
   const imageRef = useRef<HTMLInputElement>(null);
   const [activeTab, setActiveTab] = useState<"personal" | "professional">("personal");
-  const [notifOpen, setNotifOpen] = useState(false);
-  const [avatarMenuOpen, setAvatarMenuOpen] = useState(false);
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [genderOpen, setGenderOpen] = useState(false);
   const [showCurrent, setShowCurrent] = useState(false);
@@ -102,74 +102,12 @@ export default function ProfilePage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-[#F7F9FC]" style={{ fontFamily: "'Abel', sans-serif" }}>
-      {/* Header */}
-      <header className="sticky top-0 z-40 bg-white" style={{ borderBottom: "1px solid #F3F3F6" }}>
-        <div className="mx-auto flex max-w-[1375px] items-center justify-between" style={{ padding: "12px 40px" }}>
-          <div className="flex items-center gap-10">
-            <div className="flex items-center gap-1.5 text-2xl">
-              <span className="text-foreground">TEACH</span>
-              <span className="text-[#2C7AEA]">UP</span>
-            </div>
-            <nav className="flex items-center gap-8 text-base">
-              <a onClick={() => router.push("/jobs")} className="cursor-pointer text-muted-foreground hover:text-foreground">Job search</a>
-              <a onClick={() => router.push("/jobs?tab=my")} className="cursor-pointer text-muted-foreground hover:text-foreground">My jobs</a>
-              <a onClick={() => router.push("/contact")} className="cursor-pointer text-muted-foreground hover:text-foreground">Contact us</a>
-            </nav>
-          </div>
-          <div className="flex items-center gap-5">
-            <button onClick={toggleLocale} className="flex cursor-pointer items-center gap-1.5 border-none bg-transparent text-sm text-muted-foreground hover:text-foreground">
-              <Globe size={16} /><span>{locale === "en" ? "עב" : "EN"}</span>
-            </button>
-            <div className="flex items-center gap-4">
-              <button onClick={() => router.push("/favorites")} className="flex cursor-pointer items-center justify-center border-none bg-transparent text-muted-foreground hover:text-foreground"><Heart size={18} /></button>
-              <div className="relative">
-                <button onClick={() => setNotifOpen(!notifOpen)} className="flex cursor-pointer items-center justify-center border-none bg-transparent text-muted-foreground hover:text-foreground"><Bell size={18} /></button>
-                {notifOpen && (
-                  <>
-                    <div className="fixed inset-0 z-50" onClick={() => setNotifOpen(false)} />
-                    <div className="absolute right-0 top-10 z-50 flex w-[420px] flex-col rounded-2xl bg-white shadow-xl" style={{ padding: "20px 0" }}>
-                      <h3 className="text-center text-lg text-foreground" style={{ marginBottom: 16 }}>Notifications</h3>
-                      {[
-                        { msg: "We wanted to inform you that Tel Aviv University has updated your application status.", time: "4 hours ago", logo: "/images/chat-company-logo.png", anon: false },
-                        { msg: "We wanted to let you know that there is a new update from an anonymous source.", time: "4 hours ago", logo: "", anon: true },
-                      ].map((notif, i) => (
-                        <div key={i} className="flex items-start gap-3 border-b border-border-light" style={{ padding: "14px 20px" }}>
-                          <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl" style={{ background: notif.anon ? "#E8EEF5" : "#0E1117", padding: notif.anon ? 0 : 6 }}>
-                            {notif.anon ? <svg width="20" height="20" viewBox="0 0 24 24" fill="#9CA3AF"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" /></svg> : <img src={notif.logo} alt="" className="h-full w-full object-contain" />}
-                          </div>
-                          <div className="flex flex-1 flex-col gap-1"><p className="text-sm leading-[1.3] text-foreground">{notif.msg}</p><span className="text-xs text-muted-foreground">{notif.time}</span></div>
-                          <button className="shrink-0 cursor-pointer border-none bg-transparent text-xs text-primary underline">View status</button>
-                        </div>
-                      ))}
-                    </div>
-                  </>
-                )}
-              </div>
-              <button onClick={() => router.push("/messages")} className="flex cursor-pointer items-center justify-center border-none bg-transparent text-muted-foreground"><MessageSquare size={18} /></button>
-            </div>
-            <div className="relative flex items-center gap-1">
-              <button onClick={() => router.push("/profile")} className="flex cursor-pointer items-center border-none bg-transparent">
-                <div className="h-9 w-9 overflow-hidden rounded-full border border-border-light"><img src="/images/job-avatar.png" alt="" className="h-full w-full object-cover" /></div>
-              </button>
-              <button onClick={() => setAvatarMenuOpen(!avatarMenuOpen)} className="flex cursor-pointer items-center justify-center border-none bg-transparent text-muted-foreground hover:text-foreground"><ChevronDown size={14} /></button>
-              {avatarMenuOpen && (
-                <>
-                  <div className="fixed inset-0 z-50" onClick={() => setAvatarMenuOpen(false)} />
-                  <div className="absolute right-0 top-12 z-50 flex min-w-36 flex-col gap-1 rounded-xl border border-border-light bg-white shadow-lg" style={{ padding: "12px 16px" }}>
-                    <button onClick={() => { setAvatarMenuOpen(false); router.push("/profile"); }} className="flex w-full whitespace-nowrap py-2 text-start text-sm text-foreground transition-colors hover:text-primary">Personal area</button>
-                    <button className="flex w-full whitespace-nowrap py-2 text-start text-sm text-red-400 transition-colors hover:text-red-600" onClick={() => setAvatarMenuOpen(false)}>Disengagement</button>
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      </header>
+      <SeekerNavbar />
 
       {/* Content */}
-      <div className="mx-auto w-full max-w-[1375px]" style={{ padding: "24px 40px 64px" }}>
+      <div className="mx-auto w-full max-w-[1375px]" style={{ padding: "24px 40px 64px" }} dir={direction}>
         <div className="rounded-2xl bg-white" style={{ padding: "36px 40px 40px" }}>
-          <h1 className="text-[28px] leading-tight text-foreground" style={{ marginBottom: 20 }}>My profile</h1>
+          <h1 className="text-[28px] leading-tight text-foreground" style={{ marginBottom: 20 }}>{t.profile.title}</h1>
 
           {/* Tabs */}
           <div className="inline-flex items-center gap-1.5 rounded-xl bg-[#F7F9FC]" style={{ marginBottom: 32, padding: 6 }}>
@@ -178,14 +116,14 @@ export default function ProfilePage() {
               className="rounded-xl text-sm transition-colors"
               style={{ padding: "12px 40px", background: activeTab === "personal" ? "linear-gradient(168deg, #4C96FF 12%, #1667DB 94%)" : "transparent", color: activeTab === "personal" ? "white" : "#0E1117", border: "none", cursor: "pointer" }}
             >
-              Personal details
+              {isHe ? "פרטים אישיים" : "Personal details"}
             </button>
             <button
               onClick={() => setActiveTab("professional")}
               className="rounded-xl text-sm transition-colors"
               style={{ padding: "12px 40px", background: activeTab === "professional" ? "linear-gradient(168deg, #4C96FF 12%, #1667DB 94%)" : "transparent", color: activeTab === "professional" ? "white" : "#0E1117", border: "none", cursor: "pointer" }}
             >
-              Professional background
+              {isHe ? "רקע מקצועי" : "Professional background"}
             </button>
           </div>
 
@@ -193,14 +131,14 @@ export default function ProfilePage() {
             <div className="flex flex-col gap-8 lg:flex-row lg:gap-12">
               {/* Left — Profile picture + personal fields */}
               <div className="flex-1">
-                <h2 className="text-xl text-primary" style={{ marginBottom: 16 }}>Profile picture</h2>
+                <h2 className="text-xl text-primary" style={{ marginBottom: 16 }}>{isHe ? "תמונת פרופיל" : "Profile picture"}</h2>
                 <div className="flex flex-col items-start" style={{ marginBottom: 28, gap: 12 }}>
                   <input ref={imageRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
                   <div className="h-28 w-28 shrink-0 overflow-hidden rounded-xl bg-muted-foreground/20">
                     <img src={profileImage || "/images/job-avatar.png"} alt="Profile" className="h-full w-full object-cover" />
                   </div>
                   <button onClick={() => imageRef.current?.click()} className="cursor-pointer rounded-lg border border-border-light text-sm text-foreground transition-colors hover:bg-gray-50" style={{ padding: "8px 20px" }}>
-                    Change image
+                    {t.profile.changeImage}
                   </button>
                 </div>
 
@@ -265,30 +203,30 @@ export default function ProfilePage() {
 
               {/* Right — Change password */}
               <div className="self-start lg:w-96">
-                <h2 className="text-xl text-primary" style={{ marginBottom: 20 }}>Change password</h2>
+                <h2 className="text-xl text-primary" style={{ marginBottom: 20 }}>{t.profile.changePassword}</h2>
                 <div className="flex flex-col gap-5">
                   <div className="flex flex-col gap-2">
-                    <label className="text-sm text-foreground">Current password</label>
+                    <label className="text-sm text-foreground">{t.profile.currentPassword}</label>
                     <div className="relative">
-                      <input type={showCurrent ? "text" : "password"} placeholder="Type here..." value={passwords.current} onChange={(e) => setPasswords({ ...passwords, current: e.target.value })} className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:bg-white focus:outline-none" style={{ padding: "14px 40px 14px 16px" }} />
+                      <input type={showCurrent ? "text" : "password"} placeholder="{isHe ? "הקלד כאן..." : "Type here..."}" value={passwords.current} onChange={(e) => setPasswords({ ...passwords, current: e.target.value })} className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:bg-white focus:outline-none" style={{ padding: "14px 40px 14px 16px" }} />
                       <button onClick={() => setShowCurrent(!showCurrent)} className="absolute inset-y-0 right-3 flex items-center border-none bg-transparent text-muted-foreground">
                         {showCurrent ? <EyeOff size={16} /> : <Eye size={16} />}
                       </button>
                     </div>
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label className="text-sm text-foreground">New password</label>
+                    <label className="text-sm text-foreground">{t.profile.newPassword}</label>
                     <div className="relative">
-                      <input type={showNew ? "text" : "password"} placeholder="Type here..." value={passwords.newPass} onChange={(e) => setPasswords({ ...passwords, newPass: e.target.value })} className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:bg-white focus:outline-none" style={{ padding: "14px 40px 14px 16px" }} />
+                      <input type={showNew ? "text" : "password"} placeholder="{isHe ? "הקלד כאן..." : "Type here..."}" value={passwords.newPass} onChange={(e) => setPasswords({ ...passwords, newPass: e.target.value })} className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:bg-white focus:outline-none" style={{ padding: "14px 40px 14px 16px" }} />
                       <button onClick={() => setShowNew(!showNew)} className="absolute inset-y-0 right-3 flex items-center border-none bg-transparent text-muted-foreground">
                         {showNew ? <EyeOff size={16} /> : <Eye size={16} />}
                       </button>
                     </div>
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label className="text-sm text-foreground">Verify new password</label>
+                    <label className="text-sm text-foreground">{t.profile.verifyNewPassword}</label>
                     <div className="relative">
-                      <input type={showVerify ? "text" : "password"} placeholder="Type here..." value={passwords.verify} onChange={(e) => setPasswords({ ...passwords, verify: e.target.value })} className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:bg-white focus:outline-none" style={{ padding: "14px 40px 14px 16px" }} />
+                      <input type={showVerify ? "text" : "password"} placeholder="{isHe ? "הקלד כאן..." : "Type here..."}" value={passwords.verify} onChange={(e) => setPasswords({ ...passwords, verify: e.target.value })} className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:bg-white focus:outline-none" style={{ padding: "14px 40px 14px 16px" }} />
                       <button onClick={() => setShowVerify(!showVerify)} className="absolute inset-y-0 right-3 flex items-center border-none bg-transparent text-muted-foreground">
                         {showVerify ? <EyeOff size={16} /> : <Eye size={16} />}
                       </button>
@@ -297,7 +235,7 @@ export default function ProfilePage() {
                 </div>
 
                 <p className="text-xs text-red-400" style={{ marginTop: 8 }}>
-                  Password guidelines: 8 characters, numbers and letters
+                  {isHe ? "הנחיות סיסמה: 8 תווים, מספרים ואותיות" : "Password guidelines: 8 characters, numbers and letters"}
                 </p>
               </div>
             </div>
@@ -307,7 +245,7 @@ export default function ProfilePage() {
             <div className="flex flex-col gap-8 lg:flex-row lg:gap-12">
               {/* Left — Professional background fields */}
               <div className="flex-1">
-                <h2 className="text-xl text-primary" style={{ marginBottom: 20 }}>Professional background</h2>
+                <h2 className="text-xl text-primary" style={{ marginBottom: 20 }}>{isHe ? "רקע מקצועי" : "Professional background"}</h2>
                 <div className="flex flex-col gap-5">
                   {/* Role */}
                   <ProfDropdown label="Role" value={profRole} open={profRoleOpen} setOpen={setProfRoleOpen} options={["Teacher", "Tutor", "Teaching Assistant", "Substitute Teacher", "Counselor", "Instructor"]} onSelect={(v) => setProfRole(v)} onClear={() => setProfRole("")} hasTag />
@@ -341,7 +279,7 @@ export default function ProfilePage() {
                         )}
                       </div>
                     ))}
-                    <p onClick={() => setSkills([...skills, ""])} className="cursor-pointer text-sm text-primary underline">Add another field +</p>
+                    <p onClick={() => setSkills([...skills, ""])} className="cursor-pointer text-sm text-primary underline">{t.profile.addAnotherField}</p>
                   </div>
 
                   {/* Mobile with car */}
@@ -358,7 +296,7 @@ export default function ProfilePage() {
               {/* Right — Certificates, Work experience, Resume */}
               <div className="self-start lg:w-[420px]">
                 {/* Certificates */}
-                <h2 className="text-xl text-foreground" style={{ marginBottom: 16 }}>Certificates and training</h2>
+                <h2 className="text-xl text-foreground" style={{ marginBottom: 16 }}>{isHe ? "תעודות והכשרות" : "Certificates and training"}</h2>
                 <div className="flex flex-col gap-5" style={{ marginBottom: 32 }}>
                   {certificates.map((cert, idx) => (
                     <div key={idx} className="flex flex-col gap-4">
@@ -370,21 +308,21 @@ export default function ProfilePage() {
                       )}
                       <div className="flex flex-col gap-2">
                         <label className="text-sm text-foreground">Name of the educational institution</label>
-                        <input type="text" placeholder="Type here..." value={cert.institution} onChange={(e) => { const c = [...certificates]; c[idx].institution = e.target.value; setCertificates(c); }} className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:bg-white focus:outline-none" style={{ padding: "14px 16px" }} />
+                        <input type="text" placeholder="{isHe ? "הקלד כאן..." : "Type here..."}" value={cert.institution} onChange={(e) => { const c = [...certificates]; c[idx].institution = e.target.value; setCertificates(c); }} className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:bg-white focus:outline-none" style={{ padding: "14px 16px" }} />
                       </div>
                       <div className="flex flex-col gap-2">
                         <label className="text-sm text-foreground">Enter information or upload a file</label>
-                        <input type="text" placeholder="Type here..." value={cert.info} onChange={(e) => { const c = [...certificates]; c[idx].info = e.target.value; setCertificates(c); }} className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:bg-white focus:outline-none" style={{ padding: "14px 16px" }} />
+                        <input type="text" placeholder="{isHe ? "הקלד כאן..." : "Type here..."}" value={cert.info} onChange={(e) => { const c = [...certificates]; c[idx].info = e.target.value; setCertificates(c); }} className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:bg-white focus:outline-none" style={{ padding: "14px 16px" }} />
                       </div>
                     </div>
                   ))}
                   <input ref={certFileRef} type="file" accept=".pdf,.doc,.docx,.jpg,.png" className="hidden" />
-                  <button onClick={() => certFileRef.current?.click()} className="cursor-pointer self-start rounded-lg border border-foreground text-sm text-foreground transition-colors hover:bg-gray-50" style={{ padding: "8px 20px" }}>Upload file +</button>
-                  <p onClick={() => setCertificates([...certificates, { institution: "", info: "" }])} className="cursor-pointer text-sm text-primary underline">Add another field +</p>
+                  <button onClick={() => certFileRef.current?.click()} className="cursor-pointer self-start rounded-lg border border-foreground text-sm text-foreground transition-colors hover:bg-gray-50" style={{ padding: "8px 20px" }}>{isHe ? "העלאת קובץ +" : "Upload file +"}</button>
+                  <p onClick={() => setCertificates([...certificates, { institution: "", info: "" }])} className="cursor-pointer text-sm text-primary underline">{t.profile.addAnotherField}</p>
                 </div>
 
                 {/* Work experience */}
-                <h2 className="text-xl text-foreground" style={{ marginBottom: 16 }}>Work experience</h2>
+                <h2 className="text-xl text-foreground" style={{ marginBottom: 16 }}>{isHe ? "ניסיון תעסוקתי" : "Work experience"}</h2>
                 <div className="flex flex-col gap-4" style={{ marginBottom: 16 }}>
                   {workExps.map((exp) => (
                     <div key={exp.id} className="flex items-center justify-between rounded-lg border border-border-light bg-[#F7F9FC]" style={{ padding: "10px 14px" }}>
@@ -405,10 +343,10 @@ export default function ProfilePage() {
                     </div>
                   ))}
                 </div>
-                <button onClick={() => setWorkExps([...workExps, { id: Date.now(), role: "New Role", company: "New Company", dates: "Jan 2024 - Present" }])} className="cursor-pointer self-start rounded-lg border border-foreground text-sm text-foreground transition-colors hover:bg-gray-50" style={{ padding: "8px 20px", marginBottom: 32 }}>Add a workplace +</button>
+                <button onClick={() => setWorkExps([...workExps, { id: Date.now(), role: "New Role", company: "New Company", dates: "Jan 2024 - Present" }])} className="cursor-pointer self-start rounded-lg border border-foreground text-sm text-foreground transition-colors hover:bg-gray-50" style={{ padding: "8px 20px", marginBottom: 32 }}>{isHe ? "הוסף מקום עבודה +" : "Add a workplace +"}</button>
 
                 {/* Resume file */}
-                <h2 className="text-xl text-foreground" style={{ marginBottom: 16 }}>Resume file</h2>
+                <h2 className="text-xl text-foreground" style={{ marginBottom: 16 }}>{isHe ? "קובץ קורות חיים" : "Resume file"}</h2>
                 <input ref={resumeRef} type="file" accept=".pdf,.doc,.docx" onChange={(e) => { if (e.target.files?.[0]) { setResumeFile(e.target.files[0]); setHasResume(true); } }} className="hidden" />
                 {hasResume ? (
                   <div className="flex items-center justify-between rounded-lg border border-border-light" style={{ padding: "12px 14px", background: "linear-gradient(180deg, #FFFDF7 0%, #FFF8E8 100%)" }}>
@@ -423,7 +361,7 @@ export default function ProfilePage() {
                   </div>
                 ) : (
                   <button onClick={() => resumeRef.current?.click()} className="cursor-pointer rounded-lg border border-foreground text-sm text-foreground transition-colors hover:bg-gray-50" style={{ padding: "8px 20px" }}>
-                    Upload resume +
+                    {isHe ? "העלאת קורות חיים +" : "Upload resume +"}
                   </button>
                 )}
               </div>
@@ -433,10 +371,10 @@ export default function ProfilePage() {
           {/* Buttons */}
           <div className="flex items-center justify-end gap-4" style={{ marginTop: 40 }}>
             <button className="cursor-pointer rounded-lg text-sm text-white transition-colors hover:opacity-90" style={{ padding: "12px 32px", border: "none", backgroundImage: "linear-gradient(168deg, #4C96FF 12%, #1667DB 94%)" }}>
-              Saving changes
+              {t.profile.savingChanges}
             </button>
             <button className="cursor-pointer rounded-lg border border-foreground text-sm text-foreground transition-colors hover:bg-gray-50" style={{ padding: "12px 32px" }}>
-              Cancel changes
+              {t.profile.cancelChanges}
             </button>
           </div>
         </div>

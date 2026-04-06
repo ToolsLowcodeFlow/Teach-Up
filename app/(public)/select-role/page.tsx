@@ -8,7 +8,7 @@ type Role = "seeker" | "institution";
 
 export default function SelectRolePage() {
   const router = useRouter();
-  const { t } = useLanguage();
+  const { t, direction } = useLanguage();
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -25,6 +25,7 @@ export default function SelectRolePage() {
   return (
     <div
       className="w-screen h-screen overflow-hidden flex"
+      dir={direction}
       style={{ fontFamily: "'Abel', sans-serif", background: "#F7F9FC" }}
     >
       {/* LEFT — Content */}

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ChevronDown, Search, ArrowRight, ArrowLeft, X } from "lucide-react";
 import { PublicNavbar } from "@/components/home/public-navbar";
+import { useLanguage } from "@/lib/i18n/context";
 
 const suppliers = [
   {
@@ -177,9 +178,9 @@ function SupplierDetailModal({
             </div>
           </div>
 
-          {/* Age groups */}
+          {/* {isHe ? "קבוצת גיל" : "Age group"}s */}
           <div className="flex flex-col gap-2.5">
-            <p className="text-base text-foreground">Age groups</p>
+            <p className="text-base text-foreground">{isHe ? "קבוצת גיל" : "Age group"}s</p>
             <div className="flex gap-4">
               <span className="rounded-full border border-[#F3F3F6] text-sm text-foreground" style={{ padding: "6px 14px" }}>Adults</span>
             </div>
@@ -320,6 +321,8 @@ function SupplierCard({ supplier, onOpen }: { supplier: (typeof suppliers)[0]; o
 
 export default function SupplierDatabasePage() {
   const [selectedSupplier, setSelectedSupplier] = useState<(typeof suppliers)[0] | null>(null);
+  const { locale, direction } = useLanguage();
+  const isHe = locale === "he";
 
   return (
     <div className="min-h-screen bg-[#F7F9FC]">
@@ -332,10 +335,10 @@ export default function SupplierDatabasePage() {
         />
       )}
 
-      <div className="mx-auto max-w-[1375px]" style={{ padding: "120px 40px 60px" }}>
+      <div className="mx-auto max-w-[1375px]" style={{ padding: "120px 40px 60px" }} dir={direction}>
         {/* Title */}
         <h1 className="text-[32px] leading-[1.1] text-foreground" style={{ marginBottom: 36 }}>
-          Our supplier database <span className="text-[22px]">(1,000)</span>
+          {isHe ? "מאגר הספקים שלנו" : "Our supplier database"} <span className="text-[22px]">(1,000)</span>
         </h1>
 
         {/* Layout: Cards + Sidebar (filters on right) */}
@@ -358,7 +361,7 @@ export default function SupplierDatabasePage() {
             }}
           >
             <div className="flex flex-col" style={{ gap: 20 }}>
-              <h2 className="text-[22px] leading-[1.1] text-foreground">Filters</h2>
+              <h2 className="text-[22px] leading-[1.1] text-foreground">{isHe ? "מסננים" : "Filters"}</h2>
 
               <div className="flex flex-col" style={{ gap: 24 }}>
                 {/* Search input */}
@@ -375,21 +378,21 @@ export default function SupplierDatabasePage() {
                   <ChevronDown size={14} className="shrink-0 text-muted-foreground" />
                 </div>
 
-                {/* Areas of activity */}
+                {/* {isHe ? "תחומי פעילות" : "Areas of activity"} */}
                 <div
                   className="flex items-center justify-between rounded-[10px] border border-[#F3F3F6] bg-white"
                   style={{ height: 44, padding: "0 14px" }}
                 >
-                  <span className="text-sm text-foreground">Areas of activity</span>
+                  <span className="text-sm text-foreground">{isHe ? "תחומי פעילות" : "Areas of activity"}</span>
                   <ChevronDown size={14} className="shrink-0 text-muted-foreground" />
                 </div>
 
-                {/* Age group */}
+                {/* {isHe ? "קבוצת גיל" : "Age group"} */}
                 <div
                   className="flex items-center justify-between rounded-[10px] border border-[#F3F3F6] bg-white"
                   style={{ height: 44, padding: "0 14px" }}
                 >
-                  <span className="text-sm text-foreground">Age group</span>
+                  <span className="text-sm text-foreground">{isHe ? "קבוצת גיל" : "Age group"}</span>
                   <ChevronDown size={14} className="shrink-0 text-muted-foreground" />
                 </div>
 
@@ -403,8 +406,8 @@ export default function SupplierDatabasePage() {
                     fontFamily: "'Abel', sans-serif",
                   }}
                 >
-                  Search
-                </button>
+                  {isHe ? "חיפוש" : "Search"}
+</button>
               </div>
             </div>
           </div>

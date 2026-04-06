@@ -15,7 +15,10 @@ export async function updateSession(request: NextRequest) {
   ];
   const isPublicRoute = publicRoutes.some(
     (route) => path === route || path.startsWith("/jobs/")
-  );
+  ) || path.startsWith("/profile") || path.startsWith("/messages")
+    || path.startsWith("/contact") || path.startsWith("/favorites")
+    || path.startsWith("/supplier-database") || path.startsWith("/about")
+    || path.startsWith("/prices");
 
   if (isPublicRoute) {
     return supabaseResponse;

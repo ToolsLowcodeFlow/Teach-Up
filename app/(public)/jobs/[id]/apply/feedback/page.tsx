@@ -3,16 +3,19 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { X, Star } from "lucide-react";
-
-const ratings = [
-  "I liked it very much.",
-  "Very good",
-  "average",
-  "bad",
-  "Very bad",
-];
+import { useLanguage } from "@/lib/i18n/context";
 
 export default function FeedbackPage() {
+  const { locale, direction, t } = useLanguage();
+  const isHe = locale === "he";
+
+  const ratings = [
+    t.reviewModal.likedVeryMuch,
+    t.reviewModal.veryGood,
+    t.reviewModal.average,
+    t.reviewModal.bad,
+    t.reviewModal.veryBad,
+  ];
   const router = useRouter();
   const [selected, setSelected] = useState<number | null>(null);
   const [comment, setComment] = useState("");
@@ -46,7 +49,7 @@ export default function FeedbackPage() {
 
         {/* Title */}
         <h2 className="text-center text-[22px] leading-[1.2] text-foreground" style={{ marginBottom: 24 }}>
-          How was your experience?
+          {isHe ? "איך היה החוויה שלך?" : "How was your experience?"}
         </h2>
 
         {/* Star ratings */}
@@ -80,7 +83,7 @@ export default function FeedbackPage() {
 
         {/* Comment box */}
         <textarea
-          placeholder="Add a comment..."
+          placeholder={t.reviewModal.addComment}
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           className="w-full resize-none rounded-[10px] border border-border-light bg-white text-sm text-foreground outline-none placeholder:text-muted-foreground/40"
@@ -97,7 +100,7 @@ export default function FeedbackPage() {
             backgroundImage: "linear-gradient(168deg, #4C96FF 12%, #1667DB 94%)",
           }}
         >
-          Send a reply
+          {t.reviewModal.sendReply}
         </button>
       </div>
     </div>

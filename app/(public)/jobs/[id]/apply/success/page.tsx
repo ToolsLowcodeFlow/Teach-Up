@@ -2,9 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/context";
 
 export default function ApplySuccessPage() {
   const router = useRouter();
+  const { locale, direction } = useLanguage();
+  const isHe = locale === "he";
 
   return (
     <div
@@ -41,11 +44,11 @@ export default function ApplySuccessPage() {
 
         {/* Success text */}
         <h2 className="text-center text-[22px] leading-[1.3] text-foreground" style={{ marginBottom: 16 }}>
-          The nomination was successfully submitted!
+          {isHe ? "המועמדות הוגשה בהצלחה!" : "The nomination was successfully submitted!"}
         </h2>
 
         <p className="text-center text-sm leading-[1.6] text-muted-foreground" style={{ maxWidth: 360 }}>
-          Your details have been sent to the employer. You can track your application status here as updates from the employer are received. If there is a match, you will be contacted directly.
+          {isHe ? "הפרטים שלך נשלחו למעסיק. תוכל לעקוב אחר סטטוס המועמדות שלך כאן ככל שיתקבלו עדכונים מהמעסיק. אם יש התאמה, ייצרו איתך קשר ישירות." : "Your details have been sent to the employer. You can track your application status here as updates from the employer are received. If there is a match, you will be contacted directly."}
         </p>
       </div>
     </div>

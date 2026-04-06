@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Check } from "lucide-react";
 import { PublicNavbar } from "@/components/home/public-navbar";
+import { useLanguage } from "@/lib/i18n/context";
 
 const plans = [
   {
@@ -45,13 +46,15 @@ const plans = [
 
 export default function PricesPage() {
   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("yearly");
+  const { locale, direction } = useLanguage();
+  const isHe = locale === "he";
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-gradient-to-b from-white from-[40%] to-[#EEF3FD]">
       <PublicNavbar />
 
       {/* Pricing content */}
-      <div className="flex flex-1 flex-col items-center justify-center px-10" style={{ paddingTop: 80 }}>
+      <div className="flex flex-1 flex-col items-center justify-center px-10" style={{ paddingTop: 80 }} dir={direction}>
         <div className="flex w-full max-w-[981px] flex-col items-center" style={{ gap: "clamp(20px, 3vh, 40px)" }}>
           {/* Toggle */}
           <div className="flex items-center" style={{ gap: 18 }}>
@@ -64,7 +67,7 @@ export default function PricesPage() {
                 whiteSpace: "pre-line",
               }}
             >
-              {"Monthly price\nwithout obligation"}
+              {isHe ? "מחיר חודשי\nללא התחייבות" : "Monthly price\nwithout obligation"}
             </div>
             <div
               className="relative shrink-0 cursor-pointer"
@@ -99,7 +102,7 @@ export default function PricesPage() {
                 whiteSpace: "pre-line",
               }}
             >
-              {"Annual price\nup to 10% savings"}
+              {isHe ? "מחיר שנתי\nעד 10% חיסכון" : "Annual price\nup to 10% savings"}
             </div>
           </div>
 
@@ -153,7 +156,7 @@ export default function PricesPage() {
                     </p>
                     <p className="text-center text-foreground" style={{ fontSize: "clamp(20px, 1.8vw, 26px)" }}>
                       <span>₪{plan.price} </span>
-                      <span style={{ fontSize: "clamp(13px, 1.1vw, 16px)" }}>Price per year</span>
+                      <span style={{ fontSize: "clamp(13px, 1.1vw, 16px)" }}>{isHe ? "מחיר לשנה" : "Price per year"}</span>
                     </p>
                   </div>
 
@@ -193,7 +196,7 @@ export default function PricesPage() {
               flexShrink: 0,
             }}
           >
-            Continue with the selected package
+            {isHe ? "המשך עם החבילה שנבחרה" : "Continue with the selected package"}
           </button>
         </div>
       </div>

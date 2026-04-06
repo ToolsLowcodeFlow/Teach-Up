@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronDown, X } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/context";
 
 const roleOptions = ["Teacher", "Tutor", "Teaching Assistant", "Substitute Teacher", "Counselor", "Instructor"];
 const fieldOptions = ["Mathematics", "English", "Science", "History", "Art", "Music", "Physical Education", "Computer Science", "Special Education"];
@@ -52,6 +53,8 @@ function SelectField({
 
 export default function ProfileSetupPage() {
   const router = useRouter();
+  const { locale, direction } = useLanguage();
+  const isHe = locale === "he";
   const resumeRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState({
     firstName: "", lastName: "", mobile: "", area: "", role: "", fieldOfKnowledge: "", aboutYourself: "",
@@ -69,7 +72,7 @@ export default function ProfileSetupPage() {
   };
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden" style={{ fontFamily: "'Abel', sans-serif", background: "#F7F9FC" }}>
+    <div className="flex h-screen w-screen overflow-hidden" style={{ fontFamily: "'Abel', sans-serif", background: "#F7F9FC" }} dir={direction}>
       {/* LEFT — Form content */}
       <div className="flex flex-1 flex-col overflow-y-auto">
         <div className="flex shrink-0 items-center justify-between" style={{ padding: "3vh 4vw 0 4vw" }}>

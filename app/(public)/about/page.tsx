@@ -5,6 +5,7 @@ import { Plus, X } from "lucide-react";
 import { PublicNavbar } from "@/components/home/public-navbar";
 import { EasyWaySection } from "@/components/home/easy-way-section";
 import { PublicFooter } from "@/components/home/public-footer";
+import { useLanguage } from "@/lib/i18n/context";
 
 const stats = [
   { number: "257,000", label: "Jobs filled this month" },
@@ -47,8 +48,9 @@ function FaqItem({ faq, index }: { faq: typeof faqs[0]; index: number }) {
 }
 
 export default function AboutPage() {
+  const { direction } = useLanguage();
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background" dir={direction}>
       <PublicNavbar />
 
       {/* Hero */}
