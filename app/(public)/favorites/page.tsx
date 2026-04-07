@@ -40,7 +40,7 @@ export default function FavoritesPage() {
       <SeekerNavbar />
 
       {/* Content */}
-      <div className="mx-auto w-full max-w-[1375px]" style={{ padding: "30px 40px 60px" }} dir={direction}>
+      <div className="w-full" style={{ padding: "30px 40px 60px" }} dir={direction}>
         <h1 className="text-[28px] leading-[1.1] text-foreground" style={{ marginBottom: 28 }}>{t.favorites.title}</h1>
 
         {/* 4-column grid */}

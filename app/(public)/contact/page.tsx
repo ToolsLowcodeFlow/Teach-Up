@@ -21,7 +21,7 @@ export default function ContactPage() {
       <SeekerNavbar activeNav="contactUs" />
 
       {/* Content */}
-      <div className="mx-auto flex w-full max-w-[1375px] flex-1 gap-12" style={{ padding: "40px 40px 60px" }} dir={direction}>
+      <div className="flex w-full flex-1 gap-12" style={{ padding: "40px 40px 60px" }} dir={direction}>
         {/* Left — Contact info */}
         <div className="flex flex-col" style={{ width: 480, gap: 24 }}>
           <h1 className="text-[36px] leading-[1.2] text-foreground">{t.contactUs.title}</h1>

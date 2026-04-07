@@ -4,13 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { MoreHorizontal, Zap, ChevronDown, ChevronRight, Search } from "lucide-react";
 import { AdminNavbar } from "@/components/admin/admin-navbar";
-
-const stats = [
-  { label: "Total jobs", value: "760", change: "+12%", positive: true },
-  { label: "Total inactive suppliers", value: "760", change: "-12%", positive: false },
-  { label: "Total active suppliers", value: "760", change: "+12%", positive: true },
-  { label: "Total suppliers in the system", value: "760", change: "+12%", positive: true },
-];
+import { useLanguage } from "@/lib/i18n/context";
 
 const suppliers = Array.from({ length: 8 }, (_, i) => ({
   id: i + 1,
@@ -24,25 +18,48 @@ const suppliers = Array.from({ length: 8 }, (_, i) => ({
   status: i === 0 ? "new" : i === 5 ? "inactive" : "active",
 }));
 
+function exportToCSV(data: Record<string, string>[], filename: string) {
+  const headers = Object.keys(data[0]);
+  const csv = [
+    headers.join(","),
+    ...data.map((row) => headers.map((h) => `"${row[h]}"`).join(","))
+  ].join("\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `${filename}.csv`;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
 export default function AdminSuppliersPage() {
+  const { t, direction } = useLanguage();
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
   const [openMenu, setOpenMenu] = useState<number | null>(null);
+
+  const stats = [
+    { label: t.admin.totalJobs, value: "760", change: "+12%", positive: true },
+    { label: t.admin.totalInactiveSuppliers, value: "760", change: "-12%", positive: false },
+    { label: t.admin.totalActiveSuppliers, value: "760", change: "+12%", positive: true },
+    { label: t.admin.totalSuppliers, value: "760", change: "+12%", positive: true },
+  ];
 
   return (
     <div className="min-h-screen bg-[#F7F9FC]" style={{ fontFamily: "'Abel', sans-serif" }}>
       <AdminNavbar />
 
-      <div className="mx-auto max-w-[1375px]" style={{ padding: "30px 40px 60px" }}>
+      <div dir={direction} style={{ padding: "30px 40px 60px" }}>
         {/* Header */}
         <div className="flex items-start justify-between" style={{ marginBottom: 28 }}>
           <div className="flex flex-col gap-2">
-            <h1 className="text-[32px] leading-[1.1] text-foreground">Suppliers</h1>
+            <h1 className="text-[32px] leading-[1.1] text-foreground">{t.admin.suppliers}</h1>
             <p className="max-w-sm text-sm leading-[1.4] text-muted-foreground">
-              Managing suppliers, viewing details and jobs, and removing from the system
+              {t.admin.suppliersSubtitle}
             </p>
           </div>
-          <button className="text-sm text-primary underline hover:text-primary/80">Export to Excel file</button>
+          <button onClick={() => exportToCSV(suppliers.map((s) => ({ "Company name": s.company, "Joining date": s.joiningDate, "Employees": s.employees, "Service type": s.serviceType, "Employer type": s.employerType, "Phone": s.phone, "Orbit": s.orbit, "Status": s.status })), "suppliers")} className="cursor-pointer text-sm text-primary underline hover:text-primary/80">{t.admin.exportToExcel}</button>
         </div>
 
         {/* Stat cards */}
@@ -63,7 +80,7 @@ export default function AdminSuppliersPage() {
                 <span className="text-xs text-muted-foreground">{stat.label}</span>
                 <span className="text-[32px] leading-none text-foreground">{stat.value}</span>
                 <span className="text-xs" style={{ color: stat.positive ? "#20AB7F" : "#FF676A" }}>
-                  From last month  {stat.change}
+                  {t.admin.fromLastMonth}  {stat.change}
                 </span>
               </div>
             </div>
@@ -79,20 +96,20 @@ export default function AdminSuppliersPage() {
                 <ChevronDown size={14} />
               </div>
               <div className="flex cursor-pointer items-center gap-2 rounded-lg border border-border-light bg-[#F7F9FC] text-xs text-foreground" style={{ padding: "8px 14px" }}>
-                <span>Employer type</span>
+                <span>{t.admin.employerType}</span>
                 <ChevronDown size={12} className="text-muted-foreground" />
               </div>
               <div className="flex cursor-pointer items-center gap-2 rounded-lg border border-border-light bg-[#F7F9FC] text-xs text-foreground" style={{ padding: "8px 14px" }}>
-                <span>Service type</span>
+                <span>{t.admin.serviceType}</span>
                 <ChevronDown size={12} className="text-muted-foreground" />
               </div>
               <div className="flex cursor-pointer items-center gap-2 rounded-lg border border-border-light bg-[#F7F9FC] text-xs text-foreground" style={{ padding: "8px 14px" }}>
-                <span>status</span>
+                <span>{t.admin.status}</span>
                 <ChevronDown size={12} className="text-muted-foreground" />
               </div>
             </div>
             <div className="flex items-center rounded-lg border border-border-light bg-[#F7F9FC]" style={{ padding: "8px 14px", width: 200 }}>
-              <input type="text" placeholder="Free search..." className="flex-1 border-none bg-transparent text-xs text-foreground outline-none placeholder:text-muted-foreground/30" />
+              <input type="text" placeholder={t.admin.freeSearch} className="flex-1 border-none bg-transparent text-xs text-foreground outline-none placeholder:text-muted-foreground/30" />
               <Search size={14} className="shrink-0 text-muted-foreground/30" />
             </div>
           </div>
@@ -102,14 +119,14 @@ export default function AdminSuppliersPage() {
             <table className="w-full" style={{ borderCollapse: "collapse" }}>
               <thead>
                 <tr style={{ borderBottom: "1px solid #F3F3F6" }}>
-                  <th style={{ padding: "12px 28px" }} className="text-start text-xs font-normal text-muted-foreground">Company name</th>
-                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">Joining date</th>
-                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">Number of employees</th>
-                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">Service type</th>
-                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">Employer type</th>
-                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">phone</th>
-                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">orbit</th>
-                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">status</th>
+                  <th style={{ padding: "12px 28px" }} className="text-start text-xs font-normal text-muted-foreground">{t.admin.companyName}</th>
+                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">{t.admin.joiningDate}</th>
+                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">{t.admin.numberOfEmployees}</th>
+                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">{t.admin.serviceType}</th>
+                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">{t.admin.employerType}</th>
+                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">{t.admin.phone}</th>
+                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">{t.admin.orbit}</th>
+                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">{t.admin.status}</th>
                   <th style={{ padding: "12px 28px 12px 16px", width: 50 }} className="text-start text-xs font-normal text-muted-foreground"></th>
                 </tr>
               </thead>
@@ -153,11 +170,11 @@ export default function AdminSuppliersPage() {
                           <>
                             <div className="fixed inset-0 z-10" onClick={() => setOpenMenu(null)} />
                             <div className="absolute right-0 top-8 z-20 flex min-w-52 flex-col gap-1 rounded-xl border border-border-light bg-white shadow-lg" style={{ padding: "10px 14px" }}>
-                              <button onClick={() => { setOpenMenu(null); router.push(`/admin/suppliers/${sup.id}`); }} className="flex w-full whitespace-nowrap py-1.5 text-start text-sm text-foreground transition-colors hover:text-primary">View profile</button>
-                              <button onClick={() => setOpenMenu(null)} className="flex w-full whitespace-nowrap py-1.5 text-start text-sm text-foreground transition-colors hover:text-primary">Blocking a user</button>
-                              <button onClick={() => setOpenMenu(null)} className="flex w-full whitespace-nowrap py-1.5 text-start text-sm text-foreground transition-colors hover:text-primary">Opening a directory database</button>
-                              <button onClick={() => setOpenMenu(null)} className="flex w-full whitespace-nowrap py-1.5 text-start text-sm text-foreground transition-colors hover:text-primary">Blocking from supplier database</button>
-                              <button onClick={() => { setOpenMenu(null); router.push(`/admin/suppliers/delete/${sup.id}`); }} className="flex w-full whitespace-nowrap py-1.5 text-start text-sm text-red-400 transition-colors hover:text-red-600">Delete a provider</button>
+                              <button onClick={() => { setOpenMenu(null); router.push(`/admin/suppliers/${sup.id}`); }} className="flex w-full whitespace-nowrap py-1.5 text-start text-sm text-foreground transition-colors hover:text-primary">{t.admin.viewProfile}</button>
+                              <button onClick={() => setOpenMenu(null)} className="flex w-full whitespace-nowrap py-1.5 text-start text-sm text-foreground transition-colors hover:text-primary">{t.admin.blockingUser}</button>
+                              <button onClick={() => setOpenMenu(null)} className="flex w-full whitespace-nowrap py-1.5 text-start text-sm text-foreground transition-colors hover:text-primary">{t.admin.openingDirectory}</button>
+                              <button onClick={() => setOpenMenu(null)} className="flex w-full whitespace-nowrap py-1.5 text-start text-sm text-foreground transition-colors hover:text-primary">{t.admin.blockingFromSupplier}</button>
+                              <button onClick={() => { setOpenMenu(null); router.push(`/admin/suppliers/delete/${sup.id}`); }} className="flex w-full whitespace-nowrap py-1.5 text-start text-sm text-red-400 transition-colors hover:text-red-600">{t.admin.deleteProvider}</button>
                             </div>
                           </>
                         )}
@@ -170,9 +187,9 @@ export default function AdminSuppliersPage() {
           </div>
 
           {/* Pagination */}
-          <div className="flex items-center justify-between" style={{ padding: "20px 28px 0" }}>
+          <div className="flex items-center justify-between rounded-b-2xl bg-[#F7F9FC]" style={{ padding: "20px 28px" }}>
             <div className="flex items-center gap-2">
-              <button className="cursor-pointer rounded-lg border border-border-light bg-white px-4 py-2 text-xs text-foreground transition-colors hover:bg-gray-50">next</button>
+              <button className="cursor-pointer rounded-lg border border-border-light bg-white px-4 py-2 text-xs text-foreground transition-colors hover:bg-gray-50">{t.admin.next}</button>
               {[1, 2, 3].map((p) => (
                 <button
                   key={p}
@@ -186,9 +203,9 @@ export default function AdminSuppliersPage() {
                   {p}
                 </button>
               ))}
-              <span className="text-xs text-muted-foreground" style={{ marginLeft: 8 }}>Presenter</span>
+              <span className="text-xs text-muted-foreground" style={{ marginLeft: 8 }}>{t.admin.presenter}</span>
             </div>
-            <span className="text-xs text-primary">Showing 1-5 of 248 users</span>
+            <span className="text-xs text-primary">{t.admin.showingUsers}</span>
           </div>
         </div>
       </div>

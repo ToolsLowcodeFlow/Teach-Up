@@ -22,7 +22,7 @@ export function SeekerNavbar({ activeNav = "" }: SeekerNavbarProps) {
 
   return (
     <header className="sticky top-0 z-40 bg-white" style={{ borderBottom: "1px solid #F3F3F6" }} dir="ltr">
-      <div className="mx-auto flex max-w-[1375px] items-center justify-between" style={{ padding: "12px 40px" }}>
+      <div className="flex items-center justify-between" style={{ padding: "12px 40px" }}>
         {/* Left: Logo + nav links */}
         <div className="flex items-center gap-10">
           <div className="flex items-center gap-1.5 text-2xl">

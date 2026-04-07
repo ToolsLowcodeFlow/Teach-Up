@@ -105,7 +105,7 @@ export default function ProfilePage() {
       <SeekerNavbar />
 
       {/* Content */}
-      <div className="mx-auto w-full max-w-[1375px]" style={{ padding: "24px 40px 64px" }} dir={direction}>
+      <div className="w-full" style={{ padding: "24px 40px 64px" }} dir={direction}>
         <div className="rounded-2xl bg-white" style={{ padding: "36px 40px 40px" }}>
           <h1 className="text-[28px] leading-tight text-foreground" style={{ marginBottom: 20 }}>{t.profile.title}</h1>
 

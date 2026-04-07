@@ -3,9 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronLeft, MoreHorizontal, Link2 } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/context";
 
 export default function AdminJobDetailPage() {
   const router = useRouter();
+  const { t, direction } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -13,13 +15,7 @@ export default function AdminJobDetailPage() {
       className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto"
       style={{ fontFamily: "'Abel', sans-serif" }}
     >
-      <iframe
-        src="/admin/suppliers"
-        className="fixed inset-0 h-screen w-screen border-none"
-        style={{ filter: "blur(6px)", pointerEvents: "none", opacity: 0.7 }}
-        tabIndex={-1}
-      />
-      <div className="fixed inset-0 h-screen w-screen" style={{ background: "rgba(0,0,0,0.35)" }} onClick={() => router.back()} />
+      <div className="fixed inset-0" style={{ background: "rgba(0,0,0,0.4)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }} onClick={() => router.back()} />
 
       <div
         className="relative z-10 my-8 w-full max-w-[620px] rounded-2xl bg-white"
@@ -31,7 +27,7 @@ export default function AdminJobDetailPage() {
             <button onClick={() => router.back()} className="flex cursor-pointer items-center justify-center border-none bg-transparent text-muted-foreground hover:text-foreground">
               <ChevronLeft size={20} />
             </button>
-            <h1 className="text-[22px] leading-[1.1] text-foreground">Job details</h1>
+            <h1 className="text-[22px] leading-[1.1] text-foreground">{t.admin.jobDetailsTitle}</h1>
           </div>
 
           {/* Menu */}
@@ -43,10 +39,10 @@ export default function AdminJobDetailPage() {
                 <>
                   <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
                   <div className="absolute right-0 top-8 z-20 flex min-w-40 flex-col gap-0.5 rounded-xl border border-border-light bg-white shadow-lg" style={{ padding: "10px 14px" }}>
-                    <button onClick={() => setMenuOpen(false)} className="w-full whitespace-nowrap py-1.5 text-start text-sm text-foreground hover:text-primary">Become a hot job</button>
-                    <button onClick={() => setMenuOpen(false)} className="w-full whitespace-nowrap py-1.5 text-start text-sm text-foreground hover:text-primary">Job hopping</button>
-                    <button onClick={() => setMenuOpen(false)} className="w-full whitespace-nowrap py-1.5 text-start text-sm text-foreground hover:text-primary">Ad blocking</button>
-                    <button onClick={() => setMenuOpen(false)} className="w-full whitespace-nowrap py-1.5 text-start text-sm text-red-400 hover:text-red-600">Deleting an ad</button>
+                    <button onClick={() => setMenuOpen(false)} className="w-full whitespace-nowrap py-1.5 text-start text-sm text-foreground hover:text-primary">{t.admin.becomeHotJob}</button>
+                    <button onClick={() => setMenuOpen(false)} className="w-full whitespace-nowrap py-1.5 text-start text-sm text-foreground hover:text-primary">{t.admin.jobHopping}</button>
+                    <button onClick={() => setMenuOpen(false)} className="w-full whitespace-nowrap py-1.5 text-start text-sm text-foreground hover:text-primary">{t.admin.adBlocking}</button>
+                    <button onClick={() => setMenuOpen(false)} className="w-full whitespace-nowrap py-1.5 text-start text-sm text-red-400 hover:text-red-600">{t.admin.deletingAd}</button>
                   </div>
                 </>
               )}
@@ -105,9 +101,9 @@ export default function AdminJobDetailPage() {
           ))}
         </div>
 
-        {/* Company Description */}
+        {/* {t.admin.companyDescription} */}
         <div className="flex flex-col" style={{ gap: 8, marginBottom: 20 }}>
-          <h3 className="text-base text-foreground">Company Description</h3>
+          <h3 className="text-base text-foreground">{t.admin.companyDescription}</h3>
           <p className="text-xs leading-[1.5] text-muted-foreground">
             Lorem Ipsum Dolor Sit Emmet, Consecteur Adipiscing Elite Goler Monferrer Sobert Lorem Shabdach Yehol, Lorem Ipsum Dolor Sit Emmet, Consecteur Adipiscing Elite Goler Monferrer Sobert Lorem Shabdach Yehol, Lorem Ipsum Dolor Sit Emmet, Consecteur Adipiscing Elite Goler Monferrer Sobert Lorem Shabdach Yehol,
           </p>
@@ -119,9 +115,9 @@ export default function AdminJobDetailPage() {
           </div>
         </div>
 
-        {/* Attachments */}
+        {/* {t.admin.attachments} */}
         <div className="flex flex-col" style={{ gap: 8 }}>
-          <h3 className="text-base text-foreground">Attachments</h3>
+          <h3 className="text-base text-foreground">{t.admin.attachments}</h3>
           {[1, 2, 3].map((i) => (
             <div key={i} className="flex items-center justify-between rounded-[10px] border border-border-light" style={{ padding: "10px 14px", background: "linear-gradient(180deg, #FFFDF7 0%, #FFF8E8 100%)" }}>
               <div className="flex items-center gap-2">

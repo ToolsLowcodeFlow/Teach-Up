@@ -3,13 +3,7 @@
 import { useState } from "react";
 import { MoreHorizontal, Zap, ChevronRight } from "lucide-react";
 import { AdminNavbar } from "@/components/admin/admin-navbar";
-
-const stats = [
-  { label: "Total jobs filled", value: "760", change: "+12%", positive: true },
-  { label: "Total jobs in the system", value: "760", change: "-12%", positive: false },
-  { label: "Total instructors in the system", value: "760", change: "+12%", positive: true },
-  { label: "Total suppliers in the system", value: "760", change: "+12%", positive: true },
-];
+import { useLanguage } from "@/lib/i18n/context";
 
 const suppliers = Array.from({ length: 8 }, (_, i) => ({
   id: i + 1,
@@ -24,20 +18,28 @@ const suppliers = Array.from({ length: 8 }, (_, i) => ({
 }));
 
 export default function AdminDashboardPage() {
+  const { t, direction } = useLanguage();
   const [currentPage, setCurrentPage] = useState(1);
+
+  const stats = [
+    { label: t.admin.totalJobsFilled, value: "760", change: "+12%", positive: true },
+    { label: t.admin.totalJobsInSystem, value: "760", change: "-12%", positive: false },
+    { label: t.admin.totalInstructors, value: "760", change: "+12%", positive: true },
+    { label: t.admin.totalSuppliers, value: "760", change: "+12%", positive: true },
+  ];
 
   return (
     <div className="min-h-screen bg-[#F7F9FC]" style={{ fontFamily: "'Abel', sans-serif" }}>
       <AdminNavbar />
 
-      <div className="mx-auto max-w-[1375px]" style={{ padding: "30px 40px 60px" }}>
+      <div dir={direction} style={{ padding: "30px 40px 60px" }}>
         {/* Welcome */}
         <div style={{ marginBottom: 32 }}>
           <h1 className="text-[32px] leading-[1.2] text-foreground" style={{ marginBottom: 8 }}>
-            Good to see you again 👋
+            {t.admin.welcomeTitle}
           </h1>
           <p className="text-sm text-muted-foreground">
-            Here you can view all the data from the latest period in the system.
+            {t.admin.welcomeSubtitle}
           </p>
         </div>
 
@@ -59,7 +61,7 @@ export default function AdminDashboardPage() {
                 <span className="text-xs text-muted-foreground">{stat.label}</span>
                 <span className="text-[32px] leading-none text-foreground">{stat.value}</span>
                 <span className="text-xs" style={{ color: stat.positive ? "#20AB7F" : "#FF676A" }}>
-                  From last month  {stat.change}
+                  {t.admin.fromLastMonth}  {stat.change}
                 </span>
               </div>
             </div>
@@ -70,9 +72,9 @@ export default function AdminDashboardPage() {
         <div className="rounded-2xl bg-white" style={{ padding: "24px 0" }}>
           {/* Table header */}
           <div className="flex items-center justify-between" style={{ padding: "0 28px", marginBottom: 16 }}>
-            <h2 className="text-lg text-foreground">New suppliers in the system</h2>
+            <h2 className="text-lg text-foreground">{t.admin.newSuppliersInSystem}</h2>
             <button className="flex items-center gap-1 text-sm text-primary hover:underline">
-              View all providers
+              {t.admin.viewAllProviders}
               <ChevronRight size={14} />
             </button>
           </div>
@@ -82,14 +84,14 @@ export default function AdminDashboardPage() {
             <table className="w-full" style={{ borderCollapse: "collapse" }}>
               <thead>
                 <tr style={{ borderBottom: "1px solid #F3F3F6" }}>
-                  <th style={{ padding: "12px 28px 12px 28px" }} className="text-start text-xs font-normal text-muted-foreground">Company name</th>
-                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">Joining date</th>
-                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">Number of employees</th>
-                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">Service type</th>
-                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">Employer type</th>
-                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">phone</th>
-                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">orbit</th>
-                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">status</th>
+                  <th style={{ padding: "12px 28px 12px 28px" }} className="text-start text-xs font-normal text-muted-foreground">{t.admin.companyName}</th>
+                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">{t.admin.joiningDate}</th>
+                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">{t.admin.numberOfEmployees}</th>
+                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">{t.admin.serviceType}</th>
+                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">{t.admin.employerType}</th>
+                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">{t.admin.phone}</th>
+                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">{t.admin.orbit}</th>
+                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">{t.admin.status}</th>
                   <th style={{ padding: "12px 28px 12px 16px", width: 50 }} className="text-start text-xs font-normal text-muted-foreground"></th>
                 </tr>
               </thead>
@@ -133,9 +135,9 @@ export default function AdminDashboardPage() {
           </div>
 
           {/* Pagination */}
-          <div className="flex items-center justify-between" style={{ padding: "20px 28px 0" }}>
+          <div className="flex items-center justify-between rounded-b-2xl bg-[#F7F9FC]" style={{ padding: "20px 28px" }}>
             <div className="flex items-center gap-2">
-              <button className="cursor-pointer rounded-lg border border-border-light bg-white px-4 py-2 text-xs text-foreground transition-colors hover:bg-gray-50">next</button>
+              <button className="cursor-pointer rounded-lg border border-border-light bg-white px-4 py-2 text-xs text-foreground transition-colors hover:bg-gray-50">{t.admin.next}</button>
               {[1, 2, 3].map((p) => (
                 <button
                   key={p}
@@ -149,9 +151,9 @@ export default function AdminDashboardPage() {
                   {p}
                 </button>
               ))}
-              <span className="text-xs text-muted-foreground" style={{ marginLeft: 8 }}>Presenter</span>
+              <span className="text-xs text-muted-foreground" style={{ marginLeft: 8 }}>{t.admin.presenter}</span>
             </div>
-            <span className="text-xs text-primary">Showing 1-5 of 248 users</span>
+            <span className="text-xs text-primary">{t.admin.showingUsers}</span>
           </div>
         </div>
       </div>

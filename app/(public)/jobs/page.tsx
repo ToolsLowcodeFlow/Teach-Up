@@ -188,7 +188,7 @@ export default function JobsPage() {
       <SeekerNavbar activeNav={activeTab === "all" ? "jobSearch" : (activeTab === "my" || activeTab === "my-empty") ? "myJobs" : ""} />
 
       {/* Content */}
-      <div className="mx-auto flex w-full max-w-[1375px] flex-1 flex-col" style={{ padding: "24px 40px 0" }} dir={direction}>
+      <div className="flex w-full flex-1 flex-col" style={{ padding: "24px 40px 0" }} dir={direction}>
         {/* Sort + Tabs row */}
         <div className="flex items-center justify-between" style={{ marginBottom: 20 }}>
           <div className="flex items-center gap-4">

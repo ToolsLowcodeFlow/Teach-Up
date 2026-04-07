@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { X, MoreHorizontal, MapPin, BadgeCheck, Calendar } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/context";
 
 const postedJobs = Array.from({ length: 6 }, (_, i) => ({
   id: i + 1,
@@ -18,6 +19,7 @@ const postedJobs = Array.from({ length: 6 }, (_, i) => ({
 
 export default function SupplierDetailPage() {
   const router = useRouter();
+  const { t, direction } = useLanguage();
   const [jobMenuOpen, setJobMenuOpen] = useState<number | null>(null);
 
   return (
@@ -25,14 +27,7 @@ export default function SupplierDetailPage() {
       className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto"
       style={{ fontFamily: "'Abel', sans-serif" }}
     >
-      {/* Blurred suppliers page background */}
-      <iframe
-        src="/admin/suppliers"
-        className="fixed inset-0 h-screen w-screen border-none"
-        style={{ filter: "blur(6px)", pointerEvents: "none", opacity: 0.7 }}
-        tabIndex={-1}
-      />
-      <div className="fixed inset-0 h-screen w-screen" style={{ background: "rgba(0,0,0,0.35)" }} onClick={() => router.back()} />
+      <div className="fixed inset-0" style={{ background: "rgba(0,0,0,0.4)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }} onClick={() => router.back()} />
 
       <div
         className="relative z-10 my-8 w-full max-w-[520px] rounded-2xl bg-white"
@@ -66,15 +61,15 @@ export default function SupplierDetailPage() {
         {/* Action buttons */}
         <div className="flex items-center gap-4" style={{ marginBottom: 28 }}>
           <button className="flex-1 cursor-pointer rounded-lg border border-foreground bg-white py-3 text-sm text-foreground transition-colors hover:bg-gray-50">
-            Provider blocking
+            {t.admin.providerBlocking}
           </button>
           <button onClick={() => router.push("/admin/suppliers/delete/1")} className="flex-1 cursor-pointer rounded-lg border border-red-400 bg-white py-3 text-sm text-red-400 transition-colors hover:bg-red-50">
-            Delete a provider
+            {t.admin.deleteProvider}
           </button>
         </div>
 
         {/* System activity */}
-        <h3 className="text-base text-foreground" style={{ marginBottom: 12 }}>System activity</h3>
+        <h3 className="text-base text-foreground" style={{ marginBottom: 12 }}>{t.admin.systemActivity}</h3>
         <div className="grid grid-cols-3 gap-3" style={{ marginBottom: 28 }}>
           <div className="flex flex-col items-center gap-1 rounded-xl border border-border-light bg-white" style={{ padding: "14px 10px" }}>
             <span className="text-[10px] text-muted-foreground">orbit</span>
@@ -91,7 +86,7 @@ export default function SupplierDetailPage() {
         </div>
 
         {/* Posted jobs */}
-        <h3 className="text-base text-foreground" style={{ marginBottom: 12 }}>Posted jobs</h3>
+        <h3 className="text-base text-foreground" style={{ marginBottom: 12 }}>{t.admin.postedJobs}</h3>
         <div className="grid grid-cols-2 gap-4">
           {postedJobs.map((job) => (
             <div key={job.id} onClick={() => router.push(`${window.location.pathname}/job/${job.id}`)} className="flex cursor-pointer flex-col rounded-xl border border-border-light bg-white transition-shadow hover:shadow-md" style={{ padding: "14px" }}>
@@ -117,10 +112,10 @@ export default function SupplierDetailPage() {
                     <>
                       <div className="fixed inset-0 z-10" onClick={() => setJobMenuOpen(null)} />
                       <div className="absolute right-0 top-6 z-20 flex min-w-36 flex-col gap-0.5 rounded-lg border border-border-light bg-white shadow-lg" style={{ padding: "8px 12px" }}>
-                        <button onClick={() => setJobMenuOpen(null)} className="w-full whitespace-nowrap py-1 text-start text-[11px] text-foreground hover:text-primary">Become a hot job</button>
-                        <button onClick={() => setJobMenuOpen(null)} className="w-full whitespace-nowrap py-1 text-start text-[11px] text-foreground hover:text-primary">Job hopping</button>
-                        <button onClick={() => setJobMenuOpen(null)} className="w-full whitespace-nowrap py-1 text-start text-[11px] text-foreground hover:text-primary">Ad blocking</button>
-                        <button onClick={() => setJobMenuOpen(null)} className="w-full whitespace-nowrap py-1 text-start text-[11px] text-red-400 hover:text-red-600">Deleting an ad</button>
+                        <button onClick={() => setJobMenuOpen(null)} className="w-full whitespace-nowrap py-1 text-start text-[11px] text-foreground hover:text-primary">{t.admin.becomeHotJob}</button>
+                        <button onClick={() => setJobMenuOpen(null)} className="w-full whitespace-nowrap py-1 text-start text-[11px] text-foreground hover:text-primary">{t.admin.jobHopping}</button>
+                        <button onClick={() => setJobMenuOpen(null)} className="w-full whitespace-nowrap py-1 text-start text-[11px] text-foreground hover:text-primary">{t.admin.adBlocking}</button>
+                        <button onClick={() => setJobMenuOpen(null)} className="w-full whitespace-nowrap py-1 text-start text-[11px] text-red-400 hover:text-red-600">{t.admin.deletingAd}</button>
                       </div>
                     </>
                   )}
@@ -156,7 +151,7 @@ export default function SupplierDetailPage() {
 
               {/* Total candidates */}
               <div className="rounded-lg bg-[#F3F3F6] text-center text-[9px] text-muted-foreground" style={{ padding: "8px 10px" }}>
-                Total candidates · {job.candidates}
+                {t.admin.totalCandidates} · {job.candidates}
               </div>
             </div>
           ))}

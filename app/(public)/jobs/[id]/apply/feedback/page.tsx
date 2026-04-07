@@ -25,14 +25,7 @@ export default function FeedbackPage() {
       className="fixed inset-0 z-50 flex items-center justify-center"
       style={{ fontFamily: "'Abel', sans-serif" }}
     >
-      {/* Blurred jobs page background */}
-      <iframe
-        src="/jobs"
-        className="absolute inset-0 h-full w-full border-none"
-        style={{ filter: "blur(6px)", pointerEvents: "none", opacity: 0.7 }}
-        tabIndex={-1}
-      />
-      <div className="absolute inset-0" style={{ background: "rgba(0,0,0,0.35)" }} onClick={() => router.push("/jobs")} />
+      <div className="fixed inset-0" style={{ background: "rgba(0,0,0,0.4)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }} onClick={() => router.push("/jobs")} />
 
       {/* Modal */}
       <div

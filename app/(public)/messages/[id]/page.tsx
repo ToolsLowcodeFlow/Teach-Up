@@ -36,7 +36,7 @@ export default function MessageDetailPage() {
       <SeekerNavbar />
 
       {/* Content */}
-      <div className="mx-auto flex w-full max-w-[1375px] flex-1 gap-5 overflow-hidden" style={{ padding: "20px 40px" }} dir={direction}>
+      <div className="flex w-full flex-1 gap-5 overflow-hidden" style={{ padding: "20px 40px" }} dir={direction}>
         {/* Left — Conversations sidebar */}
         <div className="flex shrink-0 flex-col rounded-t-2xl bg-white" style={{ width: 280 }}>
           <div className="flex flex-col gap-3" style={{ padding: "20px 16px" }}>

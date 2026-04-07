@@ -335,7 +335,7 @@ export default function SupplierDatabasePage() {
         />
       )}
 
-      <div className="mx-auto max-w-[1375px]" style={{ padding: "120px 40px 60px" }} dir={direction}>
+      <div style={{ padding: "120px 40px 60px" }} dir={direction}>
         {/* Title */}
         <h1 className="text-[32px] leading-[1.1] text-foreground" style={{ marginBottom: 36 }}>
           {isHe ? "מאגר הספקים שלנו" : "Our supplier database"} <span className="text-[22px]">(1,000)</span>

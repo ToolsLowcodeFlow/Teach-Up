@@ -4,12 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { MoreHorizontal, Zap, ChevronDown, Search } from "lucide-react";
 import { AdminNavbar } from "@/components/admin/admin-navbar";
-
-const stats = [
-  { label: "Total inactive instructors", value: "760", change: "-12%", positive: false },
-  { label: "Total active instructors", value: "760", change: "+12%", positive: true },
-  { label: "Total instructors", value: "760", change: "+12%", positive: true },
-];
+import { useLanguage } from "@/lib/i18n/context";
 
 const roles = ["teacher", "Assistant", "lecturer", "+2 teacher"];
 const fields = ["Computer Science", "English", "Physics"];
@@ -28,23 +23,45 @@ const guides = Array.from({ length: 8 }, (_, i) => ({
   status: i === 0 ? "new" : i === 6 ? "inactive" : "active",
 }));
 
+function exportToCSV(data: Record<string, string>[], filename: string) {
+  const headers = Object.keys(data[0]);
+  const csv = [
+    headers.join(","),
+    ...data.map((row) => headers.map((h) => `"${row[h]}"`).join(","))
+  ].join("\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `${filename}.csv`;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
 export default function AdminGuidesPage() {
+  const { t, direction } = useLanguage();
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
   const [openMenu, setOpenMenu] = useState<number | null>(null);
+
+  const stats = [
+    { label: t.admin.totalInactiveInstructors, value: "760", change: "-12%", positive: false },
+    { label: t.admin.totalActiveInstructors, value: "760", change: "+12%", positive: true },
+    { label: t.admin.totalInstructors, value: "760", change: "+12%", positive: true },
+  ];
 
   return (
     <div className="min-h-screen bg-[#F7F9FC]" style={{ fontFamily: "'Abel', sans-serif" }}>
       <AdminNavbar />
 
-      <div className="mx-auto max-w-[1375px]" style={{ padding: "30px 40px 60px" }}>
+      <div dir={direction} style={{ padding: "30px 40px 60px" }}>
         {/* Header */}
         <div className="flex items-start justify-between" style={{ marginBottom: 28 }}>
           <div className="flex flex-col gap-2">
-            <h1 className="text-[32px] leading-[1.1] text-foreground">Guides</h1>
-            <p className="text-sm text-muted-foreground">Here you can view all instructors looking for work.</p>
+            <h1 className="text-[32px] leading-[1.1] text-foreground">{t.admin.guidesTitle}</h1>
+            <p className="text-sm text-muted-foreground">{t.admin.guidesSubtitle}</p>
           </div>
-          <button className="text-sm text-primary underline hover:text-primary/80">Export to Excel file</button>
+          <button onClick={() => exportToCSV(guides.map((g) => ({ "Name": g.name, "Joining date": g.joiningDate, "Area": g.area, "Role": g.role, "Field of knowledge": g.fieldOfKnowledge, "Phone": g.phone, "Gender": g.gender, "Status": g.status })), "guides")} className="cursor-pointer text-sm text-primary underline hover:text-primary/80">{t.admin.exportToExcel}</button>
         </div>
 
         {/* Stat cards */}
@@ -65,7 +82,7 @@ export default function AdminGuidesPage() {
                 <span className="text-xs text-muted-foreground">{stat.label}</span>
                 <span className="text-[32px] leading-none text-foreground">{stat.value}</span>
                 <span className="text-xs" style={{ color: stat.positive ? "#20AB7F" : "#FF676A" }}>
-                  From last month  {stat.change}
+                  {t.admin.fromLastMonth}  {stat.change}
                 </span>
               </div>
             </div>
@@ -79,17 +96,17 @@ export default function AdminGuidesPage() {
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2"><ChevronDown size={14} className="text-muted-foreground" /></div>
               <div className="flex cursor-pointer items-center gap-2 rounded-lg border border-border-light bg-[#F7F9FC] text-xs text-foreground" style={{ padding: "8px 14px" }}>
-                <span>Employer type</span><ChevronDown size={12} className="text-muted-foreground" />
+                <span>{t.admin.employerType}</span><ChevronDown size={12} className="text-muted-foreground" />
               </div>
               <div className="flex cursor-pointer items-center gap-2 rounded-lg border border-border-light bg-[#F7F9FC] text-xs text-foreground" style={{ padding: "8px 14px" }}>
-                <span>Service type</span><ChevronDown size={12} className="text-muted-foreground" />
+                <span>{t.admin.serviceType}</span><ChevronDown size={12} className="text-muted-foreground" />
               </div>
               <div className="flex cursor-pointer items-center gap-2 rounded-lg border border-border-light bg-[#F7F9FC] text-xs text-foreground" style={{ padding: "8px 14px" }}>
-                <span>status</span><ChevronDown size={12} className="text-muted-foreground" />
+                <span>{t.admin.status}</span><ChevronDown size={12} className="text-muted-foreground" />
               </div>
             </div>
             <div className="flex items-center rounded-lg border border-border-light bg-[#F7F9FC]" style={{ padding: "8px 14px", width: 200 }}>
-              <input type="text" placeholder="Free search..." className="flex-1 border-none bg-transparent text-xs text-foreground outline-none placeholder:text-muted-foreground/30" />
+              <input type="text" placeholder={t.admin.freeSearch} className="flex-1 border-none bg-transparent text-xs text-foreground outline-none placeholder:text-muted-foreground/30" />
               <Search size={14} className="shrink-0 text-muted-foreground/30" />
             </div>
           </div>
@@ -99,14 +116,14 @@ export default function AdminGuidesPage() {
             <table className="w-full" style={{ borderCollapse: "collapse" }}>
               <thead>
                 <tr style={{ borderBottom: "1px solid #F3F3F6" }}>
-                  <th style={{ padding: "12px 28px" }} className="text-start text-xs font-normal text-muted-foreground">Instructor&apos;s name</th>
-                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">Joining date</th>
-                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">area</th>
-                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">role</th>
-                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">Field of knowledge</th>
-                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">phone</th>
-                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">Gender</th>
-                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">status</th>
+                  <th style={{ padding: "12px 28px" }} className="text-start text-xs font-normal text-muted-foreground">{t.admin.instructorName}</th>
+                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">{t.admin.joiningDate}</th>
+                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">{t.admin.area}</th>
+                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">{t.admin.role}</th>
+                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">{t.admin.fieldOfKnowledge}</th>
+                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">{t.admin.phone}</th>
+                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">{t.admin.gender}</th>
+                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">{t.admin.status}</th>
                   <th style={{ padding: "12px 28px 12px 16px", width: 50 }} className="text-start text-xs font-normal text-muted-foreground"></th>
                 </tr>
               </thead>
@@ -150,8 +167,8 @@ export default function AdminGuidesPage() {
                           <>
                             <div className="fixed inset-0 z-10" onClick={() => setOpenMenu(null)} />
                             <div className="absolute right-0 top-8 z-20 flex min-w-44 flex-col gap-1 rounded-xl border border-border-light bg-white shadow-lg" style={{ padding: "10px 14px" }}>
-                              <button onClick={() => setOpenMenu(null)} className="flex w-full whitespace-nowrap py-1.5 text-start text-sm text-foreground transition-colors hover:text-primary">Blocking a guide</button>
-                              <button onClick={() => setOpenMenu(null)} className="flex w-full whitespace-nowrap py-1.5 text-start text-sm text-red-400 transition-colors hover:text-red-600">Deleting a guide</button>
+                              <button onClick={() => setOpenMenu(null)} className="flex w-full whitespace-nowrap py-1.5 text-start text-sm text-foreground transition-colors hover:text-primary">{t.admin.blockingGuide}</button>
+                              <button onClick={() => setOpenMenu(null)} className="flex w-full whitespace-nowrap py-1.5 text-start text-sm text-red-400 transition-colors hover:text-red-600">{t.admin.deletingGuide}</button>
                             </div>
                           </>
                         )}
@@ -164,9 +181,9 @@ export default function AdminGuidesPage() {
           </div>
 
           {/* Pagination */}
-          <div className="flex items-center justify-between" style={{ padding: "20px 28px 0" }}>
+          <div className="flex items-center justify-between rounded-b-2xl bg-[#F7F9FC]" style={{ padding: "20px 28px" }}>
             <div className="flex items-center gap-2">
-              <button className="cursor-pointer rounded-lg border border-border-light bg-white px-4 py-2 text-xs text-foreground transition-colors hover:bg-gray-50">next</button>
+              <button className="cursor-pointer rounded-lg border border-border-light bg-white px-4 py-2 text-xs text-foreground transition-colors hover:bg-gray-50">{t.admin.next}</button>
               {[1, 2, 3].map((p) => (
                 <button
                   key={p}
@@ -177,9 +194,9 @@ export default function AdminGuidesPage() {
                   {p}
                 </button>
               ))}
-              <span className="text-xs text-muted-foreground" style={{ marginLeft: 8 }}>Presenter</span>
+              <span className="text-xs text-muted-foreground" style={{ marginLeft: 8 }}>{t.admin.presenter}</span>
             </div>
-            <span className="text-xs text-primary">Showing 1-5 of 248 users</span>
+            <span className="text-xs text-primary">{t.admin.showingUsers}</span>
           </div>
         </div>
       </div>

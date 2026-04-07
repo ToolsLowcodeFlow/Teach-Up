@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { MoreHorizontal, ChevronDown, Search } from "lucide-react";
 import { AdminNavbar } from "@/components/admin/admin-navbar";
+import { useLanguage } from "@/lib/i18n/context";
 
 const bannerImages = ["/images/banner-1.jpg", "/images/banner-2.jpg", "/images/banner-3.jpg"];
 
@@ -18,6 +19,7 @@ const banners = Array.from({ length: 6 }, (_, i) => ({
 }));
 
 export default function AdminAdvertisingPage() {
+  const { t, direction } = useLanguage();
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
   const [activeTab, setActiveTab] = useState<"website" | "advertisement">("website");
@@ -27,13 +29,13 @@ export default function AdminAdvertisingPage() {
     <div className="min-h-screen bg-[#F7F9FC]" style={{ fontFamily: "'Abel', sans-serif" }}>
       <AdminNavbar />
 
-      <div className="mx-auto max-w-[1375px]" style={{ padding: "30px 40px 60px" }}>
+      <div dir={direction} style={{ padding: "30px 40px 60px" }}>
         {/* Header */}
         <div className="flex items-start justify-between" style={{ marginBottom: 28 }}>
           <div className="flex flex-col gap-3">
-            <h1 className="text-[32px] leading-[1.1] text-foreground">Managing and defining<br />advertising banners</h1>
+            <h1 className="text-[32px] leading-[1.1] text-foreground">{t.admin.advertisingTitle}</h1>
             <div className="flex items-center gap-3">
-              <span className="text-sm text-muted-foreground">Please note:</span>
+              <span className="text-sm text-muted-foreground">{t.admin.pleaseNote}</span>
               <div className="inline-flex items-center gap-0 rounded-xl border border-[#D0D5DD] bg-[#F3F3F6]" style={{ padding: 4 }}>
                 <button
                   onClick={() => setActiveTab("website")}
@@ -45,7 +47,7 @@ export default function AdminAdvertisingPage() {
                     borderRadius: 8,
                   }}
                 >
-                  Website screen
+                  {t.admin.websiteScreen}
                 </button>
                 <button
                   onClick={() => setActiveTab("advertisement")}
@@ -58,7 +60,7 @@ export default function AdminAdvertisingPage() {
                     borderRadius: 8,
                   }}
                 >
-                  Advertisement screen
+                  {t.admin.advertisementScreen}
                 </button>
               </div>
             </div>
@@ -68,7 +70,7 @@ export default function AdminAdvertisingPage() {
             className="cursor-pointer rounded-xl text-sm text-white"
             style={{ padding: "12px 28px", border: "none", backgroundImage: "linear-gradient(168deg, #4C96FF 12%, #1667DB 94%)" }}
           >
-            Create a new banner +
+            {t.admin.createNewBanner}
           </button>
         </div>
 
@@ -79,14 +81,14 @@ export default function AdminAdvertisingPage() {
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2"><ChevronDown size={14} className="text-muted-foreground" /></div>
               <div className="flex cursor-pointer items-center gap-2 rounded-lg border border-border-light bg-[#F7F9FC] text-xs text-foreground" style={{ padding: "8px 14px" }}>
-                <span>Banner placement</span><ChevronDown size={12} className="text-muted-foreground" />
+                <span>{t.admin.bannerPlacement}</span><ChevronDown size={12} className="text-muted-foreground" />
               </div>
               <div className="flex cursor-pointer items-center gap-2 rounded-lg border border-border-light bg-[#F7F9FC] text-xs text-foreground" style={{ padding: "8px 14px" }}>
-                <span>status</span><ChevronDown size={12} className="text-muted-foreground" />
+                <span>{t.admin.status}</span><ChevronDown size={12} className="text-muted-foreground" />
               </div>
             </div>
             <div className="flex items-center rounded-lg border border-border-light bg-[#F7F9FC]" style={{ padding: "8px 14px", width: 200 }}>
-              <input type="text" placeholder="Free search..." className="flex-1 border-none bg-transparent text-xs text-foreground outline-none placeholder:text-muted-foreground/30" />
+              <input type="text" placeholder={t.admin.freeSearch} className="flex-1 border-none bg-transparent text-xs text-foreground outline-none placeholder:text-muted-foreground/30" />
               <Search size={14} className="shrink-0 text-muted-foreground/30" />
             </div>
           </div>
@@ -96,12 +98,12 @@ export default function AdminAdvertisingPage() {
             <table className="w-full" style={{ borderCollapse: "collapse" }}>
               <thead>
                 <tr style={{ borderBottom: "1px solid #F3F3F6" }}>
-                  <th style={{ padding: "12px 28px" }} className="text-start text-xs font-normal text-muted-foreground">image</th>
-                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">Banner name</th>
-                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">Creation date</th>
-                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">content</th>
-                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">Banner placement</th>
-                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">status</th>
+                  <th style={{ padding: "12px 28px" }} className="text-start text-xs font-normal text-muted-foreground">{t.admin.image}</th>
+                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">{t.admin.bannerName}</th>
+                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">{t.admin.creationDate}</th>
+                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">{t.admin.content}</th>
+                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">{t.admin.bannerPlacement}</th>
+                  <th style={{ padding: "12px 16px" }} className="text-start text-xs font-normal text-muted-foreground">{t.admin.status}</th>
                   <th style={{ padding: "12px 28px 12px 16px", width: 50 }} className="text-start text-xs font-normal text-muted-foreground"></th>
                 </tr>
               </thead>
@@ -140,11 +142,11 @@ export default function AdminAdvertisingPage() {
                           <>
                             <div className="fixed inset-0 z-10" onClick={() => setOpenMenu(null)} />
                             <div className="absolute right-0 top-8 z-20 flex min-w-40 flex-col gap-1 rounded-xl border border-border-light bg-white shadow-lg" style={{ padding: "10px 14px" }}>
-                              <button onClick={() => setOpenMenu(null)} className="flex w-full whitespace-nowrap py-1.5 text-start text-sm text-foreground transition-colors hover:text-primary">
-                                {b.status === "active" ? "Play banner" : "Turn off banner"}
+                              <button onClick={() => { setOpenMenu(null); if (b.status === "inactive") router.push("/admin/advertising/warning"); }} className="flex w-full whitespace-nowrap py-1.5 text-start text-sm text-foreground transition-colors hover:text-primary">
+                                {b.status === "active" ? t.admin.turnOffBanner : t.admin.playBanner}
                               </button>
-                              <button onClick={() => setOpenMenu(null)} className="flex w-full whitespace-nowrap py-1.5 text-start text-sm text-foreground transition-colors hover:text-primary">Edit banner</button>
-                              <button onClick={() => setOpenMenu(null)} className="flex w-full whitespace-nowrap py-1.5 text-start text-sm text-red-400 transition-colors hover:text-red-600">Deleting a banner</button>
+                              <button onClick={() => { setOpenMenu(null); router.push("/admin/advertising/create"); }} className="flex w-full whitespace-nowrap py-1.5 text-start text-sm text-foreground transition-colors hover:text-primary">{t.admin.editBanner}</button>
+                              <button onClick={() => { setOpenMenu(null); router.push(`/admin/advertising/delete/${b.id}`); }} className="flex w-full whitespace-nowrap py-1.5 text-start text-sm text-red-400 transition-colors hover:text-red-600">{t.admin.deletingBanner}</button>
                             </div>
                           </>
                         )}
@@ -157,9 +159,9 @@ export default function AdminAdvertisingPage() {
           </div>
 
           {/* Pagination */}
-          <div className="flex items-center justify-between" style={{ padding: "20px 28px 0" }}>
+          <div className="flex items-center justify-between rounded-b-2xl bg-[#F7F9FC]" style={{ padding: "20px 28px" }}>
             <div className="flex items-center gap-2">
-              <button className="cursor-pointer rounded-lg border border-border-light bg-white px-4 py-2 text-xs text-foreground transition-colors hover:bg-gray-50">next</button>
+              <button className="cursor-pointer rounded-lg border border-border-light bg-white px-4 py-2 text-xs text-foreground transition-colors hover:bg-gray-50">{t.admin.next}</button>
               {[1, 2, 3].map((p) => (
                 <button
                   key={p}
@@ -170,9 +172,9 @@ export default function AdminAdvertisingPage() {
                   {p}
                 </button>
               ))}
-              <span className="text-xs text-muted-foreground" style={{ marginLeft: 8 }}>Presenter</span>
+              <span className="text-xs text-muted-foreground" style={{ marginLeft: 8 }}>{t.admin.presenter}</span>
             </div>
-            <span className="text-xs text-primary">Showing 1-5 of 248 users</span>
+            <span className="text-xs text-primary">{t.admin.showingUsers}</span>
           </div>
         </div>
       </div>

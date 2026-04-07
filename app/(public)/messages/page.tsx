@@ -22,7 +22,7 @@ export default function MessagesPage() {
     <div className="flex min-h-screen flex-col bg-[#F7F9FC]" style={{ fontFamily: "'Abel', sans-serif" }}>
       <SeekerNavbar />
 
-      <div className="mx-auto flex w-full max-w-[1375px] flex-1 gap-5" style={{ padding: "20px 40px" }} dir={direction}>
+      <div className="flex w-full flex-1 gap-5" style={{ padding: "20px 40px" }} dir={direction}>
         {/* Left — Sidebar */}
         <div className="flex shrink-0 flex-col rounded-2xl bg-white" style={{ width: 280, padding: "20px", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
           <div className="flex items-center justify-between rounded-[10px] border border-border-light bg-[#F7F9FC]" style={{ height: 44, padding: "0 14px", marginBottom: 14 }}>
