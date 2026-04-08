@@ -214,9 +214,7 @@ export default function RegisterPage() {
               </Link>
             </p>
             <p style={{ fontFamily: "'Abel', sans-serif", fontSize: 14, color: "#647787", textAlign: "center", lineHeight: 1.1 }}>
-              <span>By continuing to use, you agree </span>
-              <span className="underline" style={{ textDecorationSkipInk: "none" }}>to the </span>
-              <span>TEACH UP Terms of Use and Privacy Policy.</span>
+              {t.common.termsText} {t.common.termsLink} {t.common.and} {t.common.privacyLink}.
             </p>
           </div>
         </div>

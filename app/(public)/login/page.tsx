@@ -145,9 +145,6 @@ export default function LoginPage() {
                         borderRadius: 10,
                       }}
                     />
-                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none" className="shrink-0" style={{ marginInlineEnd: 16 }}>
-                      <path d="M1 1L5 5L9 1" stroke="#647787" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
                   </div>
                   {errors.email && <p style={{ fontFamily: "'Abel', sans-serif", fontSize: 12, color: "#EF4444" }}>{errors.email.message}</p>}
                 </div>
@@ -241,9 +238,7 @@ export default function LoginPage() {
 
           {/* Terms */}
           <p style={{ fontFamily: "'Abel', sans-serif", fontSize: 14, color: "#647787", textAlign: "center", lineHeight: 1.1 }}>
-            <span>By continuing to use, you agree </span>
-            <span className="underline" style={{ textDecorationSkipInk: "none" }}>to the </span>
-            <span>TEACH UP Terms of Use and Privacy Policy.</span>
+            {t.common.termsText} {t.common.termsLink} {t.common.and} {t.common.privacyLink}.
           </p>
         </div>
       </div>
