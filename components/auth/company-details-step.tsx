@@ -7,10 +7,11 @@ import {
   type CompanyDetailsFormData,
 } from "@/lib/validations/institution";
 import { EMPLOYER_TYPES } from "@/lib/constants";
+import { useState } from "react";
 import { useLanguage } from "@/lib/i18n/context";
 import { OnboardingSplitLayout } from "./onboarding-split-layout";
 import { Checkbox } from "@/components/ui/checkbox";
-import Link from "next/link";
+import { PrivacyPolicyModal } from "@/components/shared/privacy-policy-modal";
 
 interface CompanyDetailsStepProps {
   onSubmit: (data: CompanyDetailsFormData) => void;
@@ -22,6 +23,7 @@ export function CompanyDetailsStep({
   defaultValues,
 }: CompanyDetailsStepProps) {
   const { t } = useLanguage();
+  const [privacyOpen, setPrivacyOpen] = useState(false);
 
   const {
     register,
@@ -151,9 +153,9 @@ export function CompanyDetailsStep({
                 style={{ fontFamily: "'Abel', sans-serif", fontSize: "clamp(12px, 1vw, 14px)", color: "#647787", cursor: "pointer", lineHeight: 1.4 }}
               >
                 {t.companyDetails.privacyCheckbox}{" "}
-                <Link href="/privacy" style={{ color: "#4C96FF", textDecoration: "underline" }} target="_blank">
+                <button type="button" onClick={() => setPrivacyOpen(true)} className="cursor-pointer border-none bg-transparent underline" style={{ padding: 0, color: "#4C96FF", fontSize: "inherit", fontFamily: "inherit" }}>
                   {t.companyDetails.privacyLink}
-                </Link>
+                </button>
               </label>
               <Checkbox
                 id="privacy"
@@ -193,6 +195,8 @@ export function CompanyDetailsStep({
           </button>
         </div>
       </form>
+
+      <PrivacyPolicyModal open={privacyOpen} onClose={() => setPrivacyOpen(false)} />
     </OnboardingSplitLayout>
   );
 }
