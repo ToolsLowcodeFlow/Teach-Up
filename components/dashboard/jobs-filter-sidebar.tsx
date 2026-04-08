@@ -80,8 +80,8 @@ export function JobsFilterSidebar() {
             <ChevronDown className="h-3 w-3 shrink-0 text-muted-foreground/30" />
           </div>
 
-          <DropdownSelect label={t.dashboard.role} options={["Option 1", "Option 2", "Option 3"]} />
-          <DropdownSelect label={t.dashboard.fieldOfKnowledge} options={["Option 1", "Option 2", "Option 3"]} />
+          <DropdownSelect label={t.dashboard.role} options={[t.candidateSearch.option1, t.candidateSearch.option2, t.candidateSearch.option3]} />
+          <DropdownSelect label={t.dashboard.fieldOfKnowledge} options={[t.candidateSearch.option1, t.candidateSearch.option2, t.candidateSearch.option3]} />
 
           <RangeSlider
             label={t.dashboard.experienceYears}
@@ -89,10 +89,10 @@ export function JobsFilterSidebar() {
             onChange={setExperience}
           />
 
-          <DropdownSelect label={t.dashboard.scopeOfWork} options={["Option 1", "Option 2", "Option 3"]} />
-          <DropdownSelect label={t.dashboard.searchByRegion} options={["Option 1", "Option 2", "Option 3"]} placeholder />
-          <DropdownSelect label={t.dashboard.languages} options={["Option 1", "Option 2", "Option 3"]} />
-          <DropdownSelect label={t.dashboard.training} options={["Option 1", "Option 2", "Option 3"]} />
+          <DropdownSelect label={t.dashboard.scopeOfWork} options={[t.candidateSearch.option1, t.candidateSearch.option2, t.candidateSearch.option3]} />
+          <DropdownSelect label={t.dashboard.searchByRegion} options={[t.candidateSearch.option1, t.candidateSearch.option2, t.candidateSearch.option3]} placeholder />
+          <DropdownSelect label={t.dashboard.languages} options={[t.candidateSearch.option1, t.candidateSearch.option2, t.candidateSearch.option3]} />
+          <DropdownSelect label={t.dashboard.training} options={[t.candidateSearch.option1, t.candidateSearch.option2, t.candidateSearch.option3]} />
 
           <RangeSlider
             label={t.dashboard.salary}

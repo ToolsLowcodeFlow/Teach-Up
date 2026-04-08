@@ -49,8 +49,8 @@ export function CandidateSearchFilters() {
             <ChevronDown className="h-3 w-3 shrink-0 text-muted-foreground/30" />
           </div>
 
-          <DropdownSelect label={t.dashboard.role} options={["Option 1", "Option 2", "Option 3"]} />
-          <DropdownSelect label={t.dashboard.fieldOfKnowledge} options={["Option 1", "Option 2", "Option 3"]} />
+          <DropdownSelect label={t.dashboard.role} options={[t.candidateSearch.option1, t.candidateSearch.option2, t.candidateSearch.option3]} />
+          <DropdownSelect label={t.dashboard.fieldOfKnowledge} options={[t.candidateSearch.option1, t.candidateSearch.option2, t.candidateSearch.option3]} />
 
           <RangeSlider
             label={t.dashboard.experienceYears}
@@ -58,11 +58,11 @@ export function CandidateSearchFilters() {
             onChange={setExperience}
           />
 
-          <DropdownSelect label={t.dashboard.searchByRegion} options={["Option 1", "Option 2", "Option 3"]} placeholder />
-          <DropdownSelect label={t.candidateSearch.mobileWithCar} options={["Option 1", "Option 2", "Option 3"]} />
-          <DropdownSelect label={t.dashboard.languages} options={["Option 1", "Option 2", "Option 3"]} />
-          <DropdownSelect label={t.candidateSearch.teachingPreferences} options={["Option 1", "Option 2", "Option 3"]} />
-          <DropdownSelect label={t.candidateSearch.dealerType} options={["Option 1", "Option 2", "Option 3"]} />
+          <DropdownSelect label={t.dashboard.searchByRegion} options={[t.candidateSearch.option1, t.candidateSearch.option2, t.candidateSearch.option3]} placeholder />
+          <DropdownSelect label={t.candidateSearch.mobileWithCar} options={[t.candidateSearch.option1, t.candidateSearch.option2, t.candidateSearch.option3]} />
+          <DropdownSelect label={t.dashboard.languages} options={[t.candidateSearch.option1, t.candidateSearch.option2, t.candidateSearch.option3]} />
+          <DropdownSelect label={t.candidateSearch.teachingPreferences} options={[t.candidateSearch.option1, t.candidateSearch.option2, t.candidateSearch.option3]} />
+          <DropdownSelect label={t.candidateSearch.dealerType} options={[t.candidateSearch.option1, t.candidateSearch.option2, t.candidateSearch.option3]} />
         </div>
 
         {/* Search button */}

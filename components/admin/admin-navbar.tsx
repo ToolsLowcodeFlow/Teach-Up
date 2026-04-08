@@ -2,8 +2,9 @@
 
 import { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { Globe } from "lucide-react";
+import { Globe, LogOut } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/context";
+import { createClient } from "@/lib/supabase/client";
 
 export function AdminNavbar() {
   const router = useRouter();
@@ -66,6 +67,18 @@ export function AdminNavbar() {
             >
               <Globe size={14} />
               <span>{locale === "en" ? "עב" : "EN"}</span>
+            </button>
+            <button
+              onClick={async () => {
+                const supabase = createClient();
+                await supabase.auth.signOut();
+                router.push("/login");
+              }}
+              className="flex cursor-pointer items-center gap-1.5 border-none bg-transparent text-sm"
+              style={{ padding: "14px 0", color: "rgba(255,255,255,0.6)" }}
+            >
+              <LogOut size={14} />
+              <span>{t.profile.logout}</span>
             </button>
           </div>
         </div>

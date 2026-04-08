@@ -12,24 +12,22 @@ import { JobDetailsModal } from "@/components/dashboard/job-details-modal";
 
 type JobTab = "open" | "all" | "closed";
 
-// Mock data for demonstration
-const mockJobs: JobCardData[] = Array.from({ length: 9 }, (_, i) => ({
-  id: String(i + 1),
-  title: "Computer Science Teacher",
-  subtitle: "with at least 4 years of experience",
-  description:
-    "This is a dummy paragraph about spacer experience and demonstrate how the actual text will look. It can be used.",
-  date: "09/12/2026",
-  location: "Jaffa - Tel Aviv",
-  salaryMin: 30000,
-  salaryMax: 50000,
-  status: i % 3 === 0 ? "closed" as const : "open" as const,
-  totalCandidates: 1240,
-  isVerified: true,
-}));
-
 export default function MyJobsPage() {
   const { t } = useLanguage();
+
+  const mockJobs: JobCardData[] = Array.from({ length: 9 }, (_, i) => ({
+    id: String(i + 1),
+    title: t.jobCard.jobTitle,
+    subtitle: t.jobCard.jobSubtitle,
+    description: t.jobCard.jobDescription,
+    date: "09/12/2026",
+    location: t.jobCard.locationJaffaTelAviv,
+    salaryMin: 30000,
+    salaryMax: 50000,
+    status: i % 3 === 0 ? "closed" as const : "open" as const,
+    totalCandidates: 1240,
+    isVerified: true,
+  }));
   const [activeTab, setActiveTab] = useState<JobTab>("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedJob, setSelectedJob] = useState<JobCardData | null>(null);

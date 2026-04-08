@@ -6,8 +6,8 @@ import { useLanguage } from "@/lib/i18n/context";
 
 export default function ApplySuccessPage() {
   const router = useRouter();
-  const { locale, direction } = useLanguage();
-  const isHe = locale === "he";
+  const { t } = useLanguage();
+  const jd = t.jobDetails;
 
   return (
     <div
@@ -36,11 +36,11 @@ export default function ApplySuccessPage() {
 
         {/* Success text */}
         <h2 className="text-center text-[22px] leading-[1.3] text-foreground" style={{ marginBottom: 16 }}>
-          {isHe ? "המועמדות הוגשה בהצלחה!" : "The nomination was successfully submitted!"}
+          {jd.successTitle}
         </h2>
 
         <p className="text-center text-sm leading-[1.6] text-muted-foreground" style={{ maxWidth: 360 }}>
-          {isHe ? "הפרטים שלך נשלחו למעסיק. תוכל לעקוב אחר סטטוס המועמדות שלך כאן ככל שיתקבלו עדכונים מהמעסיק. אם יש התאמה, ייצרו איתך קשר ישירות." : "Your details have been sent to the employer. You can track your application status here as updates from the employer are received. If there is a match, you will be contacted directly."}
+          {jd.successDesc}
         </p>
       </div>
     </div>

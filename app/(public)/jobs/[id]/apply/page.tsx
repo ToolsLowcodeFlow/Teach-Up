@@ -7,8 +7,8 @@ import { useLanguage } from "@/lib/i18n/context";
 
 export default function JobApplyPage() {
   const router = useRouter();
-  const { locale, direction } = useLanguage();
-  const isHe = locale === "he";
+  const { t, direction } = useLanguage();
+  const jd = t.jobDetails;
   const [coverLetter, setCoverLetter] = useState(
     "Lorem Ipsum Dolor Sit Emmet, Consector Adipiscing Elite Goler Monferrer Sobert Lorem Shabdach Yehol, Lorem Ipsum Dolor Sit Emmet, Consector Adipiscing Elite Goler Monferrer Sobert Lorem Shabdach Yehol, Lorem Ipsum Dolor Sit Emmet, Consector Adipiscing Elite Goler Monferrer Sobert Lorem Shabdach Yehol, Lorem Ipsum Dolor Sit Emmet, Consector Adipiscing Elite Goler Monferrer Sobert Lorem Shabdach Yehol, Lorem Ipsum Dolor Habinbhams."
   );
@@ -28,19 +28,20 @@ export default function JobApplyPage() {
       <div
         className="relative z-10 flex overflow-hidden rounded-[20px] bg-white"
         style={{ width: "90vw", maxWidth: 960, height: "88vh", boxShadow: "0 20px 60px rgba(0,0,0,0.15)" }}
+        dir={direction}
       >
         {/* LEFT — Application form (scrollable) */}
         <div className="flex flex-1 flex-col overflow-y-auto" style={{ padding: "24px 32px 36px" }}>
           {/* Header */}
           <div className="flex items-center gap-2" style={{ marginBottom: 20 }}>
-            <h1 className="text-[24px] leading-[1.1] text-foreground">Applying</h1>
+            <h1 className="text-[24px] leading-[1.1] text-foreground">{jd.applying}</h1>
             <button onClick={() => router.back()} className="flex cursor-pointer items-center justify-center border-none bg-transparent text-muted-foreground hover:text-foreground">
               <ChevronRight size={20} />
             </button>
           </div>
 
           {/* Subtitle */}
-          <p className="text-sm text-foreground" style={{ marginBottom: 20 }}>Tell the employer a little about yourself.</p>
+          <p className="text-sm text-foreground" style={{ marginBottom: 20 }}>{jd.tellEmployer}</p>
 
           {/* Cover letter */}
           <textarea
@@ -52,8 +53,8 @@ export default function JobApplyPage() {
 
           {/* Filter questions */}
           <div className="flex flex-col" style={{ gap: 6, marginBottom: 16 }}>
-            <h3 className="text-base text-foreground">Filter question</h3>
-            <p className="text-xs text-muted-foreground">Please answer in as much detail as possible to expedite the recruitment process.</p>
+            <h3 className="text-base text-foreground">{jd.filterQuestion}</h3>
+            <p className="text-xs text-muted-foreground">{jd.filterQuestionDesc}</p>
           </div>
 
           <div className="flex flex-col" style={{ gap: 20, marginBottom: 28 }}>
@@ -61,7 +62,7 @@ export default function JobApplyPage() {
               <div key={i} className="flex flex-col" style={{ gap: 8 }}>
                 <p className="text-sm text-foreground">{question}</p>
                 <textarea
-                  placeholder="Type your answer here..."
+                  placeholder={jd.typeAnswerHere}
                   value={answers[i]}
                   onChange={(e) => updateAnswer(i, e.target.value)}
                   className="w-full resize-none rounded-[10px] border border-border-light bg-white text-xs text-foreground outline-none placeholder:text-muted-foreground/30"
@@ -73,7 +74,7 @@ export default function JobApplyPage() {
 
           {/* Your CV */}
           <div className="flex flex-col" style={{ gap: 10, marginBottom: 32 }}>
-            <h3 className="text-base text-foreground">Your CV</h3>
+            <h3 className="text-base text-foreground">{jd.yourCV}</h3>
             <div
               className="flex items-center justify-between rounded-[10px] border border-border-light"
               style={{ padding: "14px 16px", background: "linear-gradient(180deg, #FFFDF7 0%, #FFF8E8 100%)" }}
@@ -81,7 +82,7 @@ export default function JobApplyPage() {
               <div className="flex items-center gap-2">
                 <Link2 size={14} className="text-muted-foreground" />
                 <div className="flex flex-col">
-                  <span className="text-xs text-primary">May Bozo&apos;s resume file</span>
+                  <span className="text-xs text-primary">{jd.resumeFileName}</span>
                   <span className="text-[10px] text-muted-foreground">142 KB</span>
                 </div>
               </div>
@@ -101,22 +102,22 @@ export default function JobApplyPage() {
               flexShrink: 0,
             }}
           >
-            Completion and application
+            {jd.completionAndApplication}
           </button>
         </div>
 
         {/* RIGHT — Sidebar full height */}
         <div className="flex shrink-0 flex-col border-l border-border-light" style={{ width: 280, padding: "24px 20px" }}>
           <div className="flex flex-1 flex-col rounded-2xl bg-white" style={{ padding: "22px 16px", gap: 14, boxShadow: "0 4px 24px rgba(0,0,0,0.08)" }}>
-            <h3 className="text-center text-[18px] text-foreground" style={{ lineHeight: 1.2 }}>Candidacy status</h3>
+            <h3 className="text-center text-[18px] text-foreground" style={{ lineHeight: 1.2 }}>{jd.candidacyStatus}</h3>
             <p className="text-center text-xs leading-[1.4] text-muted-foreground">
-              This is a dummy paragraph text that is intended to fill space in the website design and demonstrate how the actual text will look.
+              {jd.candidacyStatusDesc}
             </p>
 
             <div className="h-px w-full bg-border-light" />
 
             <div className="flex items-center justify-between rounded-[10px] border border-border-light bg-[#F7F9FC]" style={{ padding: "10px 12px" }}>
-              <span className="text-sm text-foreground">New candidacy</span>
+              <span className="text-sm text-foreground">{jd.newCandidacy}</span>
               <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#20AB7F]">
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" /></svg>
               </div>

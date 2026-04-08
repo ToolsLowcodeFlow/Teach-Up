@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { ChevronDown, MessageSquareText, Bell, Heart, Globe } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { ChevronDown, MessageSquareText, Bell, Heart, Globe, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/i18n/context";
+import { createClient } from "@/lib/supabase/client";
 import { useState } from "react";
 
 interface EmployerNavbarProps {
@@ -13,8 +14,16 @@ interface EmployerNavbarProps {
 
 export function EmployerNavbar({ onPostJob }: EmployerNavbarProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const { t, locale, toggleLocale } = useLanguage();
   const [avatarMenu, setAvatarMenu] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
+
+  const handleLogout = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/login");
+  };
 
   const navLinks = [
     { label: t.dashboard.myJobs, href: "/institution/dashboard" },
@@ -75,12 +84,50 @@ export function EmployerNavbar({ onPostJob }: EmployerNavbarProps) {
             <Link href="/institution/dashboard/favorites" className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gray-100">
               <Heart className="h-5 w-5 text-foreground" />
             </Link>
-            <button className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gray-100">
-              <Bell className="h-5 w-5 text-foreground" />
-            </button>
-            <button className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gray-100">
+            {/* Notifications bell */}
+            <div className="relative">
+              <button
+                onClick={() => setNotifOpen(!notifOpen)}
+                className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gray-100"
+              >
+                <Bell className="h-5 w-5 text-foreground" />
+              </button>
+              {notifOpen && (
+                <>
+                  <div className="fixed inset-0 z-10" onClick={() => setNotifOpen(false)} />
+                  <div className="absolute top-12 z-20 flex w-[420px] flex-col rounded-2xl bg-white shadow-xl" style={{ padding: "20px 0", insetInlineEnd: 0 }}>
+                    <h3 className="text-center text-lg text-foreground" style={{ marginBottom: 16 }}>
+                      {t.seekerNav.notifications}
+                    </h3>
+                    {[
+                      { msg: t.seekerNav.notifMsg1, time: t.seekerNav.hoursAgo, logo: "/images/chat-company-logo.png", anon: false },
+                      { msg: t.seekerNav.notifMsg2, time: t.seekerNav.hoursAgo, logo: "", anon: true },
+                    ].map((notif, i) => (
+                      <div key={i} className="flex items-start gap-3 border-b border-border-light" style={{ padding: "14px 20px" }}>
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl" style={{ background: notif.anon ? "#E8EEF5" : "#0E1117", padding: notif.anon ? 0 : 6 }}>
+                          {notif.anon ? (
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="#9CA3AF"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" /></svg>
+                          ) : (
+                            <img src={notif.logo} alt="" className="h-full w-full object-contain" />
+                          )}
+                        </div>
+                        <div className="flex flex-1 flex-col gap-1">
+                          <p className="text-sm leading-[1.3] text-foreground">{notif.msg}</p>
+                          <span className="text-xs text-muted-foreground">{notif.time}</span>
+                        </div>
+                        <button className="shrink-0 cursor-pointer border-none bg-transparent text-xs text-primary underline">
+                          {t.seekerNav.viewStatus}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+            {/* Messages */}
+            <Link href="/institution/dashboard/messages" className="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gray-100">
               <MessageSquareText className="h-5 w-5 text-foreground" />
-            </button>
+            </Link>
           </div>
 
           <button
@@ -119,6 +166,14 @@ export function EmployerNavbar({ onPostJob }: EmployerNavbarProps) {
                     className="whitespace-nowrap py-1 text-start text-sm text-danger transition-colors hover:text-danger/70"
                   >
                     {t.profile.disengagement}
+                  </button>
+                  <div className="my-1 h-px w-full bg-border-light" />
+                  <button
+                    onClick={handleLogout}
+                    className="flex w-full items-center gap-2 whitespace-nowrap py-1 text-start text-sm text-foreground transition-colors hover:text-primary"
+                  >
+                    <LogOut size={14} />
+                    {t.profile.logout}
                   </button>
                 </div>
               </>

@@ -31,8 +31,10 @@ function TextInput({ placeholder }: { placeholder: string }) {
   );
 }
 
-function SelectInput({ placeholder }: { placeholder: string }) {
-  return <DropdownSelect label={placeholder} options={["Option 1", "Option 2", "Option 3"]} />;
+function SelectInput({ placeholder, options }: { placeholder: string; options?: string[] }) {
+  const { t } = useLanguage();
+  const opts = options || [t.candidateSearch.option1, t.candidateSearch.option2, t.candidateSearch.option3];
+  return <DropdownSelect label={placeholder} options={opts} />;
 }
 
 interface CreateJobModalProps {

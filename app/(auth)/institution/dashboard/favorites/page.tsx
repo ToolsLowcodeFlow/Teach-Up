@@ -3,20 +3,19 @@
 import { useLanguage } from "@/lib/i18n/context";
 import { CandidateCard, type CandidateCardData } from "@/components/dashboard/candidate-card";
 
-const mockFavorites: CandidateCardData[] = Array.from({ length: 8 }, (_, i) => ({
-  id: String(i + 1),
-  name: "Yotam Israeli",
-  role: "teacher",
-  field: "Computer Science",
-  description:
-    "This is a dummy paragraph text that is intended to fill space in the website design and demonstrate how the actual text will look. It can be used...",
-  experience: 4,
-  location: "Jaffa - Tel Aviv",
-  isFavorited: true,
-}));
-
 export default function FavoritesPage() {
   const { t } = useLanguage();
+  const cs = t.candidateSearch;
+  const mockFavorites: CandidateCardData[] = Array.from({ length: 8 }, (_, i) => ({
+    id: String(i + 1),
+    name: cs.candidateName,
+    role: cs.teacher,
+    field: cs.computerScience,
+    description: cs.candidateDescription,
+    experience: 4,
+    location: cs.jaffaTelAviv,
+    isFavorited: true,
+  }));
 
   return (
     <div style={{ padding: "24px 40px 64px" }} className="w-full">

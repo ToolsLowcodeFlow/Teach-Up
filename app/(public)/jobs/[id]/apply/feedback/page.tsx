@@ -6,8 +6,7 @@ import { X, Star } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/context";
 
 export default function FeedbackPage() {
-  const { locale, direction, t } = useLanguage();
-  const isHe = locale === "he";
+  const { t } = useLanguage();
 
   const ratings = [
     t.reviewModal.likedVeryMuch,
@@ -42,7 +41,7 @@ export default function FeedbackPage() {
 
         {/* Title */}
         <h2 className="text-center text-[22px] leading-[1.2] text-foreground" style={{ marginBottom: 24 }}>
-          {isHe ? "איך היה החוויה שלך?" : "How was your experience?"}
+          {t.seekerNav.howWasExperience}
         </h2>
 
         {/* Star ratings */}

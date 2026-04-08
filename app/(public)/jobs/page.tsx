@@ -1,41 +1,26 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ChevronDown, ChevronLeft, ChevronRight, Search, Heart, MapPin } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/context";
 import { SeekerNavbar } from "@/components/seeker/seeker-navbar";
 import { PublicFooter } from "@/components/home/public-footer";
 
-const allJobCards = Array.from({ length: 12 }, (_, i) => ({
-  id: i + 1,
-  title: "Computer Science Teacher",
-  badge: "with at least 4 years of experience",
-  description: "This is a dummy paragraph text that aims to fill a space in the website design and demonstrate how the actual text will look. It can be...",
-  locations: ["Jaffa", "Tel Aviv"],
-  salary: "30,000 - 50,000",
-  company: i === 8 ? "Anonymous" : "Company Name",
-  date: "08/12/2025",
-  isNew: i < 3,
-  status: "",
-}));
+type JobCardType = {
+  id: number;
+  title: string;
+  badge: string;
+  description: string;
+  locations: string[];
+  salary: string;
+  company: string;
+  date: string;
+  isNew: boolean;
+  status: string;
+};
 
-const myJobCards = Array.from({ length: 9 }, (_, i) => ({
-  id: i + 100,
-  title: "Computer Science Teacher",
-  badge: "with at least 4 years of experience",
-  description: "This is a dummy paragraph text that aims to fill a space in the website design and demonstrate how the actual text will look. It can be...",
-  locations: ["Jaffa", "Tel Aviv"],
-  salary: "30,000 - 50,000",
-  company: i >= 6 ? "Anonymous" : "Company Name",
-  date: "08/12/2025",
-  isNew: false,
-  status: i < 3 ? "nomination sent" : i < 6 ? "Invitation" : "sent",
-}));
-
-type JobCardType = (typeof allJobCards)[0];
-
-function JobCard({ job }: { job: JobCardType }) {
+function JobCard({ job, salaryLabel }: { job: JobCardType; salaryLabel: string }) {
   const [liked, setLiked] = useState(false);
   const router = useRouter();
   return (
@@ -70,7 +55,7 @@ function JobCard({ job }: { job: JobCardType }) {
             style={{
               padding: "4px 12px",
               marginBottom: 8,
-              background: job.status === "Invitation" ? "#20AB7F" : job.status === "nomination sent" ? "#4C96FF" : "#FF8C42",
+              background: job.status === "invitation" ? "#20AB7F" : job.status === "nominationSent" ? "#4C96FF" : "#FF8C42",
             }}
           >
             {job.status}
@@ -90,7 +75,7 @@ function JobCard({ job }: { job: JobCardType }) {
 
         {/* Salary */}
         <div className="flex items-center justify-between" style={{ marginBottom: 10 }}>
-          <span className="text-xs text-muted-foreground">Salary ₪</span>
+          <span className="text-xs text-muted-foreground">{salaryLabel}</span>
           <span className="text-sm text-foreground">{job.salary}</span>
         </div>
 
@@ -113,9 +98,9 @@ function JobCard({ job }: { job: JobCardType }) {
 }
 
 function FilterDropdown({
-  label, options, value, onChange,
+  label, options, value, onChange, allLabel,
 }: {
-  label: string; options: string[]; value: string; onChange: (v: string) => void;
+  label: string; options: string[]; value: string; onChange: (v: string) => void; allLabel: string;
 }) {
   const [open, setOpen] = useState(false);
   return (
@@ -140,7 +125,7 @@ function FilterDropdown({
             className="cursor-pointer text-xs text-muted-foreground hover:bg-border-light"
             style={{ padding: "8px 10px" }}
           >
-            All
+            {allLabel}
           </div>
           {options.map((opt) => (
             <div
@@ -158,10 +143,19 @@ function FilterDropdown({
   );
 }
 
-export default function JobsPage() {
+export default function JobsPageWrapper() {
+  return (
+    <Suspense fallback={<div className="flex min-h-screen items-center justify-center bg-[#F7F9FC]" />}>
+      <JobsPage />
+    </Suspense>
+  );
+}
+
+function JobsPage() {
   const router = useRouter();
-  const { locale, direction, t, toggleLocale } = useLanguage();
+  const { locale, direction, t } = useLanguage();
   const isHe = locale === "he";
+  const d = t.dashboard;
   const searchParams = useSearchParams();
   const tabParam = searchParams.get("tab");
   const [activeTab, setActiveTab] = useState<"all" | "my" | "my-empty">(tabParam === "my" ? "my" : tabParam === "my-empty" ? "my-empty" : "all");
@@ -183,6 +177,38 @@ export default function JobsPage() {
     return () => { if (el) el.style.display = ""; };
   }, []);
 
+  const allJobCards: JobCardType[] = Array.from({ length: 12 }, (_, i) => ({
+    id: i + 1,
+    title: d.jobTitle,
+    badge: d.jobBadge,
+    description: d.jobDescription,
+    locations: [d.jaffa, d.telAviv],
+    salary: "30,000 - 50,000",
+    company: i === 8 ? d.anonymous : d.companyName,
+    date: "08/12/2025",
+    isNew: i < 3,
+    status: "",
+  }));
+
+  const myJobCards: JobCardType[] = Array.from({ length: 9 }, (_, i) => ({
+    id: i + 100,
+    title: d.jobTitle,
+    badge: d.jobBadge,
+    description: d.jobDescription,
+    locations: [d.jaffa, d.telAviv],
+    salary: "30,000 - 50,000",
+    company: i >= 6 ? d.anonymous : d.companyName,
+    date: "08/12/2025",
+    isNew: false,
+    status: i < 3 ? d.nominationSent : i < 6 ? d.invitation : d.sent,
+  }));
+
+  const roleOptions = [d.teacher, d.tutor, d.teachingAssistant, d.substituteTeacher, d.counselor, d.instructor];
+  const fieldOptions = [d.mathematics, d.english, d.science, d.history, d.art, d.music, d.physicalEducation, d.computerScience, d.specialEducation];
+  const scopeOptions = [d.fullTime, d.partTime, d.freelance, d.contract, d.temporary];
+  const langOptions = [d.hebrew, d.english, d.arabic, d.russian, d.french, d.spanish, d.amharic];
+  const trainingOptions = [d.bEd, d.mEd, d.teachingCertificate, d.montessori, d.waldorf, d.specialEdCertificate];
+
   return (
     <div className="flex min-h-screen flex-col bg-[#F7F9FC]" style={{ fontFamily: "'Abel', sans-serif" }}>
       <SeekerNavbar activeNav={activeTab === "all" ? "jobSearch" : (activeTab === "my" || activeTab === "my-empty") ? "myJobs" : ""} />
@@ -202,7 +228,7 @@ export default function JobsPage() {
                 textUnderlineOffset: 4,
               }}
             >
-              {t.dashboard.allJobs}
+              {d.allJobs}
             </button>
             <button
               onClick={() => setActiveTab("my")}
@@ -214,11 +240,11 @@ export default function JobsPage() {
                 textUnderlineOffset: 4,
               }}
             >
-              {t.dashboard.myJobs}
+              {d.myJobs}
             </button>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">{t.dashboard.sortBy}</span>
+            <span className="text-sm text-muted-foreground">{d.sortBy}</span>
             <ChevronDown size={14} className="text-muted-foreground" />
           </div>
         </div>
@@ -244,10 +270,10 @@ export default function JobsPage() {
                 </svg>
 
                 <h2 className="text-center text-[20px] leading-[1.2] text-foreground">
-                  {isHe ? "עדיין לא הוגשו מועמדויות." : "No nominations have been submitted yet."}
+                  {d.noNominations}
                 </h2>
                 <p className="max-w-sm text-center text-sm leading-[1.5] text-muted-foreground">
-                  {isHe ? "המשרות שהגשת אליהן מועמדות יוצגו כאן. כדי להתחיל לנהל את המועמדויות שלך, עבור לחיפוש עבודה והגש מועמדות למשרה הראשונה שלך." : "The jobs you have applied for will be displayed here. To start managing your applications, you can go to Job Search and apply for your first job."}
+                  {d.noNominationsDesc}
                 </p>
                 <button
                   onClick={() => setActiveTab("all")}
@@ -258,13 +284,13 @@ export default function JobsPage() {
                     backgroundImage: "linear-gradient(168deg, #4C96FF 12%, #1667DB 94%)",
                   }}
                 >
-                  {isHe ? "לחיפוש עבודה" : "Beyond job search"}
+                  {d.toJobSearch}
                 </button>
               </div>
             ) : (<>
               <div className="grid grid-cols-3 gap-5">
                 {(activeTab === "all" ? allJobCards : myJobCards).map((job) => (
-                  <JobCard key={job.id} job={job} />
+                  <JobCard key={job.id} job={job} salaryLabel={d.salaryLabel} />
                 ))}
               </div>
               <div className="flex items-center justify-center gap-2" style={{ padding: "30px 0" }}>
@@ -298,33 +324,23 @@ export default function JobsPage() {
             style={{ width: 240, padding: "20px 16px", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}
           >
             <div className="flex flex-col" style={{ gap: 16 }}>
-              <p className="text-lg text-foreground" style={{ marginBottom: 4 }}>{t.dashboard.filters}</p>
+              <p className="text-lg text-foreground" style={{ marginBottom: 4 }}>{d.filters}</p>
 
               {/* Search */}
               <div className="flex items-center rounded-[10px] border border-border-light bg-[#F7F9FC]" style={{ height: 36, padding: "0 10px" }}>
                 <Search size={14} className="shrink-0 text-muted-foreground/30" />
-                <input type="text" placeholder={isHe ? "חיפוש חופשי..." : "Free search..."} className="mx-1.5 flex-1 border-none bg-transparent text-xs text-foreground outline-none placeholder:text-muted-foreground/30" />
+                <input type="text" placeholder={d.freeSearchPlaceholder} className="mx-1.5 flex-1 border-none bg-transparent text-xs text-foreground outline-none placeholder:text-muted-foreground/30" />
               </div>
 
               {/* Role */}
-              <FilterDropdown
-                label={t.dashboard.role}
-                options={["Teacher", "Tutor", "Teaching Assistant", "Substitute Teacher", "Counselor", "Instructor"]}
-                value={filters.role}
-                onChange={(v) => setFilters((p) => ({ ...p, role: v }))}
-              />
+              <FilterDropdown label={d.role} options={roleOptions} value={filters.role} onChange={(v) => setFilters((p) => ({ ...p, role: v }))} allLabel={d.all} />
 
               {/* Field of knowledge */}
-              <FilterDropdown
-                label={t.dashboard.fieldOfKnowledge}
-                options={["Mathematics", "English", "Science", "History", "Art", "Music", "Physical Education", "Computer Science", "Special Education"]}
-                value={filters.field}
-                onChange={(v) => setFilters((p) => ({ ...p, field: v }))}
-              />
+              <FilterDropdown label={d.fieldOfKnowledge} options={fieldOptions} value={filters.field} onChange={(v) => setFilters((p) => ({ ...p, field: v }))} allLabel={d.all} />
 
               {/* Years of experience - slider */}
               <div className="flex flex-col" style={{ gap: 8 }}>
-                <span className="text-xs text-foreground">{t.dashboard.experienceYears}</span>
+                <span className="text-xs text-foreground">{d.experienceYears}</span>
                 <input
                   type="range"
                   min="0"
@@ -335,38 +351,23 @@ export default function JobsPage() {
                   style={{ accentColor: "#4C96FF" }}
                 />
                 <div className="flex items-center justify-between text-[10px] text-muted-foreground">
-                  <span>0 years</span>
-                  <span>{filters.experience || 0} years</span>
+                  <span>0 {d.years}</span>
+                  <span>{filters.experience || 0} {d.years}</span>
                 </div>
               </div>
 
               {/* Scope of work */}
-              <FilterDropdown
-                label={t.dashboard.scopeOfWork}
-                options={["Full-time", "Part-time", "Freelance", "Contract", "Temporary"]}
-                value={filters.scope}
-                onChange={(v) => setFilters((p) => ({ ...p, scope: v }))}
-              />
+              <FilterDropdown label={d.scopeOfWork} options={scopeOptions} value={filters.scope} onChange={(v) => setFilters((p) => ({ ...p, scope: v }))} allLabel={d.all} />
 
               {/* Languages */}
-              <FilterDropdown
-                label={t.dashboard.languages}
-                options={["Hebrew", "English", "Arabic", "Russian", "French", "Spanish", "Amharic"]}
-                value={filters.language}
-                onChange={(v) => setFilters((p) => ({ ...p, language: v }))}
-              />
+              <FilterDropdown label={d.languages} options={langOptions} value={filters.language} onChange={(v) => setFilters((p) => ({ ...p, language: v }))} allLabel={d.all} />
 
               {/* Training */}
-              <FilterDropdown
-                label={t.dashboard.training}
-                options={["B.Ed", "M.Ed", "Teaching Certificate", "Montessori", "Waldorf", "Special Education Certificate"]}
-                value={filters.training}
-                onChange={(v) => setFilters((p) => ({ ...p, training: v }))}
-              />
+              <FilterDropdown label={d.training} options={trainingOptions} value={filters.training} onChange={(v) => setFilters((p) => ({ ...p, training: v }))} allLabel={d.all} />
 
               {/* Salary range */}
               <div className="flex flex-col" style={{ gap: 8 }}>
-                <span className="text-xs text-foreground">{t.dashboard.salary}</span>
+                <span className="text-xs text-foreground">{d.salary}</span>
                 <input
                   type="range"
                   min="0"
@@ -387,7 +388,7 @@ export default function JobsPage() {
                 className="w-full cursor-pointer rounded-[10px] text-sm text-white"
                 style={{ height: 40, border: "none", backgroundImage: "linear-gradient(173deg, #4C96FF 12%, #1667DB 94%)" }}
               >
-                {isHe ? "חיפוש" : "Search"}
+                {d.search}
               </button>
             </div>
           </div>

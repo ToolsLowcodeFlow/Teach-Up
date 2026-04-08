@@ -7,20 +7,19 @@ import { MyCandidateCard, type MyCandidateCardData } from "@/components/dashboar
 import { MyCandidatesFilters } from "@/components/dashboard/my-candidates-filters";
 import { Pagination } from "@/components/dashboard/pagination";
 
-const mockCandidates: MyCandidateCardData[] = Array.from({ length: 9 }, (_, i) => ({
-  id: String(i + 1),
-  name: "Yotam Israeli",
-  role: "teacher",
-  field: "Computer Science",
-  status: "An interview invitation has been sent",
-  description:
-    "This is a dummy paragraph text that is intended to fill space in the website design and demonstrate how the actual text will look. It can be used...",
-  experience: 4,
-  location: "Jaffa - Tel Aviv",
-}));
-
 export default function MyCandidatesPage() {
   const { t } = useLanguage();
+  const cs = t.candidateSearch;
+  const mockCandidates: MyCandidateCardData[] = Array.from({ length: 9 }, (_, i) => ({
+    id: String(i + 1),
+    name: cs.candidateName,
+    role: cs.teacher,
+    field: cs.computerScience,
+    status: t.myCandidates.interviewInvitationSent,
+    description: cs.candidateDescription,
+    experience: 4,
+    location: cs.jaffaTelAviv,
+  }));
   const [currentPage, setCurrentPage] = useState(1);
 
   return (

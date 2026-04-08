@@ -2,13 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronDown, Heart, Bell, MessageSquare, Globe } from "lucide-react";
+import { ChevronDown, Heart, Bell, MessageSquare, Globe, LogOut } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/context";
-
-const notifData = [
-  { msg: "notifications.telAvivUpdate", time: "4 hours ago", logo: "/images/chat-company-logo.png", anon: false },
-  { msg: "notifications.anonymousUpdate", time: "4 hours ago", logo: "", anon: true },
-];
+import { createClient } from "@/lib/supabase/client";
 
 interface SeekerNavbarProps {
   activeNav?: "jobSearch" | "myJobs" | "contactUs" | "";
@@ -20,8 +16,14 @@ export function SeekerNavbar({ activeNav = "" }: SeekerNavbarProps) {
   const [notifOpen, setNotifOpen] = useState(false);
   const [avatarMenuOpen, setAvatarMenuOpen] = useState(false);
 
+  const handleLogout = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/login");
+  };
+
   return (
-    <header className="sticky top-0 z-40 bg-white" style={{ borderBottom: "1px solid #F3F3F6" }} dir="ltr">
+    <header className="sticky top-0 z-40 bg-white" style={{ borderBottom: "1px solid #F3F3F6" }} dir={direction}>
       <div className="flex items-center justify-between" style={{ padding: "12px 40px" }}>
         {/* Left: Logo + nav links */}
         <div className="flex items-center gap-10">
@@ -31,7 +33,7 @@ export function SeekerNavbar({ activeNav = "" }: SeekerNavbarProps) {
           </div>
           <nav className="flex items-center gap-8 text-base">
             <a onClick={() => router.push("/jobs")} className="relative cursor-pointer pb-5 text-muted-foreground hover:text-foreground" style={{ color: activeNav === "jobSearch" ? "#0E1117" : undefined }}>
-              {t.home.about === "אודות" ? "חיפוש עבודה" : "Job search"}
+              {t.seekerNav.jobSearch}
               {activeNav === "jobSearch" && <span className="absolute left-1/2 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-primary" style={{ bottom: -8 }} />}
             </a>
             <a onClick={() => router.push("/jobs?tab=my")} className="relative cursor-pointer pb-5 text-muted-foreground hover:text-foreground" style={{ color: activeNav === "myJobs" ? "#0E1117" : undefined }}>
@@ -63,13 +65,13 @@ export function SeekerNavbar({ activeNav = "" }: SeekerNavbarProps) {
               {notifOpen && (
                 <>
                   <div className="fixed inset-0 z-50" onClick={() => setNotifOpen(false)} />
-                  <div className="absolute right-0 top-10 z-50 flex w-[420px] flex-col rounded-2xl bg-white shadow-xl" style={{ padding: "20px 0" }}>
+                  <div className="absolute top-10 z-50 flex w-[420px] flex-col rounded-2xl bg-white shadow-xl" style={{ padding: "20px 0", insetInlineEnd: 0 }}>
                     <h3 className="text-center text-lg text-foreground" style={{ marginBottom: 16 }}>
-                      {locale === "he" ? "התראות" : "Notifications"}
+                      {t.seekerNav.notifications}
                     </h3>
                     {[
-                      { msg: locale === "he" ? "רצינו ליידע אותך שאוניברסיטת תל אביב עדכנה את סטטוס המועמדות שלך." : "We wanted to inform you that Tel Aviv University has updated your application status.", time: locale === "he" ? "לפני 4 שעות" : "4 hours ago", logo: "/images/chat-company-logo.png", anon: false },
-                      { msg: locale === "he" ? "רצינו ליידע אותך שיש עדכון חדש ממקור אנונימי בנוגע לסטטוס המועמדות שלך." : "We wanted to let you know that there is a new update from an anonymous source regarding your application status.", time: locale === "he" ? "לפני 4 שעות" : "4 hours ago", logo: "", anon: true },
+                      { msg: t.seekerNav.notifMsg1, time: t.seekerNav.hoursAgo, logo: "/images/chat-company-logo.png", anon: false },
+                      { msg: t.seekerNav.notifMsg2, time: t.seekerNav.hoursAgo, logo: "", anon: true },
                     ].map((notif, i) => (
                       <div key={i} className="flex items-start gap-3 border-b border-border-light" style={{ padding: "14px 20px" }}>
                         <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl" style={{ background: notif.anon ? "#E8EEF5" : "#0E1117", padding: notif.anon ? 0 : 6 }}>
@@ -84,7 +86,7 @@ export function SeekerNavbar({ activeNav = "" }: SeekerNavbarProps) {
                           <span className="text-xs text-muted-foreground">{notif.time}</span>
                         </div>
                         <button className="shrink-0 cursor-pointer border-none bg-transparent text-xs text-primary underline">
-                          {locale === "he" ? "צפה בסטטוס" : "View status"}
+                          {t.seekerNav.viewStatus}
                         </button>
                       </div>
                     ))}
@@ -109,12 +111,17 @@ export function SeekerNavbar({ activeNav = "" }: SeekerNavbarProps) {
             {avatarMenuOpen && (
               <>
                 <div className="fixed inset-0 z-50" onClick={() => setAvatarMenuOpen(false)} />
-                <div className="absolute right-0 top-12 z-50 flex min-w-36 flex-col gap-1 rounded-xl border border-border-light bg-white shadow-lg" style={{ padding: "12px 16px" }}>
+                <div className="absolute top-12 z-50 flex min-w-36 flex-col gap-1 rounded-xl border border-border-light bg-white shadow-lg" style={{ padding: "12px 16px", insetInlineEnd: 0 }}>
                   <button onClick={() => { setAvatarMenuOpen(false); router.push("/profile"); }} className="flex w-full whitespace-nowrap py-2 text-start text-sm text-foreground transition-colors hover:text-primary">
                     {t.profile.personalArea}
                   </button>
                   <button className="flex w-full whitespace-nowrap py-2 text-start text-sm text-red-400 transition-colors hover:text-red-600" onClick={() => setAvatarMenuOpen(false)}>
                     {t.profile.disengagement}
+                  </button>
+                  <div className="my-1 h-px w-full bg-border-light" />
+                  <button onClick={handleLogout} className="flex w-full items-center gap-2 whitespace-nowrap py-2 text-start text-sm text-foreground transition-colors hover:text-primary">
+                    <LogOut size={14} />
+                    {t.profile.logout}
                   </button>
                 </div>
               </>

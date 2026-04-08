@@ -99,6 +99,8 @@ function SupplierDetailModal({
   supplier: (typeof suppliers)[0];
   onClose: () => void;
 }) {
+  const { locale } = useLanguage();
+  const isHe = locale === "he";
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center"

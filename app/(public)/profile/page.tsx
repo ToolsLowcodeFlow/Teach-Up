@@ -208,7 +208,7 @@ export default function ProfilePage() {
                   <div className="flex flex-col gap-2">
                     <label className="text-sm text-foreground">{t.profile.currentPassword}</label>
                     <div className="relative">
-                      <input type={showCurrent ? "text" : "password"} placeholder="{isHe ? "הקלד כאן..." : "Type here..."}" value={passwords.current} onChange={(e) => setPasswords({ ...passwords, current: e.target.value })} className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:bg-white focus:outline-none" style={{ padding: "14px 40px 14px 16px" }} />
+                      <input type={showCurrent ? "text" : "password"} placeholder={isHe ? "הקלד כאן..." : "Type here..."} value={passwords.current} onChange={(e) => setPasswords({ ...passwords, current: e.target.value })} className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:bg-white focus:outline-none" style={{ padding: "14px 40px 14px 16px" }} />
                       <button onClick={() => setShowCurrent(!showCurrent)} className="absolute inset-y-0 right-3 flex items-center border-none bg-transparent text-muted-foreground">
                         {showCurrent ? <EyeOff size={16} /> : <Eye size={16} />}
                       </button>
@@ -217,7 +217,7 @@ export default function ProfilePage() {
                   <div className="flex flex-col gap-2">
                     <label className="text-sm text-foreground">{t.profile.newPassword}</label>
                     <div className="relative">
-                      <input type={showNew ? "text" : "password"} placeholder="{isHe ? "הקלד כאן..." : "Type here..."}" value={passwords.newPass} onChange={(e) => setPasswords({ ...passwords, newPass: e.target.value })} className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:bg-white focus:outline-none" style={{ padding: "14px 40px 14px 16px" }} />
+                      <input type={showNew ? "text" : "password"} placeholder={isHe ? "הקלד כאן..." : "Type here..."} value={passwords.newPass} onChange={(e) => setPasswords({ ...passwords, newPass: e.target.value })} className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:bg-white focus:outline-none" style={{ padding: "14px 40px 14px 16px" }} />
                       <button onClick={() => setShowNew(!showNew)} className="absolute inset-y-0 right-3 flex items-center border-none bg-transparent text-muted-foreground">
                         {showNew ? <EyeOff size={16} /> : <Eye size={16} />}
                       </button>
@@ -226,7 +226,7 @@ export default function ProfilePage() {
                   <div className="flex flex-col gap-2">
                     <label className="text-sm text-foreground">{t.profile.verifyNewPassword}</label>
                     <div className="relative">
-                      <input type={showVerify ? "text" : "password"} placeholder="{isHe ? "הקלד כאן..." : "Type here..."}" value={passwords.verify} onChange={(e) => setPasswords({ ...passwords, verify: e.target.value })} className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:bg-white focus:outline-none" style={{ padding: "14px 40px 14px 16px" }} />
+                      <input type={showVerify ? "text" : "password"} placeholder={isHe ? "הקלד כאן..." : "Type here..."} value={passwords.verify} onChange={(e) => setPasswords({ ...passwords, verify: e.target.value })} className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:bg-white focus:outline-none" style={{ padding: "14px 40px 14px 16px" }} />
                       <button onClick={() => setShowVerify(!showVerify)} className="absolute inset-y-0 right-3 flex items-center border-none bg-transparent text-muted-foreground">
                         {showVerify ? <EyeOff size={16} /> : <Eye size={16} />}
                       </button>
@@ -308,11 +308,11 @@ export default function ProfilePage() {
                       )}
                       <div className="flex flex-col gap-2">
                         <label className="text-sm text-foreground">Name of the educational institution</label>
-                        <input type="text" placeholder="{isHe ? "הקלד כאן..." : "Type here..."}" value={cert.institution} onChange={(e) => { const c = [...certificates]; c[idx].institution = e.target.value; setCertificates(c); }} className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:bg-white focus:outline-none" style={{ padding: "14px 16px" }} />
+                        <input type="text" placeholder={isHe ? "הקלד כאן..." : "Type here..."} value={cert.institution} onChange={(e) => { const c = [...certificates]; c[idx].institution = e.target.value; setCertificates(c); }} className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:bg-white focus:outline-none" style={{ padding: "14px 16px" }} />
                       </div>
                       <div className="flex flex-col gap-2">
                         <label className="text-sm text-foreground">Enter information or upload a file</label>
-                        <input type="text" placeholder="{isHe ? "הקלד כאן..." : "Type here..."}" value={cert.info} onChange={(e) => { const c = [...certificates]; c[idx].info = e.target.value; setCertificates(c); }} className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:bg-white focus:outline-none" style={{ padding: "14px 16px" }} />
+                        <input type="text" placeholder={isHe ? "הקלד כאן..." : "Type here..."} value={cert.info} onChange={(e) => { const c = [...certificates]; c[idx].info = e.target.value; setCertificates(c); }} className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:bg-white focus:outline-none" style={{ padding: "14px 16px" }} />
                       </div>
                     </div>
                   ))}

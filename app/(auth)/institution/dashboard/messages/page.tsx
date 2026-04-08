@@ -16,20 +16,25 @@ interface Conversation {
 
 const avatars = ["/images/avatar-1.jpg", "/images/avatar-2.jpg", "/images/avatar-3.jpg"];
 
-const mockConversations: Conversation[] = [
-  { id: "1", name: "Yotam Israeli", preview: "Lorem Ipsum Dolor Lorem Ipsum...", time: "Today at 16:40", avatar: avatars[0] },
-  { id: "2", name: "Yotam Israeli", preview: "Lorem Ipsum Dolor Lorem Ipsum...", time: "Today at 16:40", unread: true, avatar: avatars[1] },
-  { id: "3", name: "Yotam Israeli", preview: "Lorem Ipsum Dolor Lorem Ipsum...", time: "Today at 16:40", avatar: avatars[2] },
-  { id: "4", name: "Yotam Israeli", preview: "Lorem Ipsum Dolor Lorem Ipsum...", time: "Today at 16:40", avatar: avatars[0] },
-  { id: "5", name: "Yotam Israeli", preview: "Lorem Ipsum Dolor Lorem Ipsum...", time: "Today at 4:40 PM", avatar: avatars[1] },
-  { id: "6", name: "Yotam Israeli", preview: "Lorem Ipsum Dolor Lorem Ipsum...", time: "Today at 4:40 PM", avatar: avatars[2] },
-  { id: "7", name: "Yotam Israeli", preview: "Lorem Ipsum Dolor Lorem Ipsum...", time: "Today at 4:40 PM", avatar: avatars[0] },
-];
+function getMockConversations(name: string): Conversation[] {
+  return [
+    { id: "1", name, preview: "Lorem Ipsum Dolor Lorem Ipsum...", time: "Today at 16:40", avatar: avatars[0] },
+    { id: "2", name, preview: "Lorem Ipsum Dolor Lorem Ipsum...", time: "Today at 16:40", unread: true, avatar: avatars[1] },
+    { id: "3", name, preview: "Lorem Ipsum Dolor Lorem Ipsum...", time: "Today at 16:40", avatar: avatars[2] },
+    { id: "4", name, preview: "Lorem Ipsum Dolor Lorem Ipsum...", time: "Today at 16:40", avatar: avatars[0] },
+    { id: "5", name, preview: "Lorem Ipsum Dolor Lorem Ipsum...", time: "Today at 4:40 PM", avatar: avatars[1] },
+    { id: "6", name, preview: "Lorem Ipsum Dolor Lorem Ipsum...", time: "Today at 4:40 PM", avatar: avatars[2] },
+    { id: "7", name, preview: "Lorem Ipsum Dolor Lorem Ipsum...", time: "Today at 4:40 PM", avatar: avatars[0] },
+  ];
+}
 
 export default function MessagesPage() {
   const { t } = useLanguage();
+  const cs = t.candidateSearch;
+  const jc = t.jobCard;
   const [activeChat, setActiveChat] = useState<string>("1");
   const [chatMenuOpen, setChatMenuOpen] = useState(false);
+  const mockConversations = getMockConversations(cs.candidateName);
 
   return (
     <div style={{ padding: "24px 40px 0" }} className="flex min-h-0 w-full flex-1 gap-5 bg-[#F7F9FC]">
@@ -38,13 +43,13 @@ export default function MessagesPage() {
         {/* Contact header */}
         <div style={{ padding: "16px 24px", margin: "16px 16px 0" }} className="flex items-center gap-4 rounded-xl border border-border-light bg-[#F7F9FC]">
           <div className="h-12 w-12 shrink-0 overflow-hidden rounded-full">
-            <img src="/images/avatar-3.jpg" alt="Yotam Israeli" className="h-full w-full object-cover" />
+            <img src="/images/avatar-3.jpg" alt={cs.candidateName} className="h-full w-full object-cover" />
           </div>
           <div className="flex flex-1 flex-col">
-            <span className="text-base font-medium text-foreground">Yotam Israeli</span>
+            <span className="text-base font-medium text-foreground">{cs.candidateName}</span>
             <div className="flex items-center gap-4 text-xs text-muted-foreground">
-              <span>{t.messages.yearsOfExperience}: 06 {t.candidateSearch.years}</span>
-              <span>{t.messages.area}: Tel Aviv, Israel</span>
+              <span>{t.messages.yearsOfExperience}: 06 {cs.years}</span>
+              <span>{t.messages.area}: {cs.telAvivIsrael}</span>
             </div>
           </div>
           <div className="relative">
@@ -90,7 +95,7 @@ export default function MessagesPage() {
           {/* Sent message */}
           <div className="flex justify-start">
             <div style={{ padding: "12px 16px" }} className="max-w-md rounded-2xl rounded-es-sm bg-border text-sm text-foreground">
-              Hi, I&apos;m contacting you regarding the job you posted. Is this relevant?
+              {t.messages.contactMessage}
             </div>
           </div>
 
@@ -99,21 +104,21 @@ export default function MessagesPage() {
             <div style={{ padding: 20 }} className="max-w-sm overflow-hidden rounded-2xl border border-border-light bg-white shadow-sm">
               {/* Job info */}
               <div className="flex items-center gap-1.5 text-base font-medium text-foreground">
-                Computer Science Teacher
+                {jc.jobTitle}
                 <BadgeCheck className="h-4 w-4 text-primary" />
               </div>
-              <p style={{ marginBottom: 8 }} className="text-sm text-foreground">with at least 4 years of experience</p>
+              <p style={{ marginBottom: 8 }} className="text-sm text-foreground">{jc.jobSubtitle}</p>
               <p style={{ marginBottom: 12 }} className="text-xs leading-relaxed text-muted-foreground">
-                This is a dummy paragraph about spacer experience and demonstrate how the actual text will look. It can be used...
+                {jc.jobDescription}
               </p>
 
               {/* Location + Salary */}
               <div className="mb-2 flex items-center gap-1.5 text-xs text-foreground">
                 <MapPin className="h-3 w-3 text-primary" />
-                <span>Jaffa - Tel Aviv</span>
+                <span>{cs.jaffaTelAviv}</span>
               </div>
               <div style={{ marginBottom: 14 }} className="text-xs text-muted-foreground">
-                Salary &#8362; <span className="text-base font-medium text-foreground">30,000 - 50,000</span>
+                {t.messages.salaryLabel} <span className="text-base font-medium text-foreground">30,000 - 50,000</span>
               </div>
 
               {/* Company footer */}
@@ -121,7 +126,7 @@ export default function MessagesPage() {
                 <div className="h-8 w-8 shrink-0 overflow-hidden rounded-full">
                   <img src="/images/avatar-woman.jpg" alt="Company" className="h-full w-full object-cover" />
                 </div>
-                <span className="text-xs text-foreground">Company Name · 08/12/2025</span>
+                <span className="text-xs text-foreground">{t.messages.companyNameDate}</span>
               </div>
             </div>
           </div>
@@ -142,7 +147,7 @@ export default function MessagesPage() {
           {/* Sent message */}
           <div className="flex justify-start">
             <div style={{ padding: "12px 16px" }} className="max-w-md rounded-2xl rounded-es-sm bg-border text-sm text-foreground">
-              Hi, I&apos;m contacting you regarding the job you posted. Is this relevant?
+              {t.messages.contactMessage}
             </div>
           </div>
         </div>
