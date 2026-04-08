@@ -11,7 +11,7 @@ export default function PrivacyPolicyPage() {
 
   return (
     <div className="min-h-screen bg-[#F7F9FC]" dir={direction} style={{ fontFamily: "'Abel', sans-serif" }}>
-      <div className="mx-auto max-w-[800px]" style={{ padding: "40px 24px 80px" }}>
+      <div className="mx-auto w-full" style={{ padding: "40px 40px 80px" }}>
         {/* Back button */}
         <button
           onClick={() => router.back()}
