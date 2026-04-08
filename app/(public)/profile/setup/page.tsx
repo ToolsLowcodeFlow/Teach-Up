@@ -3,8 +3,8 @@
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronDown, X } from "lucide-react";
+import Link from "next/link";
 import { useLanguage } from "@/lib/i18n/context";
-import { PrivacyPolicyModal } from "@/components/shared/privacy-policy-modal";
 
 function SelectField({
   label, options, value, onChange, required, placeholder,
@@ -58,7 +58,6 @@ export default function ProfileSetupPage() {
   });
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [agreedToPolicy, setAgreedToPolicy] = useState(false);
-  const [privacyOpen, setPrivacyOpen] = useState(false);
 
   const roleOptions = [s.teacher, s.tutor, s.teachingAssistant, s.substituteTeacher, s.counselor, s.instructor];
   const fieldOptions = [s.mathematics, s.english, s.science, s.history, s.art, s.music, s.physicalEducation, s.computerScience, s.specialEducation];
@@ -161,7 +160,7 @@ export default function ProfileSetupPage() {
             {/* Privacy */}
             <div className="flex items-center" style={{ gap: 6 }}>
               <input type="checkbox" checked={agreedToPolicy} onChange={(e) => setAgreedToPolicy(e.target.checked)} className="shrink-0 cursor-pointer" style={{ width: 22, height: 22, accentColor: "#4C96FF" }} />
-              <span className="text-sm text-foreground">{s.privacyPolicy} <button type="button" onClick={() => setPrivacyOpen(true)} className="cursor-pointer border-none bg-transparent text-sm text-primary underline" style={{ padding: 0 }}>{s.privacyPolicyLink}</button></span>
+              <span className="text-sm text-foreground">{s.privacyPolicy} <Link href="/privacy" target="_blank" className="text-sm text-primary underline">{s.privacyPolicyLink}</Link></span>
             </div>
 
             {/* Buttons */}
@@ -199,7 +198,6 @@ export default function ProfileSetupPage() {
         </div>
       </div>
 
-      <PrivacyPolicyModal open={privacyOpen} onClose={() => setPrivacyOpen(false)} />
     </div>
   );
 }

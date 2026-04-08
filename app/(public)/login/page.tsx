@@ -10,7 +10,6 @@ import { loginSchema, type LoginFormData } from "@/lib/validations/auth";
 import { createClient } from "@/lib/supabase/client";
 import { useLanguage } from "@/lib/i18n/context";
 import { AuthLayout } from "@/components/auth/auth-layout";
-import { PrivacyPolicyModal } from "@/components/shared/privacy-policy-modal";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -19,7 +18,6 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<"login" | "candidate">("login");
-  const [privacyOpen, setPrivacyOpen] = useState(false);
 
   const {
     register,
@@ -240,10 +238,8 @@ export default function LoginPage() {
 
           {/* Terms */}
           <p style={{ fontFamily: "'Abel', sans-serif", fontSize: 14, color: "#647787", textAlign: "center", lineHeight: 1.1 }}>
-            {t.common.termsText} {t.common.termsLink} {t.common.and} <button type="button" onClick={() => setPrivacyOpen(true)} className="cursor-pointer border-none bg-transparent text-primary underline" style={{ padding: 0, fontSize: 14, fontFamily: "'Abel', sans-serif" }}>{t.common.privacyLink}</button>.
+            {t.common.termsText} {t.common.termsLink} {t.common.and} <Link href="/privacy" target="_blank" style={{ color: "#4C96FF", textDecoration: "underline" }}>{t.common.privacyLink}</Link>.
           </p>
-
-          <PrivacyPolicyModal open={privacyOpen} onClose={() => setPrivacyOpen(false)} />
         </div>
       </div>
     </AuthLayout>

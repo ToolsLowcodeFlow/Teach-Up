@@ -10,7 +10,6 @@ import { registerSchema, type RegisterFormData } from "@/lib/validations/auth";
 import { createClient } from "@/lib/supabase/client";
 import { useLanguage } from "@/lib/i18n/context";
 import { AuthLayout } from "@/components/auth/auth-layout";
-import { PrivacyPolicyModal } from "@/components/shared/privacy-policy-modal";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -18,7 +17,6 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [privacyOpen, setPrivacyOpen] = useState(false);
 
   const {
     register,
@@ -216,11 +214,9 @@ export default function RegisterPage() {
               </Link>
             </p>
             <p style={{ fontFamily: "'Abel', sans-serif", fontSize: 14, color: "#647787", textAlign: "center", lineHeight: 1.1 }}>
-              {t.common.termsText} {t.common.termsLink} {t.common.and} <button type="button" onClick={() => setPrivacyOpen(true)} className="cursor-pointer border-none bg-transparent text-primary underline" style={{ padding: 0, fontSize: 14, fontFamily: "'Abel', sans-serif" }}>{t.common.privacyLink}</button>.
+              {t.common.termsText} {t.common.termsLink} {t.common.and} <Link href="/privacy" target="_blank" style={{ color: "#4C96FF", textDecoration: "underline" }}>{t.common.privacyLink}</Link>.
             </p>
           </div>
-
-          <PrivacyPolicyModal open={privacyOpen} onClose={() => setPrivacyOpen(false)} />
         </div>
       </div>
     </AuthLayout>
