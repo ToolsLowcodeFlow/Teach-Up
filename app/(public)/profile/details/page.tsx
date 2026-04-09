@@ -118,6 +118,7 @@ export default function ProfileDetailsPage() {
   ]);
 
   const [showAddWorkplace, setShowAddWorkplace] = useState(false);
+  const [editingId, setEditingId] = useState<number | null>(null);
   const [newWork, setNewWork] = useState({ role: "", company: "", startMonth: "January", startYear: "2023", endMonth: "", endYear: "", current: false });
 
   const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -134,9 +135,20 @@ export default function ProfileDetailsPage() {
 
   const handleAddWorkplace = () => {
     if (!newWork.role || !newWork.company) return;
-    setWorkExps((prev) => [...prev, { ...newWork, id: Date.now() }]);
+    if (editingId !== null) {
+      setWorkExps((prev) => prev.map((w) => w.id === editingId ? { ...newWork, id: editingId } : w));
+    } else {
+      setWorkExps((prev) => [...prev, { ...newWork, id: Date.now() }]);
+    }
     setNewWork({ role: "", company: "", startMonth: "January", startYear: "2023", endMonth: "", endYear: "", current: false });
+    setEditingId(null);
     setShowAddWorkplace(false);
+  };
+
+  const startEditWorkExp = (exp: WorkExp) => {
+    setNewWork({ role: exp.role, company: exp.company, startMonth: exp.startMonth, startYear: exp.startYear, endMonth: exp.endMonth, endYear: exp.endYear, current: exp.current });
+    setEditingId(exp.id);
+    setShowAddWorkplace(true);
   };
 
   const deleteWorkExp = (id: number) => setWorkExps((prev) => prev.filter((w) => w.id !== id));
@@ -178,7 +190,7 @@ export default function ProfileDetailsPage() {
                     </>
                   )}
                 </div>
-                <button onClick={() => imageRef.current?.click()} className="mt-3 cursor-pointer rounded-[10px] border border-foreground bg-white text-sm text-foreground" style={{ padding: "8px 12px", width: 144 }}>
+                <button onClick={() => imageRef.current?.click()} className="cursor-pointer rounded-[10px] border border-foreground bg-white text-sm text-foreground" style={{ padding: "8px 12px", width: 144, marginTop: 5 }}>
                   {profileImage ? d.changeImage : d.uploadImage}
                 </button>
               </div>
@@ -252,7 +264,7 @@ export default function ProfileDetailsPage() {
                     <div className="flex items-center gap-5">
                       <span className="text-sm text-muted-foreground">{exp.startMonth.slice(0, 3)} {exp.startYear} - {exp.current ? d.present : `${exp.endMonth.slice(0, 3)} ${exp.endYear}`}</span>
                       <div className="flex items-center gap-2.5">
-                        <button className="flex h-[33px] w-[33px] items-center justify-center rounded-full border border-border-light bg-white"><Pencil size={14} className="text-muted-foreground" /></button>
+                        <button onClick={() => startEditWorkExp(exp)} className="flex h-[33px] w-[33px] cursor-pointer items-center justify-center rounded-full border border-border-light bg-white hover:bg-gray-50"><Pencil size={14} className="text-muted-foreground" /></button>
                         <button onClick={() => deleteWorkExp(exp.id)} className="flex h-[33px] w-[33px] cursor-pointer items-center justify-center rounded-full border border-border-light bg-white"><Trash2 size={14} className="text-muted-foreground" /></button>
                       </div>
                     </div>
@@ -301,7 +313,7 @@ export default function ProfileDetailsPage() {
 
       {/* Add workplace modal */}
       {showAddWorkplace && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: "rgba(0,0,0,0.3)" }} onClick={() => setShowAddWorkplace(false)}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: "rgba(0,0,0,0.3)" }} onClick={() => { setShowAddWorkplace(false); setEditingId(null); setNewWork({ role: "", company: "", startMonth: "January", startYear: "2023", endMonth: "", endYear: "", current: false }); }}>
           <div className="overflow-hidden rounded-[16px] bg-white" style={{ width: 300, padding: "20px 20px", boxShadow: "0px 4px 24px rgba(0,0,0,0.08)" }} onClick={(e) => e.stopPropagation()}>
             <div className="flex flex-col" style={{ gap: 12 }}>
               <label className="text-sm text-foreground">{d.roleLabel} *</label>
@@ -351,7 +363,7 @@ export default function ProfileDetailsPage() {
 
               <div className="flex items-center justify-between" style={{ marginTop: 8 }}>
                 <button onClick={handleAddWorkplace} className="cursor-pointer border-none bg-transparent text-sm text-primary">{d.approval}</button>
-                <button onClick={() => setShowAddWorkplace(false)} className="cursor-pointer border-none bg-transparent text-sm" style={{ color: "#B1B5B9" }}>{d.reset}</button>
+                <button onClick={() => { setShowAddWorkplace(false); setEditingId(null); setNewWork({ role: "", company: "", startMonth: "January", startYear: "2023", endMonth: "", endYear: "", current: false }); }} className="cursor-pointer border-none bg-transparent text-sm" style={{ color: "#B1B5B9" }}>{d.reset}</button>
               </div>
             </div>
           </div>

@@ -15,19 +15,19 @@ type JobTab = "open" | "all" | "closed";
 export default function MyJobsPage() {
   const { t } = useLanguage();
 
-  const mockJobs: JobCardData[] = Array.from({ length: 9 }, (_, i) => ({
+  const [jobs, setJobs] = useState<JobCardData[]>(() => Array.from({ length: 9 }, (_, i) => ({
     id: String(i + 1),
-    title: t.jobCard.jobTitle,
-    subtitle: t.jobCard.jobSubtitle,
-    description: t.jobCard.jobDescription,
+    title: "Computer Science Teacher",
+    subtitle: "with at least 4 years of experience",
+    description: "This is a dummy paragraph about spacer experience and demonstrate how the actual text will look. It can be used.",
     date: "09/12/2026",
-    location: t.jobCard.locationJaffaTelAviv,
+    location: "Jaffa - Tel Aviv",
     salaryMin: 30000,
     salaryMax: 50000,
     status: i % 3 === 0 ? "closed" as const : "open" as const,
     totalCandidates: 1240,
     isVerified: true,
-  }));
+  })));
   const [activeTab, setActiveTab] = useState<JobTab>("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedJob, setSelectedJob] = useState<JobCardData | null>(null);
@@ -40,8 +40,8 @@ export default function MyJobsPage() {
 
   const filteredJobs =
     activeTab === "all"
-      ? mockJobs
-      : mockJobs.filter((j) => j.status === activeTab);
+      ? jobs
+      : jobs.filter((j) => j.status === activeTab);
 
   const hasJobs = filteredJobs.length > 0;
 
@@ -86,7 +86,14 @@ export default function MyJobsPage() {
               <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
                 {filteredJobs.map((job) => (
                   <div key={job.id} className="cursor-pointer" onClick={() => setSelectedJob(job)}>
-                    <JobCard job={job} />
+                    <JobCard
+                      job={job}
+                      onView={() => setSelectedJob(job)}
+                      onEdit={() => setSelectedJob(job)}
+                      onStatusToggle={() => {
+                        setJobs((prev) => prev.map((j) => j.id === job.id ? { ...j, status: j.status === "open" ? "closed" as const : "open" as const } : j));
+                      }}
+                    />
                   </div>
                 ))}
               </div>

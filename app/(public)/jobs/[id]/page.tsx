@@ -49,10 +49,15 @@ function JobDetailPage() {
         style={{ width: "90vw", maxWidth: 960, height: "88vh", boxShadow: "0 20px 60px rgba(0,0,0,0.15)" }}
         dir={direction}
       >
-        {/* LEFT — Job content (scrollable) */}
-        <div className="flex-1 overflow-y-auto" style={{ padding: "20px 28px 36px" }}>
+        {/* LEFT — Job content */}
+        <div className="flex flex-1 flex-col">
+          {/* Fixed header */}
+          <div className="shrink-0 border-b border-border-light" style={{ padding: "20px 28px 16px" }}>
+            <h1 className="text-[22px] leading-[1.1] text-foreground">{jd.title}</h1>
+          </div>
+          {/* Scrollable content */}
+          <div className="flex-1 overflow-y-auto" style={{ padding: "16px 28px 36px" }}>
           <div className="flex flex-col" style={{ marginBottom: 10 }}>
-            <h1 className="text-[22px] leading-[1.1] text-foreground" style={{ marginBottom: 28 }}>{jd.title}</h1>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <span className="rounded-full text-xs text-white" style={{ padding: "4px 14px", backgroundImage: "linear-gradient(135deg, #FF7E7E 0%, #FF4C4C 100%)" }}>{jd.hotJob}</span>
@@ -137,6 +142,7 @@ function JobDetailPage() {
                 </div>
               </div>
             ))}
+          </div>
           </div>
         </div>
 

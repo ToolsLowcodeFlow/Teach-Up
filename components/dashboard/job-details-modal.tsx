@@ -167,22 +167,22 @@ export function JobDetailsModal({ open, onOpenChange, job }: JobDetailsModalProp
           </div>
 
           {/* Right panel: Job details */}
-          <div className="flex flex-1 flex-col overflow-y-auto">
-            <div style={{ padding: "28px 32px 32px" }}>
-              {/* Close button */}
+          <div className="flex flex-1 flex-col">
+            {/* Fixed header */}
+            <div className="shrink-0 border-b border-border-light" style={{ padding: "28px 32px 20px" }}>
               <Dialog.Close className="absolute end-4 top-4 flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-gray-100">
                 <X className="h-4 w-4" />
               </Dialog.Close>
-
-              {/* Hidden description for accessibility */}
               <Dialog.Description className="sr-only">
                 {job.title} - {t.jobDetails.title}
               </Dialog.Description>
-
-              {/* Section header */}
-              <h3 style={{ marginBottom: 22 }} className="text-2xl font-medium text-foreground">
+              <h3 className="text-2xl font-medium text-foreground">
                 {t.jobDetails.title}
               </h3>
+            </div>
+
+            {/* Scrollable content */}
+            <div className="flex-1 overflow-y-auto" style={{ padding: "20px 32px 32px" }}>
 
               {/* Favorites + Category */}
               <div style={{ marginBottom: 22 }} className="flex items-center justify-between">

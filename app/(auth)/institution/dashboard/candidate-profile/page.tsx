@@ -5,19 +5,28 @@ import { Check, Mail, MapPin, Phone, BadgeCheck, Link2, ChevronRight, ChevronUp,
 import { useLanguage } from "@/lib/i18n/context";
 import { ReviewModal } from "@/components/dashboard/review-modal";
 
-const mockWorkExperience = [
-  { period: "Jan 2020 - Aug 2023", title: "Senior Lecturer", institution: "College of Management" },
-  { period: "Jan 2020 - Aug 2023", title: "Senior Lecturer", institution: "College of Management" },
-  { period: "Jan 2020 - Aug 2023", title: "Senior Lecturer", institution: "College of Management" },
-  { period: "Jan 2020 - Aug 2023", title: "Senior Lecturer", institution: "College of Management" },
-];
+function getMockWork(isHe: boolean) {
+  const title = isHe ? "מרצה בכיר" : "Senior Lecturer";
+  const inst = isHe ? "המכללה למנהל" : "College of Management";
+  return [
+    { period: "Jan 2020 - Aug 2023", title, institution: inst },
+    { period: "Jan 2020 - Aug 2023", title, institution: inst },
+    { period: "Jan 2020 - Aug 2023", title, institution: inst },
+    { period: "Jan 2020 - Aug 2023", title, institution: inst },
+  ];
+}
 
-const mockCertificates = [
-  { institution: "Name of the institution: Lorem Ipsum", description: "Lorem Ipsum Dolor Lumbihabal Basibhasbahal Saba Sabi", hasFile: true },
-  { institution: "Institution Name: Lorem Ipsum", description: "Lorem Ipsum Dolor Lumbihabal Basibhasbahal Saba Sabi", hasFile: false },
-  { institution: "Institution Name: Lorem Ipsum", description: "Lorem Ipsum Dolor Lumbihabal Basibhasbahal Saba Sabi", hasFile: true },
-  { institution: "Name of the institution: Lorem Ipsum", description: "Lorem Ipsum Dolor Lumbihabal Basibhasbahal Saba Sabi", hasFile: false },
-];
+function getMockCerts(isHe: boolean) {
+  const name1 = isHe ? "שם המוסד: לורם איפסום" : "Name of the institution: Lorem Ipsum";
+  const name2 = isHe ? "שם המוסד: לורם איפסום" : "Institution Name: Lorem Ipsum";
+  const desc = isHe ? "לורם איפסום דולור סיט אמט קונסקטטור אדיפיסינג אלית" : "Lorem Ipsum Dolor Lumbihabal Basibhasbahal Saba Sabi";
+  return [
+    { institution: name1, description: desc, hasFile: true },
+    { institution: name2, description: desc, hasFile: false },
+    { institution: name2, description: desc, hasFile: true },
+    { institution: name1, description: desc, hasFile: false },
+  ];
+}
 
 function ApplyDropdown() {
   const { t } = useLanguage();
@@ -68,19 +77,23 @@ function ApplyDropdown() {
 }
 
 export default function CandidateProfilePage() {
-  const { t } = useLanguage();
+  const { locale, t } = useLanguage();
+  const isHe = locale === "he";
   const [reviewOpen, setReviewOpen] = useState(false);
+  const cs = t.candidateSearch;
+  const mockWorkExperience = getMockWork(isHe);
+  const mockCertificates = getMockCerts(isHe);
 
   const detailsGrid = [
     { label: t.candidateProfile.teachingPreferences, value: "Lorem Ipsum" },
     { label: t.candidateProfile.dealerType, value: "Lorem Ipsum" },
-    { label: t.candidateProfile.mobileWithCar, value: "yes" },
+    { label: t.candidateProfile.mobileWithCar, value: isHe ? "כן" : "yes" },
     { label: t.candidateProfile.yearsOfExperience, value: "04" },
-    { label: t.candidateProfile.gender, value: "female" },
+    { label: t.candidateProfile.gender, value: isHe ? "נקבה" : "female" },
   ];
 
-  const skillTags = ["Spanish", "Spanish", "Spanish", "English", "Hebrew"];
-  const languageTags = ["Spanish", "Spanish", "Spanish", "English", "Hebrew"];
+  const skillTags = [isHe ? "ספרדית" : "Spanish", isHe ? "ספרדית" : "Spanish", isHe ? "ספרדית" : "Spanish", isHe ? "אנגלית" : "English", isHe ? "עברית" : "Hebrew"];
+  const languageTags = [isHe ? "עברית" : "Hebrew", isHe ? "אנגלית" : "English", isHe ? "ספרדית" : "Spanish", isHe ? "ספרדית" : "Spanish", isHe ? "ספרדית" : "Spanish"];
 
   return (
     <div className="w-full">
@@ -103,7 +116,7 @@ export default function CandidateProfilePage() {
         </div>
         {/* Breadcrumb */}
         <div style={{ padding: "0 40px" }} className="relative flex h-full items-center gap-2 text-sm text-foreground">
-          <span>Computer Science Teacher for a Recognized College</span>
+          <span>{isHe ? "מורה למדעי המחשב למכללה מוכרת" : "Computer Science Teacher for a Recognized College"}</span>
           <ChevronRight className="h-4 w-4" />
         </div>
       </div>
@@ -124,21 +137,20 @@ export default function CandidateProfilePage() {
           {/* Center: Name + Bio + Details */}
           <div className="flex-1">
             <h1 style={{ marginBottom: 8 }} className="text-3xl font-medium text-foreground">
-              May Bozo
+              {isHe ? "מאי בוזו" : "May Bozo"}
             </h1>
             <div style={{ marginBottom: 16 }} className="flex items-center gap-3 text-sm text-muted-foreground">
-              <span>Teacher</span>
+              <span>{isHe ? "מורה" : "Teacher"}</span>
               <div className="flex items-center gap-1 text-foreground">
-                Computer Science
+                {isHe ? "מדעי המחשב" : "Computer Science"}
                 <BadgeCheck className="h-4 w-4 text-primary" />
               </div>
             </div>
 
             <p style={{ marginBottom: 24 }} className="text-sm leading-relaxed text-muted-foreground">
-              Some leaves of Ipsum dolor sit amet, consectetur adipiscing elite goler monferr sobert lorm shebts yhol, Lorem
-              Ipsum dolor sit amet, consectetur adipiscing elite goler monferr sobert lorm shebts yhol, Lorem Ipsum dolor sit
-              amet, consectetur adipiscing alite goler monferr sobert lorm shebts yhol, Lorem Ipsum dolor sit amet,
-              consectetur adipiscing elite goler monferr sobert lorm shebts yhol, Lorem Ipsum dolor habindtham&apos;s,
+              {isHe
+                ? "זהו טקסט דמה לפסקה שמטרתו למלא מקום בעיצוב האתר ולהדגים כיצד ייראה הטקסט בפועל. ניתן להשתמש בו כדי להמחיש את העיצוב ולהציג את המבנה הכללי של הדף. זהו טקסט דמה לפסקה שמטרתו למלא מקום בעיצוב האתר ולהדגים כיצד ייראה הטקסט בפועל."
+                : "Some leaves of Ipsum dolor sit amet, consectetur adipiscing elite goler monferr sobert lorm shebts yhol, Lorem Ipsum dolor sit amet, consectetur adipiscing elite goler monferr sobert lorm shebts yhol, Lorem Ipsum dolor sit amet, consectetur adipiscing alite goler monferr sobert lorm shebts yhol, Lorem Ipsum dolor sit amet, consectetur adipiscing elite goler monferr sobert lorm shebts yhol, Lorem Ipsum dolor habindtham's,"}
             </p>
 
             {/* Details grid */}
@@ -162,7 +174,7 @@ export default function CandidateProfilePage() {
               <div className="flex items-center gap-2">
                 <Link2 className="h-5 w-5 text-primary/60" />
                 <div className="flex flex-col gap-0.5">
-                  <span className="text-sm text-primary">May Bozo&apos;s resume file</span>
+                  <span className="text-sm text-primary">{isHe ? "קובץ קורות חיים של מאי בוזו" : "May Bozo's resume file"}</span>
                   <span className="text-xs text-muted-foreground">142 KB</span>
                 </div>
               </div>
@@ -184,7 +196,7 @@ export default function CandidateProfilePage() {
             <div style={{ marginTop: 8 }} className="flex flex-col gap-3">
               <div className="flex items-center gap-2 text-sm text-foreground">
                 <MapPin className="h-4 w-4 text-success" />
-                <span>Jaffa - Tel Aviv, Israel</span>
+                <span>{isHe ? "יפו - תל אביב, ישראל" : "Jaffa - Tel Aviv, Israel"}</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-foreground">
                 <Mail className="h-4 w-4 text-muted-foreground" />
@@ -239,9 +251,14 @@ export default function CandidateProfilePage() {
                       <span className="text-xs text-muted-foreground">{cert.description}</span>
                     </div>
                     {cert.hasFile && (
-                      <button className="shrink-0 text-xs text-primary underline">
+                      <a
+                        href="/images/job-avatar.png"
+                        download="certificate.png"
+                        className="shrink-0 cursor-pointer text-xs text-primary underline"
+                        onClick={(e) => e.stopPropagation()}
+                      >
                         {t.candidateProfile.downloadFile}
-                      </button>
+                      </a>
                     )}
                   </div>
                 ))}

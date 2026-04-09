@@ -29,13 +29,13 @@ export default function MessagesPage() {
             <span className="text-base text-foreground">{t.messages.allMessages}</span>
             <ChevronDown size={14} className="text-muted-foreground" />
           </div>
-          <div className="flex items-center rounded-[10px] border border-border-light bg-[#F7F9FC]" style={{ height: 44, padding: "0 14px" }}>
+          <div className="flex items-center rounded-[10px] border border-border-light bg-[#F7F9FC]" style={{ height: 44, padding: "0 14px", marginBottom: 10 }}>
             <input type="text" placeholder={t.messages.searchMessages} className="flex-1 border-none bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground/30" />
             <Search size={16} className="shrink-0 text-muted-foreground/30" />
           </div>
           <button
             onClick={() => router.push("/messages/1")}
-            className="mt-4 cursor-pointer rounded-[10px] border border-border-light bg-[#F7F9FC] text-sm text-foreground hover:bg-border-light"
+            className="cursor-pointer rounded-[10px] border border-border-light bg-[#F7F9FC] text-sm text-foreground hover:bg-border-light"
             style={{ padding: "10px 14px", textAlign: direction === "rtl" ? "right" : "left" }}
           >
             <div className="flex items-center gap-3">

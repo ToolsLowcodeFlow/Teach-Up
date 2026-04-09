@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronDown, Search, Plus, MoreHorizontal, MapPin, BadgeCheck } from "lucide-react";
+import { ChevronDown, Search, Plus, MoreHorizontal, MapPin, BadgeCheck, Image, Paperclip, X } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/context";
 import { SeekerNavbar } from "@/components/seeker/seeker-navbar";
 
@@ -23,7 +23,40 @@ export default function MessageDetailPage() {
   const [activeChat, setActiveChat] = useState("4");
   const [chatMenuOpen, setChatMenuOpen] = useState(false);
   const [attachMenuOpen, setAttachMenuOpen] = useState(false);
+  const [chatMessages, setChatMessages] = useState<{ text: string; sent: boolean; attachments?: { name: string; type: "photo" | "file"; preview?: string }[] }[]>([
+    { text: "Hi, I'm contacting you regarding the job you posted. Is this relevant?", sent: true, attachments: [] },
+  ]);
+  const chatEndRef = useRef<HTMLDivElement>(null);
+
+  const handleSend = () => {
+    if (!message.trim() && attachments.length === 0) return;
+    setChatMessages((prev) => [...prev, { text: message, sent: true, attachments: attachments.length > 0 ? [...attachments] : undefined }]);
+    setMessage("");
+    setAttachments([]);
+    setTimeout(() => chatEndRef.current?.scrollIntoView({ behavior: "smooth" }), 100);
+  };
+  const [attachments, setAttachments] = useState<{ name: string; type: "photo" | "file"; preview?: string }[]>([]);
+  const photoRef = useRef<HTMLInputElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
   const isHe = locale === "he";
+
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (ev) => setAttachments((prev) => [...prev, { name: file.name, type: "photo", preview: ev.target?.result as string }]);
+      reader.readAsDataURL(file);
+    }
+    e.target.value = "";
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) setAttachments((prev) => [...prev, { name: file.name, type: "file" }]);
+    e.target.value = "";
+  };
+
+  const removeAttachment = (index: number) => setAttachments((prev) => prev.filter((_, i) => i !== index));
 
   useEffect(() => {
     const el = document.querySelector(".lang-switcher-global") as HTMLElement;
@@ -110,9 +143,9 @@ export default function MessageDetailPage() {
                 <>
                   <div className="fixed inset-0 z-10" onClick={() => setChatMenuOpen(false)} />
                   <div className="absolute right-0 top-9 z-20 flex min-w-48 flex-col gap-2 rounded-xl border border-border-light bg-white shadow-lg" style={{ padding: "12px 16px" }}>
-                    <button className="flex w-full whitespace-nowrap py-1.5 text-start text-sm text-foreground transition-colors hover:text-primary" onClick={() => setChatMenuOpen(false)}>{t.messages.markAsUnread}</button>
-                    <button className="flex w-full whitespace-nowrap py-1.5 text-start text-sm text-foreground transition-colors hover:text-primary" onClick={() => setChatMenuOpen(false)}>{isHe ? "צפייה במשרה" : "Viewing a job"}</button>
-                    <button className="flex w-full whitespace-nowrap py-1.5 text-start text-sm text-red-400 transition-colors hover:text-red-600" onClick={() => setChatMenuOpen(false)}>{isHe ? "מחיקה" : "Deletion"}</button>
+                    <button className="flex w-full whitespace-nowrap py-1.5 text-start text-sm text-foreground transition-colors hover:text-primary" onClick={() => { setChatMenuOpen(false); alert(isHe ? "הודעה סומנה כלא נקראה" : "Message marked as unread"); }}>{t.messages.markAsUnread}</button>
+                    <button className="flex w-full whitespace-nowrap py-1.5 text-start text-sm text-foreground transition-colors hover:text-primary" onClick={() => { setChatMenuOpen(false); router.push("/jobs/1"); }}>{isHe ? "צפייה במשרה" : "Viewing a job"}</button>
+                    <button className="flex w-full whitespace-nowrap py-1.5 text-start text-sm text-red-400 transition-colors hover:text-red-600" onClick={() => { setChatMenuOpen(false); router.push("/messages"); }}>{isHe ? "מחיקה" : "Deletion"}</button>
                   </div>
                 </>
               )}
@@ -121,13 +154,6 @@ export default function MessageDetailPage() {
 
           {/* Chat messages */}
           <div className="flex flex-1 flex-col gap-4 overflow-y-auto" style={{ padding: "24px 24px" }}>
-            {/* Sent message */}
-            <div className="flex justify-start">
-              <div className="max-w-md rounded-2xl rounded-es-sm bg-border-light text-sm text-foreground" style={{ padding: "12px 16px" }}>
-                Hi, I&apos;m contacting you regarding the job you posted. Is this relevant?
-              </div>
-            </div>
-
             {/* Job card embed */}
             <div className="flex justify-start">
               <div className="overflow-hidden rounded-xl border border-border-light bg-white shadow-sm" style={{ padding: 14, maxWidth: 260 }}>
@@ -168,12 +194,28 @@ export default function MessageDetailPage() {
               </div>
             </div>
 
-            {/* Sent message */}
-            <div className="flex justify-start">
-              <div className="max-w-md rounded-2xl rounded-es-sm bg-border-light text-sm text-foreground" style={{ padding: "12px 16px" }}>
-                Hi, I&apos;m contacting you regarding the job you posted. Is this relevant?
+            {/* Dynamic messages */}
+            {chatMessages.map((msg, i) => (
+              <div key={i} className={`flex ${msg.sent ? "justify-start" : "items-end justify-end gap-2"}`}>
+                <div className={`max-w-md rounded-2xl text-sm text-foreground ${msg.sent ? "rounded-es-sm bg-border-light" : "rounded-ee-sm bg-primary-light"}`} style={{ padding: "12px 16px" }}>
+                  {msg.attachments && msg.attachments.length > 0 && (
+                    <div className="mb-2 flex flex-wrap gap-2">
+                      {msg.attachments.map((att, j) => (
+                        att.type === "photo" && att.preview ? (
+                          <img key={j} src={att.preview} alt={att.name} className="h-20 w-20 rounded-lg object-cover" />
+                        ) : (
+                          <div key={j} className="flex items-center gap-1 rounded-lg bg-white/60 px-2 py-1 text-xs text-primary">
+                            <Paperclip size={10} /> {att.name}
+                          </div>
+                        )
+                      ))}
+                    </div>
+                  )}
+                  {msg.text && <span>{msg.text}</span>}
+                </div>
               </div>
-            </div>
+            ))}
+            <div ref={chatEndRef} />
           </div>
 
           {/* Message input */}
@@ -185,22 +227,48 @@ export default function MessageDetailPage() {
               {attachMenuOpen && (
                 <>
                   <div className="fixed inset-0 z-10" onClick={() => setAttachMenuOpen(false)} />
-                  <div className="absolute bottom-12 left-0 z-20 flex min-w-40 flex-col gap-1 rounded-xl border border-border-light bg-white shadow-lg" style={{ padding: "10px 14px" }}>
-                    <button className="flex w-full whitespace-nowrap py-1.5 text-start text-sm text-foreground transition-colors hover:text-primary" onClick={() => setAttachMenuOpen(false)}>{isHe ? "העלאת תמונה" : "Upload a photo"}</button>
-                    <button className="flex w-full whitespace-nowrap py-1.5 text-start text-sm text-foreground transition-colors hover:text-primary" onClick={() => setAttachMenuOpen(false)}>{isHe ? "העלאת קובץ" : "Upload a file"}</button>
+                  <div className="absolute bottom-12 left-0 z-20 flex min-w-44 flex-col gap-1 rounded-xl border border-border-light bg-white shadow-lg" style={{ padding: "10px 14px" }}>
+                    <button className="flex w-full items-center gap-2 whitespace-nowrap py-1.5 text-start text-sm text-foreground transition-colors hover:text-primary" onClick={() => { setAttachMenuOpen(false); photoRef.current?.click(); }}>
+                      <Image size={16} className="text-primary" />
+                      {isHe ? "העלאת תמונה" : "Upload a photo"}
+                    </button>
+                    <button className="flex w-full items-center gap-2 whitespace-nowrap py-1.5 text-start text-sm text-foreground transition-colors hover:text-primary" onClick={() => { setAttachMenuOpen(false); fileRef.current?.click(); }}>
+                      <Paperclip size={16} className="text-primary" />
+                      {isHe ? "העלאת קובץ" : "Upload a file"}
+                    </button>
                   </div>
                 </>
               )}
+              <input ref={photoRef} type="file" accept="image/*" onChange={handlePhotoUpload} className="hidden" />
+              <input ref={fileRef} type="file" accept=".pdf,.doc,.docx,.txt,.xls,.xlsx" onChange={handleFileUpload} className="hidden" />
             </div>
+            {attachments.length > 0 && (
+              <div className="flex items-center gap-2">
+                {attachments.map((att, i) => (
+                  <div key={i} className="flex items-center gap-1.5 rounded-lg border border-border-light bg-[#F7F9FC]" style={{ padding: "4px 8px" }}>
+                    {att.type === "photo" && att.preview ? (
+                      <img src={att.preview} alt="" className="h-7 w-7 rounded object-cover" />
+                    ) : (
+                      <Paperclip size={12} className="text-primary" />
+                    )}
+                    <span className="max-w-[80px] truncate text-[10px] text-foreground">{att.name}</span>
+                    <button onClick={() => removeAttachment(i)} className="cursor-pointer border-none bg-transparent text-muted-foreground hover:text-foreground">
+                      <X size={12} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
             <input
               type="text"
-              placeholder="{t.messages.typeMessage}"
+              placeholder={t.messages.typeMessage}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") handleSend(); }}
               className="flex-1 rounded-full border border-border-light text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:outline-none"
               style={{ padding: "12px 16px" }}
             />
-            <button className="flex shrink-0 cursor-pointer items-center justify-center border-none bg-transparent transition-colors hover:opacity-70">
+            <button onClick={handleSend} className="flex shrink-0 cursor-pointer items-center justify-center border-none bg-transparent transition-colors hover:opacity-70">
               <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><path d="M28 18c0-1.2-.6-2.3-1.6-3l-12-8c-2-1.3-4.4.3-4.4 2.7v16.6c0 2.4 2.4 4 4.4 2.7l12-8A3.5 3.5 0 0 0 28 18z" fill="#1667DB" /></svg>
             </button>
           </div>

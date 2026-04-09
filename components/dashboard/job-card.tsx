@@ -21,9 +21,12 @@ export interface JobCardData {
 
 interface JobCardProps {
   job: JobCardData;
+  onView?: () => void;
+  onEdit?: () => void;
+  onStatusToggle?: () => void;
 }
 
-export function JobCard({ job }: JobCardProps) {
+export function JobCard({ job, onView, onEdit, onStatusToggle }: JobCardProps) {
   const { t } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -47,36 +50,34 @@ export function JobCard({ job }: JobCardProps) {
 
         <div className="relative ms-2">
           <button
-            onClick={() => setMenuOpen(!menuOpen)}
+            onClick={(e) => { e.stopPropagation(); setMenuOpen(!menuOpen); }}
             className="flex h-8 w-8 items-center justify-center rounded-full transition-colors hover:bg-gray-100"
           >
             <MoreHorizontal className="h-5 w-5 text-muted-foreground" />
           </button>
 
           {menuOpen && (
-            <div style={{ padding: "10px 6px" }} className="absolute inset-e-0 top-9 z-10 min-w-45 rounded-xl border border-border-light bg-white shadow-lg">
-              {[
-                t.jobCard.viewJob,
-                t.jobCard.editJob,
-                t.jobCard.popUpAd,
-                t.jobCard.jobActivation,
-              ].map((item) => (
-                <button
-                  key={item}
-                  className="flex w-full px-4 py-2 text-start text-sm text-foreground transition-colors hover:bg-gray-50"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {item}
-                </button>
-              ))}
+            <>
+            <div className="fixed inset-0 z-40" onClick={(e) => { e.stopPropagation(); setMenuOpen(false); }} />
+            <div style={{ padding: "10px 6px" }} className="absolute inset-e-0 top-9 z-50 min-w-45 rounded-xl border border-border-light bg-white shadow-lg">
+              <button className="flex w-full px-4 py-2 text-start text-sm text-foreground transition-colors hover:bg-gray-50" onClick={(e) => { e.stopPropagation(); setMenuOpen(false); onView?.(); }}>
+                {t.jobCard.viewJob}
+              </button>
+              <button className="flex w-full px-4 py-2 text-start text-sm text-foreground transition-colors hover:bg-gray-50" onClick={(e) => { e.stopPropagation(); setMenuOpen(false); onEdit?.(); }}>
+                {t.jobCard.editJob}
+              </button>
+              <button className="flex w-full px-4 py-2 text-start text-sm text-foreground transition-colors hover:bg-gray-50" onClick={(e) => { e.stopPropagation(); setMenuOpen(false); }}>
+                {t.jobCard.popUpAd}
+              </button>
+              <button className="flex w-full px-4 py-2 text-start text-sm text-foreground transition-colors hover:bg-gray-50" onClick={(e) => { e.stopPropagation(); setMenuOpen(false); }}>
+                {t.jobCard.jobActivation}
+              </button>
               <div className="my-1 h-px bg-border-light" />
-              <button
-                className="flex w-full px-4 py-2 text-start text-sm text-danger transition-colors hover:bg-red-50"
-                onClick={() => setMenuOpen(false)}
-              >
+              <button className="flex w-full px-4 py-2 text-start text-sm text-danger transition-colors hover:bg-red-50" onClick={(e) => { e.stopPropagation(); setMenuOpen(false); onStatusToggle?.(); }}>
                 {job.status === "open" ? t.jobCard.closeJob : t.jobCard.deleteJob}
               </button>
             </div>
+            </>
           )}
         </div>
       </div>

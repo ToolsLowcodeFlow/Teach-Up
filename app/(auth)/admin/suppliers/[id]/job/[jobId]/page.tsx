@@ -18,11 +18,12 @@ export default function AdminJobDetailPage() {
       <div className="fixed inset-0" style={{ background: "rgba(0,0,0,0.4)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }} onClick={() => router.back()} />
 
       <div
-        className="relative z-10 my-8 w-full max-w-[620px] rounded-2xl bg-white"
-        style={{ padding: "24px 32px 40px", boxShadow: "0 20px 60px rgba(0,0,0,0.15)" }}
+        className="relative z-10 my-8 flex w-full max-w-[620px] flex-col rounded-2xl bg-white"
+        style={{ boxShadow: "0 20px 60px rgba(0,0,0,0.15)", maxHeight: "calc(100vh - 64px)" }}
       >
-        {/* Top row */}
-        <div className="flex items-start justify-between" style={{ marginBottom: 16 }}>
+        {/* Fixed Top row */}
+        <div className="shrink-0 border-b border-border-light" style={{ padding: "24px 32px 16px" }}>
+        <div className="flex items-start justify-between">
           <div className="flex items-center gap-2">
             <button onClick={() => router.back()} className="flex cursor-pointer items-center justify-center border-none bg-transparent text-muted-foreground hover:text-foreground">
               <ChevronLeft size={20} />
@@ -48,7 +49,10 @@ export default function AdminJobDetailPage() {
               )}
           </div>
         </div>
+        </div>
 
+        {/* Scrollable content */}
+        <div className="flex-1 overflow-y-auto" style={{ padding: "20px 32px 40px" }}>
         {/* Badge */}
         <div className="flex items-center gap-2" style={{ marginBottom: 10 }}>
           <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary">
@@ -127,6 +131,7 @@ export default function AdminJobDetailPage() {
               </div>
             </div>
           ))}
+        </div>
         </div>
       </div>
     </div>

@@ -30,10 +30,11 @@ export default function SupplierDetailPage() {
       <div className="fixed inset-0" style={{ background: "rgba(0,0,0,0.4)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }} onClick={() => router.back()} />
 
       <div
-        className="relative z-10 my-8 w-full max-w-[520px] rounded-2xl bg-white"
-        style={{ padding: "24px 28px 40px", boxShadow: "0 20px 60px rgba(0,0,0,0.15)" }}
+        className="relative z-10 my-8 flex w-full max-w-[520px] flex-col rounded-2xl bg-white"
+        style={{ boxShadow: "0 20px 60px rgba(0,0,0,0.15)", maxHeight: "calc(100vh - 64px)" }}
       >
-        {/* Company header + Close */}
+        {/* Fixed Company header + Close */}
+        <div className="shrink-0 border-b border-border-light" style={{ padding: "24px 28px 16px" }}>
         <div className="flex items-start justify-between" style={{ marginBottom: 16 }}>
         <div className="flex items-start gap-4">
           <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#0E1117]" style={{ padding: 8 }}>
@@ -58,6 +59,10 @@ export default function SupplierDetailPage() {
           <span>Phone number: 052-7049494 📋</span>
         </div>
 
+        </div>
+
+        {/* Scrollable content */}
+        <div className="flex-1 overflow-y-auto" style={{ padding: "20px 28px 40px" }}>
         {/* Action buttons */}
         <div className="flex items-center gap-4" style={{ marginBottom: 28 }}>
           <button className="flex-1 cursor-pointer rounded-lg border border-foreground bg-white py-3 text-sm text-foreground transition-colors hover:bg-gray-50">
@@ -155,6 +160,7 @@ export default function SupplierDetailPage() {
               </div>
             </div>
           ))}
+        </div>
         </div>
       </div>
     </div>

@@ -26,16 +26,16 @@ export default function EditRoutePage() {
 
       {/* Side panel */}
       <div
-        className="relative z-10 flex w-full max-w-[480px] flex-col overflow-y-auto rounded-2xl bg-white"
-        style={{ padding: "28px 32px 40px", margin: "24px 24px 24px 0", boxShadow: "0 10px 50px rgba(0,0,0,0.15)", maxHeight: "calc(100vh - 48px)" }}
+        className="relative z-10 flex w-full max-w-[480px] flex-col rounded-2xl bg-white"
+        style={{ margin: "24px 24px 24px 0", boxShadow: "0 10px 50px rgba(0,0,0,0.15)", maxHeight: "calc(100vh - 48px)" }}
       >
         {/* Close button */}
         <button onClick={() => router.back()} className="absolute z-20 flex cursor-pointer items-center justify-center rounded-full border-none bg-white text-muted-foreground hover:text-foreground" style={{ top: 12, right: 12, width: 32, height: 32, boxShadow: "0 2px 6px rgba(0,0,0,0.1)" }}>
           <X size={16} />
         </button>
 
-        {/* Header - LTR */}
-        <div className="flex items-center justify-between" style={{ marginBottom: 28, paddingRight: 28 }}>
+        {/* Fixed Header */}
+        <div className="flex shrink-0 items-center justify-between border-b border-border-light" style={{ padding: "28px 32px 20px", paddingRight: 60 }}>
           <h1 className="text-[22px] leading-[1.1] text-foreground">{t.admin.editRoute}</h1>
           <div className="flex items-center gap-3">
             <button
@@ -55,7 +55,8 @@ export default function EditRoutePage() {
           </div>
         </div>
 
-        {/* Form */}
+        {/* Scrollable Form */}
+        <div className="flex-1 overflow-y-auto" style={{ padding: "20px 32px 40px" }}>
         <div className="flex flex-col" style={{ gap: 20 }}>
           <div className="flex flex-col gap-2">
             <label className="text-sm text-foreground">{t.admin.trackTitle}</label>
@@ -86,6 +87,7 @@ export default function EditRoutePage() {
             <label className="text-sm text-foreground">{t.admin.fourthLineText}</label>
             <input type="text" value={form.line4} onChange={(e) => setForm({ ...form, line4: e.target.value })} className="w-full rounded-lg border border-border-light bg-white text-sm text-foreground outline-none" style={{ padding: "12px 14px" }} />
           </div>
+        </div>
         </div>
       </div>
     </div>

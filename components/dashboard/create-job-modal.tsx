@@ -52,21 +52,22 @@ export function CreateJobModal({ open, onOpenChange }: CreateJobModalProps) {
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 max-h-[90vh] w-full max-w-[540px] -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-2xl bg-white shadow-xl focus:outline-none">
-          <div style={{ padding: "32px 36px 28px" }}>
-            {/* Close button */}
+        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 flex max-h-[90vh] w-full max-w-[540px] -translate-x-1/2 -translate-y-1/2 flex-col rounded-2xl bg-white shadow-xl focus:outline-none">
+          {/* Fixed Header */}
+          <div className="shrink-0 border-b border-border-light" style={{ padding: "32px 36px 20px" }}>
             <Dialog.Close className="absolute end-4 top-4 flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-gray-100">
               <X className="h-4 w-4" />
             </Dialog.Close>
-
-            {/* Header */}
             <Dialog.Title className="mb-1 text-2xl font-medium text-foreground">
               {t.createJob.title}
             </Dialog.Title>
-            <Dialog.Description className="mb-6 text-base text-primary">
+            <Dialog.Description className="text-base text-primary">
               {t.createJob.jobDetails}
             </Dialog.Description>
+          </div>
 
+          {/* Scrollable Form */}
+          <div className="flex-1 overflow-y-auto" style={{ padding: "20px 36px 28px" }}>
             {/* Form */}
             <div className="flex flex-col gap-5">
               {/* Job title - full width */}

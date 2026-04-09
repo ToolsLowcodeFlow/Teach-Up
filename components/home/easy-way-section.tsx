@@ -57,21 +57,13 @@ export function EasyWaySection() {
       </div>
 
       {/* Feature cards */}
-      <div className="relative mx-auto max-w-5xl">
-        {/* Background grid behind cards */}
-        <div className="pointer-events-none absolute inset-0 overflow-hidden" style={{ opacity: 0.25 }}>
-          <div className="flex h-full flex-wrap">
-            {Array.from({ length: 24 }, (_, i) => (
-              <div key={i} style={{ width: 200, height: 200, border: "1px solid white", background: i === 2 || i === 9 || i === 17 ? "rgba(255,255,255,0.5)" : "transparent" }} />
-            ))}
-          </div>
-        </div>
-        <div className="relative grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="relative mx-auto w-full" style={{ maxWidth: 1200, padding: "0 40px" }}>
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {features.map((feature, i) => (
           <div
             key={i}
-            style={{ padding: "48px 20px 36px" }}
-            className="flex flex-col items-center rounded-2xl border border-border-light bg-linear-to-b from-[#F0F4FA] to-white text-center"
+            style={{ padding: "48px 24px 40px" }}
+            className="flex flex-col items-center rounded-2xl border border-[#E8EEF7] bg-gradient-to-b from-[#F0F4FA] to-white text-center"
           >
             {/* Icon with glow ring */}
             <div style={{ marginBottom: 28 }} className="relative flex h-14 w-14 items-center justify-center">
@@ -83,12 +75,12 @@ export function EasyWaySection() {
             </div>
 
             {/* Title */}
-            <h3 style={{ marginBottom: 10 }} className="text-base font-medium leading-tight text-foreground">
+            <h3 style={{ marginBottom: 12 }} className="text-lg font-medium leading-tight text-foreground">
               {feature.title}
             </h3>
 
             {/* Description */}
-            <p className="text-xs leading-relaxed text-muted-foreground">
+            <p className="text-sm leading-relaxed text-muted-foreground">
               {feature.description}
             </p>
           </div>

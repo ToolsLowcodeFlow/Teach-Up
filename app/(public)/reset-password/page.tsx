@@ -14,6 +14,7 @@ export default function ResetPasswordPage() {
   const router = useRouter();
   const { t } = useLanguage();
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -48,69 +49,130 @@ export default function ResetPasswordPage() {
     }
   };
 
-  const inputClass =
-    "w-full h-[44px] rounded-lg border border-[#E5E7EB] bg-white px-4 text-[14px] text-[#1F2937] outline-none focus:border-[#4B7BF5] focus:ring-2 focus:ring-[#4B7BF5]/20 transition-colors";
-
   return (
     <AuthLayout>
-      <div className="bg-white rounded-2xl shadow-lg px-10 py-10 w-full">
-        <h1 className="text-[22px] font-bold text-center text-[#1F2937] mb-1.5">
-          {t.resetPassword.title}
-        </h1>
-        <p className="text-[13px] text-[#6B7280] text-center mb-7">
-          {t.resetPassword.subtitle}
-        </p>
-
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-          <div>
-            <label className="block text-[13px] text-[#6B7280] mb-2">
-              {t.resetPassword.newPassword}
-            </label>
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                {...register("password")}
-                className={`${inputClass} pe-11 ${errors.password ? "border-[#EF4444]" : ""}`}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute top-1/2 end-3 -translate-y-1/2 text-[#9CA3AF] hover:text-[#6B7280] cursor-pointer"
-              >
-                {showPassword ? <EyeOff className="h-[18px] w-[18px]" /> : <Eye className="h-[18px] w-[18px]" />}
-              </button>
-            </div>
-            {errors.password && (
-              <p className="text-[12px] text-[#EF4444] mt-1">{errors.password.message}</p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-[13px] text-[#6B7280] mb-2">
-              {t.resetPassword.confirmPassword}
-            </label>
-            <input
-              type="password"
-              {...register("confirmPassword")}
-              className={`${inputClass} ${errors.confirmPassword ? "border-[#EF4444]" : ""}`}
-            />
-            {errors.confirmPassword && (
-              <p className="text-[12px] text-[#EF4444] mt-1">{errors.confirmPassword.message}</p>
-            )}
-          </div>
-
-          {error && (
-            <div className="bg-[#FEF2F2] text-[#EF4444] text-[13px] rounded-lg p-3">{error}</div>
-          )}
-
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full h-[46px] bg-[#4B7BF5] hover:bg-[#3A62C4] text-white text-[15px] font-medium rounded-lg transition-colors disabled:opacity-50 cursor-pointer"
+      <div
+        className="flex w-[587px] max-w-full items-center justify-center rounded-[20px] bg-white"
+        style={{ padding: 10, minHeight: 500 }}
+      >
+        <div className="flex w-[499px] max-w-full flex-col items-center gap-[40px]">
+          {/* Title */}
+          <div
+            className="flex w-[418px] max-w-full flex-col items-center gap-[6px] text-center"
+            style={{ fontFamily: "'Abel', sans-serif", lineHeight: "normal" }}
           >
-            {isLoading ? t.resetPassword.updating : t.resetPassword.updateButton}
-          </button>
-        </form>
+            <p className="min-w-full text-[32px] tracking-[-0.64px] text-[#0E1117]">
+              {t.resetPassword.title}
+            </p>
+            <p className="text-[18px] tracking-[-0.36px] text-[#647787]">
+              {t.resetPassword.subtitle}
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-col gap-[30px]">
+            {/* New Password */}
+            <div className="flex w-full flex-col items-start gap-[11px]">
+              <p
+                className="whitespace-nowrap text-start text-[18px] text-[#414042]"
+                style={{ fontFamily: "'Abel', sans-serif", lineHeight: 1.1 }}
+              >
+                {t.resetPassword.newPassword}
+              </p>
+              <div
+                className="flex h-[48px] w-full items-center rounded-[10px] bg-white"
+                style={{ border: errors.password ? "1px solid #EF4444" : "1px solid #EAEBEB" }}
+              >
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Type your password here."
+                  {...register("password")}
+                  className="h-full flex-1 text-start placeholder:text-[#B6B6B6]"
+                  style={{
+                    border: "none", outline: "none", background: "transparent",
+                    fontFamily: "'Abel', sans-serif", fontSize: 14, color: "#0E1117",
+                    letterSpacing: "-0.28px", lineHeight: "normal",
+                    padding: "0 20px", borderRadius: 10,
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="flex shrink-0 cursor-pointer p-0"
+                  style={{ background: "none", border: "none", color: "#B6B6B6", marginInlineEnd: 16 }}
+                >
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+              {errors.password && (
+                <p style={{ fontFamily: "'Abel', sans-serif", fontSize: 12, color: "#EF4444" }}>
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
+
+            {/* Confirm Password */}
+            <div className="flex w-full flex-col items-start gap-[11px]">
+              <p
+                className="whitespace-nowrap text-start text-[18px] text-[#414042]"
+                style={{ fontFamily: "'Abel', sans-serif", lineHeight: 1.1 }}
+              >
+                {t.resetPassword.confirmPassword}
+              </p>
+              <div
+                className="flex h-[48px] w-full items-center rounded-[10px] bg-white"
+                style={{ border: errors.confirmPassword ? "1px solid #EF4444" : "1px solid #EAEBEB" }}
+              >
+                <input
+                  type={showConfirm ? "text" : "password"}
+                  placeholder="Confirm your password."
+                  {...register("confirmPassword")}
+                  className="h-full flex-1 text-start placeholder:text-[#B6B6B6]"
+                  style={{
+                    border: "none", outline: "none", background: "transparent",
+                    fontFamily: "'Abel', sans-serif", fontSize: 14, color: "#0E1117",
+                    letterSpacing: "-0.28px", lineHeight: "normal",
+                    padding: "0 20px", borderRadius: 10,
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirm(!showConfirm)}
+                  className="flex shrink-0 cursor-pointer p-0"
+                  style={{ background: "none", border: "none", color: "#B6B6B6", marginInlineEnd: 16 }}
+                >
+                  {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+              {errors.confirmPassword && (
+                <p style={{ fontFamily: "'Abel', sans-serif", fontSize: 12, color: "#EF4444" }}>
+                  {errors.confirmPassword.message}
+                </p>
+              )}
+            </div>
+
+            {error && (
+              <div
+                className="w-full rounded-[10px] px-4 py-3"
+                style={{ background: "#FEF2F2", color: "#EF4444", fontFamily: "'Abel', sans-serif", fontSize: 14 }}
+              >
+                {error}
+              </div>
+            )}
+
+            {/* Update button */}
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="flex h-[50px] w-full cursor-pointer items-center justify-center rounded-[10px] disabled:cursor-not-allowed disabled:opacity-70"
+              style={{
+                backgroundImage: "linear-gradient(175.27deg, rgb(76, 150, 255) 12.19%, rgb(22, 103, 219) 93.76%)",
+                border: "none", fontFamily: "'Abel', sans-serif", fontSize: 16, color: "#FFFFFF",
+              }}
+            >
+              {isLoading ? t.resetPassword.updating : t.resetPassword.updateButton}
+            </button>
+          </form>
+        </div>
       </div>
     </AuthLayout>
   );

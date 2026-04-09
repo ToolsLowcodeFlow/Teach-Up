@@ -101,8 +101,8 @@ export function LeadingJobsSection() {
       </div>
 
       {/* Job cards row 1 — moves right to left */}
-      <div style={{ marginBottom: 20 }} className="overflow-hidden">
-        <div className="flex animate-scroll-left gap-5">
+      <div style={{ marginBottom: 20, padding: "10px 0" }} className="overflow-hidden">
+        <div className="flex animate-scroll-left gap-5" style={{ paddingInline: 40 }}>
           {[...mockJobs, ...mockJobs].map((job, i) => (
             <JobCard key={i} job={job} />
           ))}
@@ -110,8 +110,8 @@ export function LeadingJobsSection() {
       </div>
 
       {/* Job cards row 2 — moves left to right */}
-      <div className="overflow-hidden">
-        <div className="flex animate-scroll-right gap-5">
+      <div style={{ padding: "10px 0" }} className="overflow-hidden">
+        <div className="flex animate-scroll-right gap-5" style={{ paddingInline: 40 }}>
           {[...mockJobs2, ...mockJobs2].map((job, i) => (
             <JobCard key={i} job={job} />
           ))}

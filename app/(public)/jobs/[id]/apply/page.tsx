@@ -30,16 +30,20 @@ export default function JobApplyPage() {
         style={{ width: "90vw", maxWidth: 960, height: "88vh", boxShadow: "0 20px 60px rgba(0,0,0,0.15)" }}
         dir={direction}
       >
-        {/* LEFT — Application form (scrollable) */}
-        <div className="flex flex-1 flex-col overflow-y-auto" style={{ padding: "24px 32px 36px" }}>
-          {/* Header */}
-          <div className="flex items-center gap-2" style={{ marginBottom: 20 }}>
-            <h1 className="text-[24px] leading-[1.1] text-foreground">{jd.applying}</h1>
-            <button onClick={() => router.back()} className="flex cursor-pointer items-center justify-center border-none bg-transparent text-muted-foreground hover:text-foreground">
-              <ChevronRight size={20} />
-            </button>
+        {/* LEFT — Application form */}
+        <div className="flex flex-1 flex-col">
+          {/* Fixed Header */}
+          <div className="shrink-0 border-b border-border-light" style={{ padding: "24px 32px 16px" }}>
+            <div className="flex items-center gap-2">
+              <h1 className="text-[24px] leading-[1.1] text-foreground">{jd.applying}</h1>
+              <button onClick={() => router.back()} className="flex cursor-pointer items-center justify-center border-none bg-transparent text-muted-foreground hover:text-foreground">
+                <ChevronRight size={20} />
+              </button>
+            </div>
           </div>
 
+          {/* Scrollable content */}
+          <div className="flex-1 overflow-y-auto" style={{ padding: "20px 32px 36px" }}>
           {/* Subtitle */}
           <p className="text-sm text-foreground" style={{ marginBottom: 20 }}>{jd.tellEmployer}</p>
 
@@ -104,6 +108,7 @@ export default function JobApplyPage() {
           >
             {jd.completionAndApplication}
           </button>
+          </div>
         </div>
 
         {/* RIGHT — Sidebar full height */}

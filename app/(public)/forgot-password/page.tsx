@@ -49,64 +49,122 @@ export default function ForgotPasswordPage() {
 
   return (
     <AuthLayout>
-      <div className="bg-white rounded-2xl shadow-lg px-10 py-10 w-full">
-        <h1 className="text-[22px] font-bold text-center text-[#1F2937] mb-1.5">
-          {t.forgotPassword.title}
-        </h1>
-        <p className="text-[13px] text-[#6B7280] text-center mb-7">
-          {t.forgotPassword.subtitle}
-        </p>
-
-        {sent ? (
-          <div className="text-center space-y-4">
-            <div className="bg-[#F0FDF4] text-[#22C55E] rounded-lg p-4 text-[13px]">
-              {t.forgotPassword.successMessage}
-            </div>
-            <Link href="/login" className="text-[#4B7BF5] text-[13px] hover:underline">
-              {t.forgotPassword.backToLogin}
-            </Link>
+      <div
+        className="flex w-[587px] max-w-full items-center justify-center rounded-[20px] bg-white"
+        style={{ padding: 10, minHeight: 500 }}
+      >
+        <div className="flex w-[499px] max-w-full flex-col items-center gap-[40px]">
+          {/* Title */}
+          <div
+            className="flex w-[418px] max-w-full flex-col items-center gap-[6px] text-center"
+            style={{ fontFamily: "'Abel', sans-serif", lineHeight: "normal" }}
+          >
+            <p className="min-w-full text-[32px] tracking-[-0.64px] text-[#0E1117]">
+              {t.forgotPassword.title}
+            </p>
+            <p className="text-[18px] tracking-[-0.36px] text-[#647787]">
+              {t.forgotPassword.subtitle}
+            </p>
           </div>
-        ) : (
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            <div>
-              <label className="block text-[13px] text-[#6B7280] mb-2">
-                {t.forgotPassword.email}
-              </label>
-              <input
-                type="email"
-                {...register("email")}
-                className={`w-full h-[44px] rounded-lg border bg-white px-4 text-[14px] text-[#1F2937] outline-none transition-colors ${
-                  errors.email
-                    ? "border-[#EF4444] focus:ring-2 focus:ring-[#EF4444]/20"
-                    : "border-[#E5E7EB] focus:border-[#4B7BF5] focus:ring-2 focus:ring-[#4B7BF5]/20"
-                }`}
-              />
-              {errors.email && (
-                <p className="text-[12px] text-[#EF4444] mt-1">{errors.email.message}</p>
-              )}
-            </div>
 
-            {error && (
-              <div className="bg-[#FEF2F2] text-[#EF4444] text-[13px] rounded-lg p-3">
-                {error}
+          {sent ? (
+            <div className="flex w-full flex-col items-center gap-[24px]">
+              <div
+                className="w-full rounded-[10px] px-4 py-4 text-center"
+                style={{ background: "#F0FDF4", color: "#22C55E", fontFamily: "'Abel', sans-serif", fontSize: 14 }}
+              >
+                {t.forgotPassword.successMessage}
               </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full h-[46px] bg-[#4B7BF5] hover:bg-[#3A62C4] text-white text-[15px] font-medium rounded-lg transition-colors disabled:opacity-50 cursor-pointer"
-            >
-              {isLoading ? t.forgotPassword.sending : t.forgotPassword.sendButton}
-            </button>
-
-            <div className="text-center">
-              <Link href="/login" className="text-[13px] text-[#4B7BF5] hover:underline">
+              <Link
+                href="/login"
+                style={{ fontFamily: "'Abel', sans-serif", fontSize: 16, color: "#4C96FF", textDecoration: "underline" }}
+              >
                 {t.forgotPassword.backToLogin}
               </Link>
             </div>
-          </form>
-        )}
+          ) : (
+            <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-col gap-[30px]">
+              {/* Email */}
+              <div className="flex w-full flex-col items-start gap-[11px]">
+                <p
+                  className="whitespace-nowrap text-start text-[18px] text-[#414042]"
+                  style={{ fontFamily: "'Abel', sans-serif", lineHeight: 1.1 }}
+                >
+                  {t.forgotPassword.email}
+                </p>
+                <div
+                  className="flex h-[48px] w-full items-center rounded-[10px] bg-white"
+                  style={{ border: errors.email ? "1px solid #EF4444" : "1px solid #F3F3F6" }}
+                >
+                  <input
+                    type="email"
+                    placeholder="Type here..."
+                    {...register("email")}
+                    className="h-full flex-1 text-start placeholder:text-[#647787] placeholder:opacity-30"
+                    style={{
+                      border: "none",
+                      outline: "none",
+                      background: "transparent",
+                      fontFamily: "'Abel', sans-serif",
+                      fontSize: 14,
+                      color: "#0E1117",
+                      letterSpacing: "-0.28px",
+                      lineHeight: "normal",
+                      padding: "0 20px",
+                      borderRadius: 10,
+                    }}
+                  />
+                </div>
+                {errors.email && (
+                  <p style={{ fontFamily: "'Abel', sans-serif", fontSize: 12, color: "#EF4444" }}>
+                    {errors.email.message}
+                  </p>
+                )}
+              </div>
+
+              {error && (
+                <div
+                  className="w-full rounded-[10px] px-4 py-3"
+                  style={{ background: "#FEF2F2", color: "#EF4444", fontFamily: "'Abel', sans-serif", fontSize: 14 }}
+                >
+                  {error}
+                </div>
+              )}
+
+              {/* Send button */}
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="flex h-[50px] w-full cursor-pointer items-center justify-center rounded-[10px] disabled:cursor-not-allowed disabled:opacity-70"
+                style={{
+                  backgroundImage: "linear-gradient(175.27deg, rgb(76, 150, 255) 12.19%, rgb(22, 103, 219) 93.76%)",
+                  border: "none",
+                  fontFamily: "'Abel', sans-serif",
+                  fontSize: 16,
+                  color: "#FFFFFF",
+                }}
+              >
+                {isLoading ? t.forgotPassword.sending : t.forgotPassword.sendButton}
+              </button>
+
+              {/* Back to login */}
+              <div className="text-center">
+                <Link
+                  href="/login"
+                  style={{
+                    fontFamily: "'Abel', sans-serif",
+                    fontSize: 16,
+                    color: "#4C96FF",
+                    textDecoration: "underline",
+                    textDecorationStyle: "solid" as const,
+                  }}
+                >
+                  {t.forgotPassword.backToLogin}
+                </Link>
+              </div>
+            </form>
+          )}
+        </div>
       </div>
     </AuthLayout>
   );

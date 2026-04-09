@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronDown, Eye, EyeOff } from "lucide-react";
+import { ChevronDown, Eye, EyeOff, X } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/context";
 import { SeekerNavbar } from "@/components/seeker/seeker-navbar";
 
@@ -76,6 +76,7 @@ export default function ProfilePage() {
   ]);
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [hasResume, setHasResume] = useState(true);
+  const [editingWork, setEditingWork] = useState<{ id: number; role: string; company: string; dates: string } | null>(null);
   const certFileRef = useRef<HTMLInputElement>(null);
   const resumeRef = useRef<HTMLInputElement>(null);
 
@@ -337,7 +338,7 @@ export default function ProfilePage() {
                       </div>
                       <div className="flex items-center gap-3">
                         <span className="text-xs text-muted-foreground">{exp.dates}</span>
-                        <button className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-border-light bg-white text-muted-foreground"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" /></svg></button>
+                        <button onClick={() => setEditingWork(exp)} className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-border-light bg-white text-muted-foreground hover:bg-gray-50"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" /></svg></button>
                         <button onClick={() => setWorkExps(workExps.filter((w) => w.id !== exp.id))} className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-border-light bg-white text-red-400"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" /></svg></button>
                       </div>
                     </div>
@@ -379,6 +380,36 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
+
+      {/* Edit Work Experience Modal */}
+      {editingWork && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: "rgba(0,0,0,0.4)", backdropFilter: "blur(8px)" }} onClick={() => setEditingWork(null)}>
+          <div className="relative rounded-[20px] bg-white" style={{ width: 380, padding: "32px 28px", boxShadow: "0px 20px 60px rgba(0,0,0,0.15)" }} onClick={(e) => e.stopPropagation()}>
+            <button onClick={() => setEditingWork(null)} className="absolute flex cursor-pointer items-center justify-center border-none bg-transparent text-muted-foreground hover:text-foreground" style={{ top: 16, right: 16 }}>
+              <X size={18} />
+            </button>
+            <h3 className="text-[20px] text-foreground" style={{ marginBottom: 24 }}>{isHe ? "עריכת מקום עבודה" : "Edit workplace"}</h3>
+            <div className="flex flex-col" style={{ gap: 16 }}>
+              <div className="flex flex-col gap-2">
+                <label className="text-sm text-foreground">{isHe ? "תפקיד" : "Role"}</label>
+                <input type="text" value={editingWork.role} onChange={(e) => setEditingWork({ ...editingWork, role: e.target.value })} className="rounded-[10px] border border-border-light bg-white text-sm text-foreground outline-none focus:border-primary/30" style={{ height: 44, padding: "0 16px" }} />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="text-sm text-foreground">{isHe ? "חברה" : "Company"}</label>
+                <input type="text" value={editingWork.company} onChange={(e) => setEditingWork({ ...editingWork, company: e.target.value })} className="rounded-[10px] border border-border-light bg-white text-sm text-foreground outline-none focus:border-primary/30" style={{ height: 44, padding: "0 16px" }} />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="text-sm text-foreground">{isHe ? "תאריכים" : "Dates"}</label>
+                <input type="text" value={editingWork.dates} onChange={(e) => setEditingWork({ ...editingWork, dates: e.target.value })} className="rounded-[10px] border border-border-light bg-white text-sm text-foreground outline-none focus:border-primary/30" style={{ height: 44, padding: "0 16px" }} />
+              </div>
+              <div className="flex items-center gap-3" style={{ marginTop: 8 }}>
+                <button onClick={() => { setWorkExps(workExps.map((w) => w.id === editingWork.id ? editingWork : w)); setEditingWork(null); }} className="flex-1 cursor-pointer rounded-[10px] text-sm text-white" style={{ height: 42, border: "none", backgroundImage: "linear-gradient(168deg, #4C96FF 12%, #1667DB 94%)" }}>{isHe ? "שמירה" : "Save"}</button>
+                <button onClick={() => setEditingWork(null)} className="flex-1 cursor-pointer rounded-[10px] border border-foreground bg-white text-sm text-foreground" style={{ height: 42 }}>{isHe ? "ביטול" : "Cancel"}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
