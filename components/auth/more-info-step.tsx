@@ -20,8 +20,9 @@ export function MoreInfoStep({ onSubmit, onBack, onSkip, defaultValues }: MoreIn
   const [logoPreview, setLogoPreview] = useState<string | null>(defaultValues?.company_logo_url ?? null);
   const [socialLinks, setSocialLinks] = useState<string[]>(defaultValues?.social_media_links ?? [""]);
 
-  const { register, handleSubmit, setValue } = useForm<MoreInfoFormData>({
+  const { register, handleSubmit, setValue, watch } = useForm<MoreInfoFormData>({
     resolver: zodResolver(moreInfoSchema),
+    mode: "onChange",
     defaultValues: {
       company_logo_url: defaultValues?.company_logo_url ?? "",
       website: defaultValues?.website ?? "",
@@ -29,6 +30,10 @@ export function MoreInfoStep({ onSubmit, onBack, onSkip, defaultValues }: MoreIn
       description: defaultValues?.description ?? "",
     },
   });
+
+  const watchedWebsite = watch("website");
+  const watchedDescription = watch("description");
+  const isFormValid = !!(logoPreview && watchedWebsite?.trim() && watchedDescription?.trim() && socialLinks.some((l) => l.trim() !== ""));
 
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -186,30 +191,40 @@ export function MoreInfoStep({ onSubmit, onBack, onSkip, defaultValues }: MoreIn
         </div>
 
         {/* Bottom — Buttons */}
-        <div className="flex items-center shrink-0" style={{ gap: 16, paddingTop: "clamp(8px, 1vh, 16px)" }}>
-          <button
-            type="submit"
-            className="flex items-center justify-center cursor-pointer"
-            style={{
-              width: 162, height: 40, borderRadius: 10,
-              backgroundImage: "linear-gradient(168.47deg, rgb(76, 150, 255) 12.19%, rgb(22, 103, 219) 93.76%)",
-              border: "none", fontSize: 16, color: "#FFFFFF", fontFamily: "'Abel', sans-serif",
-            }}
-          >
-            continuation
-          </button>
-          <button
-            type="button"
-            onClick={onBack}
-            className="flex items-center justify-center cursor-pointer"
-            style={{
-              width: 140, height: 40, borderRadius: 10,
-              background: "#FFFFFF", border: "1px solid #EAEBEB",
-              fontSize: 16, color: "#647787", fontFamily: "'Abel', sans-serif",
-            }}
-          >
-            return
-          </button>
+        <div className="flex flex-col shrink-0" style={{ gap: 8, paddingTop: "clamp(8px, 1vh, 16px)" }}>
+          <div className="flex items-center" style={{ gap: 16 }}>
+            <button
+              type="submit"
+              disabled={!isFormValid}
+              className="flex items-center justify-center disabled:cursor-not-allowed"
+              style={{
+                width: 162, height: 40, borderRadius: 10,
+                backgroundImage: "linear-gradient(168.47deg, rgb(76, 150, 255) 12.19%, rgb(22, 103, 219) 93.76%)",
+                border: "none", fontSize: 16, color: "#FFFFFF", fontFamily: "'Abel', sans-serif",
+                cursor: isFormValid ? "pointer" : "not-allowed",
+                opacity: isFormValid ? 1 : 0.4,
+              }}
+            >
+              continuation
+            </button>
+            <button
+              type="button"
+              onClick={onBack}
+              className="flex items-center justify-center cursor-pointer"
+              style={{
+                width: 140, height: 40, borderRadius: 10,
+                background: "#FFFFFF", border: "1px solid #EAEBEB",
+                fontSize: 16, color: "#647787", fontFamily: "'Abel', sans-serif",
+              }}
+            >
+              return
+            </button>
+          </div>
+          {!isFormValid && (
+            <p style={{ fontSize: 12, color: "#FF676A", fontFamily: "'Abel', sans-serif", lineHeight: 1.3, margin: 0 }}>
+              {t.common.fillAllFields}
+            </p>
+          )}
         </div>
       </form>
     </OnboardingSplitLayout>

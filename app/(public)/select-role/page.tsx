@@ -124,19 +124,26 @@ export default function SelectRolePage() {
             </div>
 
             {/* Continue */}
-            <button
-              type="button"
-              onClick={handleContinue}
-              disabled={!selectedRole || isLoading}
-              className="flex items-center justify-center cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
-              style={{
-                width: 162, height: 40, borderRadius: 10,
-                backgroundImage: "linear-gradient(168.47deg, rgb(76, 150, 255) 12.19%, rgb(22, 103, 219) 93.76%)",
-                border: "none", fontSize: 16, color: "#FFFFFF",
-              }}
-            >
-              {isLoading ? "..." : t.selectRole.continueButton}
-            </button>
+            <div className="flex flex-col" style={{ gap: 8 }}>
+              <button
+                type="button"
+                onClick={handleContinue}
+                disabled={!selectedRole || isLoading}
+                className="flex items-center justify-center cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                style={{
+                  width: 162, height: 40, borderRadius: 10,
+                  backgroundImage: "linear-gradient(168.47deg, rgb(76, 150, 255) 12.19%, rgb(22, 103, 219) 93.76%)",
+                  border: "none", fontSize: 16, color: "#FFFFFF",
+                }}
+              >
+                {isLoading ? "..." : t.selectRole.continueButton}
+              </button>
+              {!selectedRole && (
+                <p style={{ fontSize: 12, color: "#FF676A", fontFamily: "'Abel', sans-serif", lineHeight: 1.3, margin: 0 }}>
+                  {t.common.selectRoleAlert}
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </div>

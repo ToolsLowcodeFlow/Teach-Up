@@ -14,6 +14,9 @@ const en = {
     termsLink: "Teach UP Terms of Use",
     and: "and",
     privacyLink: "Privacy Policy",
+    fillAllFields: "Please fill in all required fields before continuing.",
+    selectRoleAlert: "Please select a role to continue.",
+    acceptPrivacyAlert: "Please accept the privacy policy to continue.",
   },
   login: {
     title: "Welcome to TEACH UP",

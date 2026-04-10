@@ -14,6 +14,9 @@ const he = {
     termsLink: "תנאי השימוש של Teach UP",
     and: "ו",
     privacyLink: "מדיניות הפרטיות",
+    fillAllFields: "אנא מלא/י את כל השדות הנדרשים לפני המשך.",
+    selectRoleAlert: "אנא בחר/י תפקיד כדי להמשיך.",
+    acceptPrivacyAlert: "אנא אשר/י את מדיניות הפרטיות כדי להמשיך.",
   },
   login: {
     title: "TEACH UP ברוכים הבאים ל",

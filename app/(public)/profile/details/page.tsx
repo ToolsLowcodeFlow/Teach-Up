@@ -277,13 +277,38 @@ export default function ProfileDetailsPage() {
             </div>
 
             {/* Buttons */}
-            <div className="flex items-center" style={{ gap: 20, paddingBottom: 40 }}>
-              <button onClick={() => router.push("/jobs")} className="flex cursor-pointer items-center justify-center text-white" style={{ width: 162, height: 40, borderRadius: 10, backgroundImage: "linear-gradient(168deg, #4C96FF 12%, #1667DB 94%)", border: "none", fontSize: 16 }}>
-                {d.continuation}
-              </button>
-              <button onClick={() => router.back()} className="flex cursor-pointer items-center justify-center text-foreground" style={{ width: 162, height: 40, borderRadius: 10, background: "white", border: "1px solid #0E1117", fontSize: 16 }}>
-                {d.returnBtn}
-              </button>
+            <div className="flex flex-col" style={{ gap: 10, paddingBottom: 40 }}>
+              {(() => {
+                const isFormValid = gender.trim() && yearsExp.trim() && mobileWithCar.trim() && hasDealer.trim() && teachingPref.trim() && languages.length > 0;
+                return (
+                  <>
+                    <div className="flex items-center" style={{ gap: 20 }}>
+                      <button
+                        onClick={() => router.push("/jobs")}
+                        disabled={!isFormValid}
+                        className="flex items-center justify-center text-white"
+                        style={{
+                          width: 162, height: 40, borderRadius: 10,
+                          backgroundImage: "linear-gradient(168deg, #4C96FF 12%, #1667DB 94%)",
+                          border: "none", fontSize: 16,
+                          cursor: isFormValid ? "pointer" : "not-allowed",
+                          opacity: isFormValid ? 1 : 0.4,
+                        }}
+                      >
+                        {d.continuation}
+                      </button>
+                      <button onClick={() => router.back()} className="flex cursor-pointer items-center justify-center text-foreground" style={{ width: 162, height: 40, borderRadius: 10, background: "white", border: "1px solid #0E1117", fontSize: 16 }}>
+                        {d.returnBtn}
+                      </button>
+                    </div>
+                    {!isFormValid && (
+                      <p style={{ fontSize: 12, color: "#FF676A", lineHeight: 1.3, margin: 0 }}>
+                        {t.common.fillAllFields}
+                      </p>
+                    )}
+                  </>
+                );
+              })()}
             </div>
           </div>
         </div>

@@ -167,30 +167,37 @@ export function CompanyDetailsStep({
         </div>
 
         {/* Bottom — Buttons */}
-        <div className="flex items-center" style={{ gap: 16 }}>
-          <button
-            type="submit"
-            disabled={!isValid}
-            className="flex items-center justify-center cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
-            style={{
-              width: 162, height: 40, borderRadius: 10,
-              backgroundImage: "linear-gradient(168.47deg, rgb(76, 150, 255) 12.19%, rgb(22, 103, 219) 93.76%)",
-              border: "none", fontSize: 16, color: "#FFFFFF", fontFamily: "'Abel', sans-serif",
-            }}
-          >
-            continuation
-          </button>
-          <button
-            type="button"
-            className="flex items-center justify-center cursor-pointer"
-            style={{
-              width: 140, height: 40, borderRadius: 10,
-              background: "#FFFFFF", border: "1px solid #EAEBEB",
-              fontSize: 16, color: "#647787", fontFamily: "'Abel', sans-serif",
-            }}
-          >
-            return
-          </button>
+        <div className="flex flex-col" style={{ gap: 10 }}>
+          <div className="flex items-center" style={{ gap: 16 }}>
+            <button
+              type="submit"
+              disabled={!isValid}
+              className="flex items-center justify-center cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+              style={{
+                width: 162, height: 40, borderRadius: 10,
+                backgroundImage: "linear-gradient(168.47deg, rgb(76, 150, 255) 12.19%, rgb(22, 103, 219) 93.76%)",
+                border: "none", fontSize: 16, color: "#FFFFFF", fontFamily: "'Abel', sans-serif",
+              }}
+            >
+              continuation
+            </button>
+            <button
+              type="button"
+              className="flex items-center justify-center cursor-pointer"
+              style={{
+                width: 140, height: 40, borderRadius: 10,
+                background: "#FFFFFF", border: "1px solid #EAEBEB",
+                fontSize: 16, color: "#647787", fontFamily: "'Abel', sans-serif",
+              }}
+            >
+              return
+            </button>
+          </div>
+          {!isValid && (
+            <p style={{ fontSize: 12, color: "#FF676A", fontFamily: "'Abel', sans-serif", lineHeight: 1.3, margin: 0 }}>
+              {t.common.fillAllFields}
+            </p>
+          )}
         </div>
       </form>
     </OnboardingSplitLayout>
