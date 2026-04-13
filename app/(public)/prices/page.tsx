@@ -140,7 +140,7 @@ export default function PricesPage() {
                       className="relative text-white"
                       style={{ fontSize: 11, lineHeight: 1 }}
                     >
-                      popular
+                      {isHe ? "פופולרי" : "popular"}
                     </span>
                   </div>
                 )}

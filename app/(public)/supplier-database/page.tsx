@@ -5,52 +5,21 @@ import { ChevronDown, Search, ArrowRight, ArrowLeft, X } from "lucide-react";
 import { PublicNavbar } from "@/components/home/public-navbar";
 import { useLanguage } from "@/lib/i18n/context";
 
-const suppliers = [
-  {
-    id: 1,
-    name: "Company name Lorem Ipsum Dolores",
-    url: "https://shop.super-pharm.co.il/",
-    description: "Lorem Ipsum Dolor Sit Amet, Consecteur Adipiscing Elite Goler Montferrer Sobert Lorem Shabdek Yahol, Lorem Shabdek Yahol, Lorem Ipsum Dolor Sit Aemm.",
-    contact: "May Bozo",
-    phone: "02-6749203",
-    email: "lorancc@gmail.com",
-    logo: "/images/supplier-logo.png",
-    tags: ["Jerusalem", "Tel Aviv"],
-    badge: { type: "new" as const, label: "New supplier" },
-    gradient: "linear-gradient(180deg, white 18%, #E5FAED 188%)",
-    borderColor: "white",
-  },
-  {
-    id: 2,
-    name: "Company name Lorem Ipsum Dolores",
-    url: "https://shop.super-pharm.co.il/",
-    description: "Lorem Ipsum Dolor Sit Amet, Consecteur Adipiscing Elite Goler Montferrer Sobert Lorem Shabdek Yahol, Lorem Shabdek Yahol, Lorem Ipsum Dolor Sit Aemm.",
-    contact: "May Bozo",
-    phone: "02-6749203",
-    email: "lorancc@gmail.com",
-    logo: "/images/supplier-logo.png",
-    tags: ["Jerusalem", "Tel Aviv"],
-    badge: { type: "preferred" as const, label: "Preferred supplier" },
-    gradient: "linear-gradient(180deg, white 18%, #CCDCFF 188%)",
-    borderColor: "white",
-  },
-  {
-    id: 3,
-    name: "Company name Lorem Ipsum Dolores",
-    url: "https://shop.super-pharm.co.il/",
-    description: "Lorem Ipsum Dolor Sit Amet, Consecteur Adipiscing Elite Goler Montferrer Sobert Lorem Shabdek Yahol, Lorem Shabdek Yahol, Lorem Ipsum Dolor Sit Aemm.",
-    contact: "May Bozo",
-    phone: "02-6749203",
-    email: "lorancc@gmail.com",
-    logo: "/images/supplier-logo.png",
-    tags: ["Jerusalem", "Tel Aviv"],
-    badge: { type: "benefit" as const, label: "There is a benefit with the supplier." },
-    gradient: "white",
-    borderColor: "#F3F3F6",
-  },
-];
+function getSuppliers(isHe: boolean) {
+  const name = isHe ? "שם חברה לורם איפסום" : "Company name Lorem Ipsum Dolores";
+  const desc = isHe ? "לורם איפסום דולור סיט אמט, קונסקטטור אדיפיסינג אלית. סד מונטס מורט, לורם שבדאך יהול, לורם איפסום דולור סיט אמט." : "Lorem Ipsum Dolor Sit Amet, Consecteur Adipiscing Elite Goler Montferrer Sobert Lorem Shabdek Yahol, Lorem Shabdek Yahol, Lorem Ipsum Dolor Sit Aemm.";
+  const contact = isHe ? "מאי בוזו" : "May Bozo";
+  const tags = isHe ? ["ירושלים", "תל אביב"] : ["Jerusalem", "Tel Aviv"];
+  return [
+    { id: 1, name, url: "https://shop.super-pharm.co.il/", description: desc, contact, phone: "02-6749203", email: "lorancc@gmail.com", logo: "/images/supplier-logo.png", tags, badge: { type: "new" as const, label: isHe ? "ספק חדש" : "New supplier" }, gradient: "linear-gradient(180deg, white 18%, #E5FAED 188%)", borderColor: "white" },
+    { id: 2, name, url: "https://shop.super-pharm.co.il/", description: desc, contact, phone: "02-6749203", email: "lorancc@gmail.com", logo: "/images/supplier-logo.png", tags, badge: { type: "preferred" as const, label: isHe ? "ספק מועדף" : "Preferred supplier" }, gradient: "linear-gradient(180deg, white 18%, #CCDCFF 188%)", borderColor: "white" },
+    { id: 3, name, url: "https://shop.super-pharm.co.il/", description: desc, contact, phone: "02-6749203", email: "lorancc@gmail.com", logo: "/images/supplier-logo.png", tags, badge: { type: "benefit" as const, label: isHe ? "יש הטבה עם הספק." : "There is a benefit with the supplier." }, gradient: "white", borderColor: "#F3F3F6" },
+  ];
+}
 
-function BadgeTag({ badge }: { badge: (typeof suppliers)[0]["badge"] }) {
+type SupplierData = ReturnType<typeof getSuppliers>[0];
+
+function BadgeTag({ badge }: { badge: SupplierData["badge"] }) {
   if (badge.type === "new") {
     return (
       <span
@@ -96,7 +65,7 @@ function SupplierDetailModal({
   supplier,
   onClose,
 }: {
-  supplier: (typeof suppliers)[0];
+  supplier: SupplierData;
   onClose: () => void;
 }) {
   const { locale } = useLanguage();
@@ -155,15 +124,15 @@ function SupplierDetailModal({
           {/* Contact info */}
           <div className="flex items-start gap-12 text-base">
             <div className="flex flex-col gap-1">
-              <span className="text-muted-foreground">Contact name</span>
+              <span className="text-muted-foreground">{isHe ? "שם איש קשר" : "Contact name"}</span>
               <span className="text-foreground">{supplier.contact}</span>
             </div>
             <div className="flex flex-col gap-1">
-              <span className="text-muted-foreground">Contact phone number</span>
+              <span className="text-muted-foreground">{isHe ? "טלפון איש קשר" : "Contact phone number"}</span>
               <span className="text-foreground">{supplier.phone}</span>
             </div>
             <div className="flex flex-col gap-1">
-              <span className="text-muted-foreground">Email address</span>
+              <span className="text-muted-foreground">{isHe ? "כתובת אימייל" : "Email address"}</span>
               <span className="text-foreground">{supplier.email}</span>
             </div>
           </div>
@@ -171,28 +140,28 @@ function SupplierDetailModal({
           {/* Divider */}
           <div className="h-px w-full bg-[#F3F3F6]" />
 
-          {/* Service type */}
+          {/* {isHe ? "סוג שירות" : "Service type"} */}
           <div className="flex flex-col gap-2.5">
-            <p className="text-base text-foreground">Service type</p>
+            <p className="text-base text-foreground">{isHe ? "סוג שירות" : "Service type"}</p>
             <div className="flex gap-4">
-              <span className="rounded-full border border-[#F3F3F6] text-sm text-foreground" style={{ padding: "6px 14px" }}>Peak days</span>
-              <span className="rounded-full border border-[#F3F3F6] text-sm text-foreground" style={{ padding: "6px 14px" }}>Workshops</span>
+              <span className="rounded-full border border-[#F3F3F6] text-sm text-foreground" style={{ padding: "6px 14px" }}>{isHe ? "ימי שיא" : "Peak days"}</span>
+              <span className="rounded-full border border-[#F3F3F6] text-sm text-foreground" style={{ padding: "6px 14px" }}>{isHe ? "סדנאות" : "Workshops"}</span>
             </div>
           </div>
 
-          {/* {isHe ? "קבוצת גיל" : "Age group"}s */}
+          {/* {isHe ? "קבוצות גיל" : "Age groups"} */}
           <div className="flex flex-col gap-2.5">
-            <p className="text-base text-foreground">{isHe ? "קבוצת גיל" : "Age group"}s</p>
+            <p className="text-base text-foreground">{isHe ? "קבוצות גיל" : "Age groups"}</p>
             <div className="flex gap-4">
-              <span className="rounded-full border border-[#F3F3F6] text-sm text-foreground" style={{ padding: "6px 14px" }}>Adults</span>
+              <span className="rounded-full border border-[#F3F3F6] text-sm text-foreground" style={{ padding: "6px 14px" }}>{isHe ? "מבוגרים" : "Adults"}</span>
             </div>
           </div>
 
           {/* Divider */}
           <div className="h-px w-full bg-[#F3F3F6]" />
 
-          {/* Services details */}
-          <p className="text-base text-foreground">Services details</p>
+          {/* {isHe ? "פרטי שירותים" : "Services details"} */}
+          <p className="text-base text-foreground">{isHe ? "פרטי שירותים" : "Services details"}</p>
           <div className="flex flex-col" style={{ gap: 19 }}>
             <div className="relative overflow-hidden rounded-[10px] border border-[#F3F3F6]" style={{ padding: 10, minHeight: 60 }}>
               <img src="/images/supplier-service-bg.png" alt="" className="absolute inset-0 h-full w-full rounded-[10px] object-cover" />
@@ -222,16 +191,16 @@ function SupplierDetailModal({
           {/* Divider */}
           <div className="h-px w-full bg-[#F3F3F6]" />
 
-          {/* Photos */}
+          {/* {isHe ? "תמונות" : "Photos"} */}
           <div className="flex flex-col gap-3.5">
             <div className="flex items-center justify-between">
-              <p className="text-base text-foreground">Photos</p>
+              <p className="text-base text-foreground">{isHe ? "תמונות" : "Photos"}</p>
               <div className="flex gap-2">
                 <button className="flex h-6 w-6 items-center justify-center rounded-full border border-foreground bg-white">
-                  <ArrowLeft size={10} />
+                  {isHe ? <ArrowRight size={10} /> : <ArrowLeft size={10} />}
                 </button>
                 <button className="flex h-6 w-6 items-center justify-center rounded-full border border-foreground bg-white">
-                  <ArrowRight size={10} />
+                  {isHe ? <ArrowLeft size={10} /> : <ArrowRight size={10} />}
                 </button>
               </div>
             </div>
@@ -247,7 +216,9 @@ function SupplierDetailModal({
   );
 }
 
-function SupplierCard({ supplier, onOpen }: { supplier: (typeof suppliers)[0]; onOpen: () => void }) {
+function SupplierCard({ supplier, onOpen }: { supplier: SupplierData; onOpen: () => void }) {
+  const { locale } = useLanguage();
+  const isHe = locale === "he";
   return (
     <div
       className="flex items-center rounded-[20px] border"
@@ -295,15 +266,15 @@ function SupplierCard({ supplier, onOpen }: { supplier: (typeof suppliers)[0]; o
         {/* Contact info - LTR order */}
         <div className="flex items-start gap-12 text-base">
           <div className="flex flex-col gap-1">
-            <span className="text-muted-foreground">Contact name</span>
+            <span className="text-muted-foreground">{isHe ? "שם איש קשר" : "Contact name"}</span>
             <span className="text-foreground">{supplier.contact}</span>
           </div>
           <div className="flex flex-col gap-1">
-            <span className="text-muted-foreground">Contact phone number</span>
+            <span className="text-muted-foreground">{isHe ? "טלפון איש קשר" : "Contact phone number"}</span>
             <span className="text-foreground">{supplier.phone}</span>
           </div>
           <div className="flex flex-col gap-1">
-            <span className="text-muted-foreground">Email address</span>
+            <span className="text-muted-foreground">{isHe ? "כתובת אימייל" : "Email address"}</span>
             <span className="text-foreground">{supplier.email}</span>
           </div>
         </div>
@@ -315,16 +286,17 @@ function SupplierCard({ supplier, onOpen }: { supplier: (typeof suppliers)[0]; o
         className="ms-10 flex shrink-0 cursor-pointer items-center justify-center rounded-full border border-foreground bg-white"
         style={{ width: 46, height: 46 }}
       >
-        <ArrowRight size={18} className="text-foreground" />
+        {isHe ? <ArrowLeft size={18} className="text-foreground" /> : <ArrowRight size={18} className="text-foreground" />}
       </button>
     </div>
   );
 }
 
 export default function SupplierDatabasePage() {
-  const [selectedSupplier, setSelectedSupplier] = useState<(typeof suppliers)[0] | null>(null);
+  const [selectedSupplier, setSelectedSupplier] = useState<SupplierData | null>(null);
   const { locale, direction } = useLanguage();
   const isHe = locale === "he";
+  const suppliers = getSuppliers(isHe);
 
   return (
     <div className="min-h-screen bg-[#F7F9FC]">
@@ -374,7 +346,7 @@ export default function SupplierDatabasePage() {
                   <Search size={18} className="shrink-0 text-muted-foreground/30" />
                   <input
                     type="text"
-                    placeholder="Free search..."
+                    placeholder={isHe ? "...חיפוש חופשי" : "Free search..."}
                     className="mx-2 flex-1 border-none bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground/30"
                   />
                   <ChevronDown size={14} className="shrink-0 text-muted-foreground" />

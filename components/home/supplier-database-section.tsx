@@ -1,68 +1,101 @@
 "use client";
 
-const suppliers = [
-  { img: "/images/supplier-1.png", size: 90, left: "6%", top: "20%" },
-  { img: "/images/supplier-3.png", size: 100, left: "19%", top: "55%" },
-  { img: "/images/supplier-1.png", size: 95, left: "33%", top: "10%" },
-  { img: "/images/supplier-4.png", size: 140, left: "44%", top: "30%", center: true },
-  { img: "/images/supplier-3.png", size: 105, left: "60%", top: "5%" },
-  { img: "/images/supplier-5.png", size: 90, left: "74%", top: "50%" },
-  { img: "/images/supplier-4.png", size: 100, left: "87%", top: "15%" },
-];
+import { useRouter } from "next/navigation";
+import { useLanguage } from "@/lib/i18n/context";
 
 export function SupplierDatabaseSection() {
+  const router = useRouter();
+  const { locale } = useLanguage();
+  const isHe = locale === "he";
+
   return (
-    <section style={{ padding: "60px 40px 40px" }} className="flex flex-col items-center bg-[#F7F9FC]">
-      <h2 style={{ marginBottom: 16 }} className="text-center text-4xl leading-tight text-foreground">
-        Supplier database
+    <section
+      className="relative flex flex-col items-center justify-center overflow-hidden"
+      style={{
+        padding: "70px 40px",
+        backgroundImage: "linear-gradient(180deg, #E8F0FE 0%, #D6E4FF 50%, #E8F0FE 100%)",
+      }}
+    >
+      {/* Left ellipse blur */}
+      <div
+        className="pointer-events-none absolute"
+        style={{
+          width: 781,
+          height: 329,
+          left: -653,
+          top: 89,
+          background: "radial-gradient(circle, rgba(76,150,255,0.08) 0%, transparent 70%)",
+          borderRadius: "50%",
+        }}
+      />
+      {/* Right ellipse blur */}
+      <div
+        className="pointer-events-none absolute"
+        style={{
+          width: 781,
+          height: 329,
+          right: -653,
+          top: 89,
+          background: "radial-gradient(circle, rgba(76,150,255,0.08) 0%, transparent 70%)",
+          borderRadius: "50%",
+        }}
+      />
+
+      {/* Blue icon circle */}
+      <div
+        className="relative flex items-center justify-center overflow-hidden rounded-full"
+        style={{
+          width: 72,
+          height: 72,
+          backgroundImage: "linear-gradient(140deg, #4C96FF 12%, #1667DB 94%)",
+          border: "2px solid white",
+          boxShadow: "0 0 0 14px rgba(255,255,255,0.61)",
+          marginBottom: 10,
+        }}
+      >
+        <img src="/images/user-search-icon.svg" alt="" style={{ width: 36, height: 36 }} />
+      </div>
+
+      {/* Title */}
+      <h2
+        className="text-center text-foreground"
+        style={{
+          fontSize: "clamp(36px, 4vw, 56px)",
+          lineHeight: 1.1,
+          marginBottom: 20,
+          maxWidth: 625,
+        }}
+      >
+        {isHe ? "מאגר ספקים הגדול בישראל" : "The largest database of education suppliers in Israel"}
       </h2>
 
-      <p style={{ marginBottom: 28 }} className="max-w-xl text-center text-sm leading-relaxed text-muted-foreground">
-        This is a dummy paragraph text that is intended to fill a space in a website design and demonstrate how. This is a dummy paragraph text that is intended to fill a space in a website design and demonstrate how
+      {/* Subtitle */}
+      <p
+        className="text-center text-muted-foreground"
+        style={{
+          fontSize: "clamp(14px, 1.4vw, 20px)",
+          lineHeight: 1.2,
+          marginBottom: 30,
+          maxWidth: 625,
+        }}
+      >
+        {isHe
+          ? "בפורטל שלנו תוכלו לחשוף את המשרות שלכם לקהל גדול וממוקד של אנשי חינוך, בצורה פשוטה, נוחה ומקצועית"
+          : "On our portal, you can expose your jobs to a large and focused audience of educators, in a simple, convenient and professional way"}
       </p>
 
+      {/* Button */}
       <button
-        style={{ padding: "14px 48px", marginBottom: 48 }}
-        className="rounded-xl bg-primary text-sm text-white transition-colors hover:bg-primary-dark"
+        onClick={() => router.push("/supplier-database")}
+        className="relative cursor-pointer rounded-[10px] text-base text-white transition-opacity hover:opacity-90"
+        style={{
+          padding: "14px 48px",
+          border: "none",
+          backgroundImage: "linear-gradient(171deg, #4C96FF 12%, #1667DB 94%)",
+        }}
       >
-        Viewing the supplier database
+        {isHe ? "כניסה למאגר הספקים" : "Enter the supplier database"}
       </button>
-
-      {/* Logos with curve */}
-      <div className="relative w-full max-w-5xl" style={{ height: 300 }}>
-        {/* Dashed curve from Figma */}
-        <img
-          src="/images/supplier-curve.svg"
-          alt=""
-          className="pointer-events-none absolute inset-0 h-full w-full object-contain"
-          style={{ opacity: 0.5 }}
-        />
-
-        {/* Logo circles */}
-        {suppliers.map((s, i) => (
-          <div
-            key={i}
-            className="absolute overflow-hidden rounded-full"
-            style={{
-              width: s.size,
-              height: s.size,
-              left: s.left,
-              top: s.top,
-              border: s.center ? "2px solid #77BFFF" : "2px dashed rgba(76,150,255,0.3)",
-              background: "#FCFCFD",
-              padding: s.center ? 4 : 2,
-            }}
-          >
-            <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full bg-white">
-              <img
-                src={s.img}
-                alt={`Supplier ${i + 1}`}
-                className="h-full w-full object-cover"
-              />
-            </div>
-          </div>
-        ))}
-      </div>
     </section>
   );
 }

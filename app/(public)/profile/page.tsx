@@ -20,7 +20,7 @@ function ProfDropdown({ label, value, open, setOpen, options, onSelect, onClear,
             <span className="text-sm">{value}</span>
           </div>
         ) : (
-          <span>{value || "Select..."}</span>
+          <span>{value || "..."}</span>
         )}
         <ChevronDown size={16} className="text-muted-foreground" />
       </div>
@@ -145,10 +145,10 @@ export default function ProfilePage() {
 
                 <div className="flex flex-col gap-5">
                   {[
-                    { label: "First name", key: "firstName" },
-                    { label: "Last name", key: "lastName" },
-                    { label: "Mobile number", key: "mobile" },
-                    { label: "Email address", key: "email" },
+                    { label: isHe ? "שם פרטי" : "First name", key: "firstName" },
+                    { label: isHe ? "שם משפחה" : "Last name", key: "lastName" },
+                    { label: isHe ? "מספר נייד" : "Mobile number", key: "mobile" },
+                    { label: isHe ? "כתובת אימייל" : "Email address", key: "email" },
                   ].map((field) => (
                     <div key={field.key} className="flex flex-col gap-2">
                       <label className="text-sm text-foreground">{field.label}</label>
@@ -164,7 +164,7 @@ export default function ProfilePage() {
 
                   {/* Gender */}
                   <div className="relative flex flex-col gap-2">
-                    <label className="text-sm text-foreground">Gender</label>
+                    <label className="text-sm text-foreground">{isHe ? "מגדר" : "Gender"}</label>
                     <button onClick={() => setGenderOpen(!genderOpen)} className="flex w-full cursor-pointer items-center justify-between rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground" style={{ padding: "14px 16px" }}>
                       <span>{form.gender}</span>
                       <ChevronDown size={16} className="text-muted-foreground" />
@@ -173,7 +173,7 @@ export default function ProfilePage() {
                       <>
                         <div className="fixed inset-0 z-10" onClick={() => setGenderOpen(false)} />
                         <div className="absolute left-0 top-full z-20 mt-1 w-full overflow-hidden rounded-lg border border-border-light bg-white shadow-lg">
-                          {["Male", "Female", "Other", "Prefer not to say"].map((opt) => (
+                          {(isHe ? ["זכר", "נקבה", "אחר", "מעדיף/ה לא לציין"] : ["Male", "Female", "Other", "Prefer not to say"]).map((opt) => (
                             <div
                               key={opt}
                               onClick={() => { setForm({ ...form, gender: opt.toLowerCase() }); setGenderOpen(false); }}
@@ -190,7 +190,7 @@ export default function ProfilePage() {
 
                   {/* Area */}
                   <div className="flex flex-col gap-2">
-                    <label className="text-sm text-foreground">area</label>
+                    <label className="text-sm text-foreground">{isHe ? "אזור" : "Area"}</label>
                     <input
                       type="text"
                       value={form.area}
@@ -249,14 +249,14 @@ export default function ProfilePage() {
                 <h2 className="text-xl text-primary" style={{ marginBottom: 20 }}>{isHe ? "רקע מקצועי" : "Professional background"}</h2>
                 <div className="flex flex-col gap-5">
                   {/* Role */}
-                  <ProfDropdown label="Role" value={profRole} open={profRoleOpen} setOpen={setProfRoleOpen} options={["Teacher", "Tutor", "Teaching Assistant", "Substitute Teacher", "Counselor", "Instructor"]} onSelect={(v) => setProfRole(v)} onClear={() => setProfRole("")} hasTag />
+                  <ProfDropdown label={isHe ? "תפקיד" : "Role"} value={profRole} open={profRoleOpen} setOpen={setProfRoleOpen} options={isHe ? ["מורה", "מורה פרטי", "עוזר הוראה", "מורה ממלא מקום", "יועץ", "מדריך"] : ["Teacher", "Tutor", "Teaching Assistant", "Substitute Teacher", "Counselor", "Instructor"]} onSelect={(v) => setProfRole(v)} onClear={() => setProfRole("")} hasTag />
 
                   {/* Field of knowledge */}
-                  <ProfDropdown label="Field of knowledge" value={profField} open={profFieldOpen} setOpen={setProfFieldOpen} options={["Mathematics", "English", "Science", "History", "Art", "Music", "Physics", "Computer Science"]} onSelect={(v) => setProfField(v)} onClear={() => setProfField("")} hasTag />
+                  <ProfDropdown label={isHe ? "תחום ידע" : "Field of knowledge"} value={profField} open={profFieldOpen} setOpen={setProfFieldOpen} options={isHe ? ["מתמטיקה", "אנגלית", "מדעים", "היסטוריה", "אמנות", "מוזיקה", "פיזיקה", "מדעי המחשב"] : ["Mathematics", "English", "Science", "History", "Art", "Music", "Physics", "Computer Science"]} onSelect={(v) => setProfField(v)} onClear={() => setProfField("")} hasTag />
 
                   {/* About yourself */}
                   <div className="flex flex-col gap-2">
-                    <label className="text-sm text-foreground">A few words about yourself</label>
+                    <label className="text-sm text-foreground">{isHe ? "כמה מילים על עצמך" : "A few words about yourself"}</label>
                     <textarea
                       defaultValue="This is dummy text intended to illustrate a template in a design interface, and to illustrate the text that should be entered in this area."
                       className="w-full resize-none rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground focus:border-primary/30 focus:bg-white focus:outline-none"
@@ -265,11 +265,11 @@ export default function ProfilePage() {
                   </div>
 
                   {/* Languages */}
-                  <ProfDropdown label="Languages" value={profLang} open={profLangOpen} setOpen={setProfLangOpen} options={["Hebrew", "English", "Arabic", "Russian", "French", "Spanish"]} onSelect={(v) => setProfLang(v)} onClear={() => setProfLang("")} hasTag />
+                  <ProfDropdown label={isHe ? "שפות" : "Languages"} value={profLang} open={profLangOpen} setOpen={setProfLangOpen} options={isHe ? ["עברית", "אנגלית", "ערבית", "רוסית", "צרפתית", "ספרדית"] : ["Hebrew", "English", "Arabic", "Russian", "French", "Spanish"]} onSelect={(v) => setProfLang(v)} onClear={() => setProfLang("")} hasTag />
 
                   {/* Skills */}
                   <div className="flex flex-col gap-2">
-                    <label className="text-sm text-foreground">Skills</label>
+                    <label className="text-sm text-foreground">{isHe ? "כישורים" : "Skills"}</label>
                     {skills.map((skill, idx) => (
                       <div key={idx} className="flex items-center gap-2">
                         <input type="text" value={skill} onChange={(e) => { const s = [...skills]; s[idx] = e.target.value; setSkills(s); }} className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground focus:border-primary/30 focus:bg-white focus:outline-none" style={{ padding: "14px 16px" }} />
@@ -284,13 +284,13 @@ export default function ProfilePage() {
                   </div>
 
                   {/* Mobile with car */}
-                  <ProfDropdown label="Mobile with car" value={profCar} open={profCarOpen} setOpen={setProfCarOpen} options={["yes", "not"]} onSelect={(v) => setProfCar(v)} onClear={() => {}} hasTag={false} />
+                  <ProfDropdown label={isHe ? "ניידות עם רכב" : "Mobile with car"} value={profCar} open={profCarOpen} setOpen={setProfCarOpen} options={isHe ? ["כן", "לא"] : ["yes", "not"]} onSelect={(v) => setProfCar(v)} onClear={() => {}} hasTag={false} />
 
                   {/* Do you have a dealer */}
-                  <ProfDropdown label="Do you have a dealer?" value={profDealer} open={profDealerOpen} setOpen={setProfDealerOpen} options={["yes", "no"]} onSelect={(v) => setProfDealer(v)} onClear={() => {}} hasTag={false} />
+                  <ProfDropdown label={isHe ? "יש לך תעודת הוראה?" : "Do you have a dealer?"} value={profDealer} open={profDealerOpen} setOpen={setProfDealerOpen} options={isHe ? ["כן", "לא"] : ["yes", "no"]} onSelect={(v) => setProfDealer(v)} onClear={() => {}} hasTag={false} />
 
                   {/* Teaching preferences */}
-                  <ProfDropdown label="Teaching preferences" value={profTeaching} open={profTeachingOpen} setOpen={setProfTeachingOpen} options={["Online", "In-person", "Both", "Hybrid"]} onSelect={(v) => setProfTeaching(v)} onClear={() => {}} hasTag={false} />
+                  <ProfDropdown label={isHe ? "העדפות הוראה" : "Teaching preferences"} value={profTeaching} open={profTeachingOpen} setOpen={setProfTeachingOpen} options={isHe ? ["אונליין", "פרונטלי", "שניהם", "היברידי"] : ["Online", "In-person", "Both", "Hybrid"]} onSelect={(v) => setProfTeaching(v)} onClear={() => {}} hasTag={false} />
                 </div>
               </div>
 
@@ -303,16 +303,16 @@ export default function ProfilePage() {
                     <div key={idx} className="flex flex-col gap-4">
                       {idx > 0 && (
                         <div className="flex items-center justify-between">
-                          <span className="text-xs text-muted-foreground">Certificate {idx + 1}</span>
-                          <button onClick={() => setCertificates(certificates.filter((_, i) => i !== idx))} className="cursor-pointer border-none bg-transparent text-xs text-red-400 underline hover:text-red-600">Remove</button>
+                          <span className="text-xs text-muted-foreground">{isHe ? `תעודה ${idx + 1}` : `Certificate ${idx + 1}`}</span>
+                          <button onClick={() => setCertificates(certificates.filter((_, i) => i !== idx))} className="cursor-pointer border-none bg-transparent text-xs text-red-400 underline hover:text-red-600">{isHe ? "הסרה" : "Remove"}</button>
                         </div>
                       )}
                       <div className="flex flex-col gap-2">
-                        <label className="text-sm text-foreground">Name of the educational institution</label>
+                        <label className="text-sm text-foreground">{isHe ? "שם המוסד החינוכי" : "Name of the educational institution"}</label>
                         <input type="text" placeholder={isHe ? "הקלד כאן..." : "Type here..."} value={cert.institution} onChange={(e) => { const c = [...certificates]; c[idx].institution = e.target.value; setCertificates(c); }} className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:bg-white focus:outline-none" style={{ padding: "14px 16px" }} />
                       </div>
                       <div className="flex flex-col gap-2">
-                        <label className="text-sm text-foreground">Enter information or upload a file</label>
+                        <label className="text-sm text-foreground">{isHe ? "הזן מידע או העלה קובץ" : "Enter information or upload a file"}</label>
                         <input type="text" placeholder={isHe ? "הקלד כאן..." : "Type here..."} value={cert.info} onChange={(e) => { const c = [...certificates]; c[idx].info = e.target.value; setCertificates(c); }} className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:bg-white focus:outline-none" style={{ padding: "14px 16px" }} />
                       </div>
                     </div>
