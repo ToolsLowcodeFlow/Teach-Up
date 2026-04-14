@@ -6,6 +6,7 @@ import { ChevronDown, MessageSquareText, Bell, Heart, Globe, LogOut } from "luci
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/i18n/context";
 import { createClient } from "@/lib/supabase/client";
+import { useUser } from "@/lib/hooks/use-user";
 import { useState } from "react";
 
 interface EmployerNavbarProps {
@@ -16,6 +17,7 @@ export function EmployerNavbar({ onPostJob }: EmployerNavbarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { t, locale, toggleLocale } = useLanguage();
+  const { user } = useUser();
   const [avatarMenu, setAvatarMenu] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
 
@@ -140,10 +142,12 @@ export function EmployerNavbar({ onPostJob }: EmployerNavbarProps) {
 
           <div className="relative">
             <button onClick={() => setAvatarMenu(!avatarMenu)} className="flex items-center gap-2">
-              <div className="h-8 w-8 overflow-hidden rounded-full bg-muted-foreground/20">
-                <div className="flex h-full w-full items-center justify-center text-xs text-muted-foreground">
-                  U
-                </div>
+              <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full" style={{ background: user?.avatarUrl ? "transparent" : "linear-gradient(140deg, #4C96FF 12%, #1667DB 94%)" }}>
+                {user?.avatarUrl ? (
+                  <img src={user.avatarUrl} alt="" className="h-full w-full object-cover" />
+                ) : (
+                  <span className="text-sm font-medium text-white">{user?.initial || "U"}</span>
+                )}
               </div>
               <ChevronDown className="h-3 w-3 text-foreground" />
             </button>

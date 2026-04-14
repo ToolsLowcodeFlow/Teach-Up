@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { ChevronDown, Heart, Bell, MessageSquare, Globe, LogOut } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/context";
 import { createClient } from "@/lib/supabase/client";
+import { useUser } from "@/lib/hooks/use-user";
 
 interface SeekerNavbarProps {
   activeNav?: "jobSearch" | "myJobs" | "contactUs" | "";
@@ -13,6 +14,7 @@ interface SeekerNavbarProps {
 export function SeekerNavbar({ activeNav = "" }: SeekerNavbarProps) {
   const router = useRouter();
   const { locale, direction, t, toggleLocale } = useLanguage();
+  const { user } = useUser();
   const [notifOpen, setNotifOpen] = useState(false);
   const [avatarMenuOpen, setAvatarMenuOpen] = useState(false);
 
@@ -101,8 +103,12 @@ export function SeekerNavbar({ activeNav = "" }: SeekerNavbarProps) {
           {/* Avatar with dropdown */}
           <div className="relative flex items-center gap-1">
             <button onClick={() => router.push("/profile")} className="flex cursor-pointer items-center border-none bg-transparent">
-              <div className="h-9 w-9 overflow-hidden rounded-full border border-border-light transition-opacity hover:opacity-80">
-                <img src="/images/job-avatar.png" alt="" className="h-full w-full object-cover" />
+              <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full border border-border-light transition-opacity hover:opacity-80" style={{ background: user?.avatarUrl ? "transparent" : "linear-gradient(140deg, #4C96FF 12%, #1667DB 94%)" }}>
+                {user?.avatarUrl ? (
+                  <img src={user.avatarUrl} alt="" className="h-full w-full object-cover" />
+                ) : (
+                  <span className="text-sm font-medium text-white">{user?.initial || "U"}</span>
+                )}
               </div>
             </button>
             <button onClick={() => setAvatarMenuOpen(!avatarMenuOpen)} className="flex cursor-pointer items-center justify-center border-none bg-transparent text-muted-foreground hover:text-foreground">

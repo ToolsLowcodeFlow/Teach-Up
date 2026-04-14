@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Eye, EyeOff, ChevronDown } from "lucide-react";
+import { useUser } from "@/lib/hooks/use-user";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/i18n/context";
 
@@ -10,14 +11,38 @@ type ProfileTab = "company" | "more" | "supplier";
 export default function ProfilePage() {
   const { t, locale } = useLanguage();
   const isHe = locale === "he";
+  const { user } = useUser();
   const [activeTab, setActiveTab] = useState<ProfileTab>("company");
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showVerify, setShowVerify] = useState(false);
-  const [companyLogo, setCompanyLogo] = useState("/images/avatar-woman.jpg");
+  const [companyLogo, setCompanyLogo] = useState("");
   const [saved, setSaved] = useState(false);
   const [socialLinks, setSocialLinks] = useState([""]);
-  const [services, setServices] = useState([{ name: "Lorem Ipsum", description: "Lorem Ipsum" }]);
+  const [services, setServices] = useState([{ name: "", description: "" }]);
+  const [companyName, setCompanyName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [employees, setEmployees] = useState("");
+  const [website, setWebsite] = useState("");
+  const [contactName, setContactName] = useState("");
+  const [contactPhone, setContactPhone] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
+  const [formLoaded, setFormLoaded] = useState(false);
+
+  useEffect(() => {
+    if (user && !formLoaded) {
+      setCompanyName(user.companyName || user.fullName || "");
+      setPhone(user.phone || "");
+      setEmployees(user.numberOfEmployees || "");
+      setEmployerType(user.employerType || "");
+      setWebsite(user.website || "");
+      setContactEmail(user.email || "");
+      if (user.companyLogoUrl) setCompanyLogo(user.companyLogoUrl);
+      else if (user.avatarUrl) setCompanyLogo(user.avatarUrl);
+      if (user.socialMediaLinks?.length > 0) setSocialLinks(user.socialMediaLinks);
+      setFormLoaded(true);
+    }
+  }, [user, formLoaded]);
   const [supplierImages, setSupplierImages] = useState<string[]>(["/images/avatar-woman.jpg"]);
   const [employerType, setEmployerType] = useState("");
   const [employerTypeOpen, setEmployerTypeOpen] = useState(false);
@@ -97,8 +122,12 @@ export default function ProfilePage() {
             {t.profile.companyLogo}
           </h2>
           <div style={{ marginBottom: 28 }} className="flex items-center gap-4">
-            <div className="h-28 w-28 shrink-0 overflow-hidden rounded-xl bg-muted-foreground/20">
-              <img src={companyLogo} alt="Company logo" className="h-full w-full object-cover" />
+            <div className="flex h-28 w-28 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-muted-foreground/20">
+              {companyLogo ? (
+                <img src={companyLogo} alt="Company logo" className="h-full w-full object-cover" />
+              ) : (
+                <span className="text-3xl font-medium text-muted-foreground">{user?.initial || "?"}</span>
+              )}
             </div>
             <input ref={logoRef} type="file" accept="image/*" onChange={handleLogoUpload} className="hidden" />
             <button
@@ -116,7 +145,8 @@ export default function ProfilePage() {
               <label className="text-sm text-foreground">{t.profile.companyName}</label>
               <input
                 type="text"
-                defaultValue="May"
+                value={companyName}
+                onChange={(e) => setCompanyName(e.target.value)}
                 style={{ padding: "14px 16px" }}
                 className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground focus:border-primary/30 focus:bg-white focus:outline-none"
               />
@@ -127,7 +157,8 @@ export default function ProfilePage() {
               <label className="text-sm text-foreground">{t.profile.phone}</label>
               <input
                 type="text"
-                defaultValue="0527083931"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
                 style={{ padding: "14px 16px" }}
                 className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground focus:border-primary/30 focus:bg-white focus:outline-none"
               />
@@ -138,7 +169,8 @@ export default function ProfilePage() {
               <label className="text-sm text-foreground">{t.profile.numberOfEmployees}</label>
               <input
                 type="text"
-                defaultValue="589385983859835"
+                value={employees}
+                onChange={(e) => setEmployees(e.target.value)}
                 style={{ padding: "14px 16px" }}
                 className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground focus:border-primary/30 focus:bg-white focus:outline-none"
               />
@@ -245,7 +277,8 @@ export default function ProfilePage() {
           <label className="text-sm text-foreground">{t.profile.companyWebsite}</label>
           <input
             type="text"
-            defaultValue="www.cnjvnkcv.co.il"
+            value={website}
+            onChange={(e) => setWebsite(e.target.value)}
             style={{ padding: "14px 16px" }}
             className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground focus:border-primary/30 focus:bg-white focus:outline-none"
           />
@@ -375,27 +408,33 @@ export default function ProfilePage() {
               <label className="text-sm text-foreground">{t.profile.contactName}</label>
               <input
                 type="text"
-                defaultValue="Lorem Ipsum"
+                value={contactName}
+                onChange={(e) => setContactName(e.target.value)}
+                placeholder={isHe ? "הקלד כאן..." : "Type here..."}
                 style={{ padding: "14px 16px" }}
-                className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground focus:border-primary/30 focus:bg-white focus:outline-none"
+                className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:bg-white focus:outline-none"
               />
             </div>
             <div className="flex flex-col gap-2">
               <label className="text-sm text-foreground">{t.profile.phoneNumber}</label>
               <input
                 type="text"
-                defaultValue="Lorem Ipsum"
+                value={contactPhone}
+                onChange={(e) => setContactPhone(e.target.value)}
+                placeholder={isHe ? "הקלד כאן..." : "Type here..."}
                 style={{ padding: "14px 16px" }}
-                className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground focus:border-primary/30 focus:bg-white focus:outline-none"
+                className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:bg-white focus:outline-none"
               />
             </div>
             <div className="flex flex-col gap-2">
               <label className="text-sm text-foreground">{t.profile.emailAddress}</label>
               <input
                 type="text"
-                defaultValue="Lorem Ipsum"
+                value={contactEmail}
+                onChange={(e) => setContactEmail(e.target.value)}
+                placeholder={isHe ? "הקלד כאן..." : "Type here..."}
                 style={{ padding: "14px 16px" }}
-                className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground focus:border-primary/30 focus:bg-white focus:outline-none"
+                className="w-full rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:bg-white focus:outline-none"
               />
             </div>
             <div className="relative flex flex-col gap-2">

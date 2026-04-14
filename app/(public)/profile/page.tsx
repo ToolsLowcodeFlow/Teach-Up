@@ -4,7 +4,9 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronDown, Eye, EyeOff, X } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/context";
+import { createClient } from "@/lib/supabase/client";
 import { SeekerNavbar } from "@/components/seeker/seeker-navbar";
+import { useUser } from "@/lib/hooks/use-user";
 
 function ProfDropdown({ label, value, open, setOpen, options, onSelect, onClear, hasTag }: {
   label: string; value: string; open: boolean; setOpen: (v: boolean) => void;
@@ -44,9 +46,11 @@ export default function ProfilePage() {
   const router = useRouter();
   const { locale, direction, t } = useLanguage();
   const isHe = locale === "he";
+  const { user } = useUser();
   const imageRef = useRef<HTMLInputElement>(null);
   const [activeTab, setActiveTab] = useState<"personal" | "professional">("personal");
   const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [formLoaded, setFormLoaded] = useState(false);
   const [genderOpen, setGenderOpen] = useState(false);
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
@@ -81,10 +85,33 @@ export default function ProfilePage() {
   const resumeRef = useRef<HTMLInputElement>(null);
 
   const [form, setForm] = useState({
-    firstName: "May", lastName: "Bozo", mobile: "0527083931",
-    email: "msmdrhsj@gmail.com", gender: "female", area: "Tel Aviv - Jaffa",
+    firstName: "", lastName: "", mobile: "",
+    email: "", gender: "", area: "",
   });
   const [passwords, setPasswords] = useState({ current: "", newPass: "", verify: "" });
+
+  // Load user data into form from auth metadata
+  useEffect(() => {
+    if (user && !formLoaded) {
+      const fetchMeta = async () => {
+        const supabase = createClient();
+        const { data: { user: authUser } } = await supabase.auth.getUser();
+        const meta = authUser?.user_metadata || {};
+        const nameParts = user.fullName.split(" ");
+        setForm({
+          firstName: meta.first_name || nameParts[0] || "",
+          lastName: meta.last_name || nameParts.slice(1).join(" ") || "",
+          mobile: meta.mobile || "",
+          email: user.email,
+          gender: meta.gender || "",
+          area: meta.area || "",
+        });
+        if (user.avatarUrl) setProfileImage(user.avatarUrl);
+        setFormLoaded(true);
+      };
+      fetchMeta();
+    }
+  }, [user, formLoaded]);
 
   useEffect(() => {
     const el = document.querySelector(".lang-switcher-global") as HTMLElement;
