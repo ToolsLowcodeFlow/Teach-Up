@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "@/lib/i18n/context";
+import { createClient } from "@/lib/supabase/client";
 
 type Role = "seeker" | "institution";
 
@@ -11,6 +12,31 @@ export default function SelectRolePage() {
   const { t, direction } = useLanguage();
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  // If user already has a completed profile, redirect to their dashboard
+  useEffect(() => {
+    const checkProfile = async () => {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("role, first_name, company_name")
+        .eq("id", user.id)
+        .single();
+      if (!profile) return;
+      // Onboarding is complete if they have a first_name (seeker) or company_name (institution)
+      const onboardingDone = !!(profile.first_name || profile.company_name);
+      if (!onboardingDone) return;
+      switch (profile.role) {
+        case "admin": router.push("/admin/suppliers"); break;
+        case "institution": router.push("/institution/dashboard"); break;
+        case "supplier": router.push("/supplier/dashboard"); break;
+        case "seeker": router.push("/jobs"); break;
+      }
+    };
+    checkProfile();
+  }, [router]);
 
   const handleContinue = async () => {
     if (!selectedRole) return;

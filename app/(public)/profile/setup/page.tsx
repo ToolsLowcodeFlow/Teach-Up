@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { ChevronDown, X } from "lucide-react";
 import Link from "next/link";
 import { useLanguage } from "@/lib/i18n/context";
+import { createClient } from "@/lib/supabase/client";
 
 function SelectField({
   label, options, value, onChange, required, placeholder,
@@ -171,7 +172,39 @@ export default function ProfileSetupPage() {
                   <>
                     <div className="flex items-center" style={{ gap: 20 }}>
                       <button
-                        onClick={() => router.push("/profile/details")}
+                        onClick={async () => {
+                          const supabase = createClient();
+                          const fullName = `${form.firstName} ${form.lastName}`.trim();
+                          await supabase.auth.updateUser({
+                            data: {
+                              full_name: fullName,
+                              first_name: form.firstName,
+                              last_name: form.lastName,
+                              mobile: form.mobile,
+                              area: form.area,
+                              seeker_role: form.role,
+                              field_of_knowledge: form.fieldOfKnowledge,
+                              about_yourself: form.aboutYourself,
+                            },
+                          });
+                          const { data: { user } } = await supabase.auth.getUser();
+                          if (user) {
+                            await supabase.from("profiles").upsert({
+                              id: user.id,
+                              role: "seeker",
+                              full_name: fullName,
+                              first_name: form.firstName,
+                              last_name: form.lastName,
+                              mobile: form.mobile,
+                              area: form.area,
+                              seeker_role: form.role,
+                              field_of_knowledge: form.fieldOfKnowledge,
+                              about_yourself: form.aboutYourself,
+                              email: user.email,
+                            });
+                          }
+                          router.push("/profile/details");
+                        }}
                         disabled={!isFormValid}
                         className="flex items-center justify-center text-white"
                         style={{

@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronDown, Trash2, Pencil, Briefcase, Upload, X } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/context";
+import { createClient } from "@/lib/supabase/client";
 
 function SelectField({
   label, options, value, onChange, placeholder, required,
@@ -284,7 +285,34 @@ export default function ProfileDetailsPage() {
                   <>
                     <div className="flex items-center" style={{ gap: 20 }}>
                       <button
-                        onClick={() => router.push("/jobs")}
+                        onClick={async () => {
+                          const supabase = createClient();
+                          await supabase.auth.updateUser({
+                            data: {
+                              avatar_url: profileImage,
+                              gender,
+                              years_experience: yearsExp,
+                              languages,
+                              mobile_with_car: mobileWithCar,
+                              has_dealer: hasDealer,
+                              teaching_preference: teachingPref,
+                              additional_skills: additionalSkills,
+                            },
+                          });
+                          const { data: { user } } = await supabase.auth.getUser();
+                          if (user) {
+                            await supabase.from("profiles").update({
+                              avatar_url: profileImage,
+                              gender,
+                              years_experience: yearsExp,
+                              languages,
+                              mobile_with_car: mobileWithCar,
+                              has_dealer: hasDealer,
+                              teaching_preference: teachingPref,
+                            }).eq("id", user.id);
+                          }
+                          router.push("/jobs");
+                        }}
                         disabled={!isFormValid}
                         className="flex items-center justify-center text-white"
                         style={{

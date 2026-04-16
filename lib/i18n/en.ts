@@ -30,6 +30,8 @@ const en = {
     loggingIn: "Logging in...",
     googleButton: "Connecting with Google",
     invalidCredentials: "Invalid email or password. Please try again.",
+    noAccount: "Don't have an account?",
+    createAccountLink: "Create an account",
     genericError: "Something went wrong. Please try again.",
   },
   register: {

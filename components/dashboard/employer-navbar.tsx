@@ -140,15 +140,15 @@ export function EmployerNavbar({ onPostJob }: EmployerNavbarProps) {
             {t.dashboard.jobPosting}
           </button>
 
-          <div className="relative">
-            <button onClick={() => setAvatarMenu(!avatarMenu)} className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full" style={{ background: user?.avatarUrl ? "transparent" : "linear-gradient(140deg, #4C96FF 12%, #1667DB 94%)" }}>
-                {user?.avatarUrl ? (
-                  <img src={user.avatarUrl} alt="" className="h-full w-full object-cover" />
-                ) : (
-                  <span className="text-sm font-medium text-white">{user?.initial || "U"}</span>
-                )}
-              </div>
+          <div className="relative flex items-center gap-2">
+            <button onClick={() => router.push("/institution/dashboard/profile")} className="flex h-8 w-8 cursor-pointer items-center justify-center overflow-hidden rounded-full border-none" style={{ background: user?.avatarUrl ? "transparent" : "linear-gradient(140deg, #4C96FF 12%, #1667DB 94%)" }}>
+              {user?.avatarUrl ? (
+                <img src={user.avatarUrl} alt="" className="h-full w-full object-cover" />
+              ) : (
+                <span className="text-sm font-medium text-white">{user?.initial || "U"}</span>
+              )}
+            </button>
+            <button onClick={() => setAvatarMenu(!avatarMenu)} className="flex cursor-pointer items-center justify-center border-none bg-transparent">
               <ChevronDown className="h-3 w-3 text-foreground" />
             </button>
             {avatarMenu && (

@@ -29,7 +29,7 @@ export function SeekerNavbar({ activeNav = "" }: SeekerNavbarProps) {
       <div className="flex items-center justify-between" style={{ padding: "12px 40px" }}>
         {/* Left: Logo + nav links */}
         <div className="flex items-center gap-10">
-          <div className="flex items-center gap-1.5 text-2xl">
+          <div onClick={() => router.push("/jobs")} className="flex cursor-pointer items-center gap-1.5 text-2xl">
             <span className="text-foreground">TEACH</span>
             <span className="text-[#2C7AEA]">UP</span>
           </div>

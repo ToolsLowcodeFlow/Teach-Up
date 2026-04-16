@@ -69,12 +69,12 @@ export default function ForgotPasswordPage() {
 
           {sent ? (
             <div className="flex w-full flex-col items-center gap-[24px]">
-              <div
-                className="w-full rounded-[10px] px-4 py-4 text-center"
-                style={{ background: "#F0FDF4", color: "#22C55E", fontFamily: "'Abel', sans-serif", fontSize: 14 }}
+              <p
+                className="w-full text-center"
+                style={{ color: "#22C55E", fontFamily: "'Abel', sans-serif", fontSize: 14, margin: 0, lineHeight: 1.4 }}
               >
                 {t.forgotPassword.successMessage}
-              </div>
+              </p>
               <Link
                 href="/login"
                 style={{ fontFamily: "'Abel', sans-serif", fontSize: 16, color: "#4C96FF", textDecoration: "underline" }}

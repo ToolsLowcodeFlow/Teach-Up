@@ -57,17 +57,18 @@ export default function ProfilePage() {
   const [showVerify, setShowVerify] = useState(false);
 
   // Professional background state
-  const [profRole, setProfRole] = useState("teacher");
+  const [profRole, setProfRole] = useState("");
   const [profRoleOpen, setProfRoleOpen] = useState(false);
-  const [profField, setProfField] = useState("Physics");
+  const [profField, setProfField] = useState("");
   const [profFieldOpen, setProfFieldOpen] = useState(false);
-  const [profLang, setProfLang] = useState("Hebrew");
+  const [profLang, setProfLang] = useState("");
   const [profLangOpen, setProfLangOpen] = useState(false);
-  const [profCar, setProfCar] = useState("not");
+  const [profCar, setProfCar] = useState("");
   const [profCarOpen, setProfCarOpen] = useState(false);
-  const [profDealer, setProfDealer] = useState("yes");
+  const [profDealer, setProfDealer] = useState("");
   const [profDealerOpen, setProfDealerOpen] = useState(false);
-  const [profTeaching, setProfTeaching] = useState("Lorem Ipsum");
+  const [profTeaching, setProfTeaching] = useState("");
+  const [profAbout, setProfAbout] = useState("");
   const [profTeachingOpen, setProfTeachingOpen] = useState(false);
 
   // Certificates, skills, work experience, resume
@@ -90,26 +91,44 @@ export default function ProfilePage() {
   });
   const [passwords, setPasswords] = useState({ current: "", newPass: "", verify: "" });
 
-  // Load user data into form from auth metadata
+  // Load user data into form from profiles table + auth metadata
   useEffect(() => {
     if (user && !formLoaded) {
-      const fetchMeta = async () => {
+      const fetchData = async () => {
         const supabase = createClient();
         const { data: { user: authUser } } = await supabase.auth.getUser();
         const meta = authUser?.user_metadata || {};
+
+        // Fetch from profiles table (more authoritative)
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("first_name, last_name, mobile, area, gender, avatar_url, seeker_role, field_of_knowledge, languages, mobile_with_car, has_dealer, teaching_preference, about_yourself")
+          .eq("id", user.id)
+          .single();
+
         const nameParts = user.fullName.split(" ");
         setForm({
-          firstName: meta.first_name || nameParts[0] || "",
-          lastName: meta.last_name || nameParts.slice(1).join(" ") || "",
-          mobile: meta.mobile || "",
+          firstName: profile?.first_name || meta.first_name || nameParts[0] || "",
+          lastName: profile?.last_name || meta.last_name || nameParts.slice(1).join(" ") || "",
+          mobile: profile?.mobile || meta.mobile || "",
           email: user.email,
-          gender: meta.gender || "",
-          area: meta.area || "",
+          gender: profile?.gender || meta.gender || "",
+          area: profile?.area || meta.area || "",
         });
-        if (user.avatarUrl) setProfileImage(user.avatarUrl);
+        const avatar = profile?.avatar_url || user.avatarUrl;
+        if (avatar) setProfileImage(avatar);
+
+        // Professional background
+        setProfRole(profile?.seeker_role || meta.seeker_role || "");
+        setProfField(profile?.field_of_knowledge || meta.field_of_knowledge || "");
+        setProfLang(Array.isArray(profile?.languages) ? profile.languages[0] || "" : (meta.languages?.[0] || ""));
+        setProfCar(profile?.mobile_with_car || meta.mobile_with_car || "");
+        setProfDealer(profile?.has_dealer || meta.has_dealer || "");
+        setProfTeaching(profile?.teaching_preference || meta.teaching_preference || "");
+        setProfAbout(profile?.about_yourself || meta.about_yourself || "");
         setFormLoaded(true);
       };
-      fetchMeta();
+      fetchData();
     }
   }, [user, formLoaded]);
 
@@ -285,8 +304,10 @@ export default function ProfilePage() {
                   <div className="flex flex-col gap-2">
                     <label className="text-sm text-foreground">{isHe ? "כמה מילים על עצמך" : "A few words about yourself"}</label>
                     <textarea
-                      defaultValue="This is dummy text intended to illustrate a template in a design interface, and to illustrate the text that should be entered in this area."
-                      className="w-full resize-none rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground focus:border-primary/30 focus:bg-white focus:outline-none"
+                      value={profAbout}
+                      onChange={(e) => setProfAbout(e.target.value)}
+                      placeholder={isHe ? "הקלד כאן..." : "Type here..."}
+                      className="w-full resize-none rounded-lg border border-border bg-[#F7F9FC] text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary/30 focus:bg-white focus:outline-none"
                       style={{ padding: "14px 16px", height: 90 }}
                     />
                   </div>

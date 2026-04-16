@@ -30,6 +30,8 @@ const he = {
     loggingIn: "מתחבר...",
     googleButton: "התחברות עם Google",
     invalidCredentials: "דוא״ל או סיסמה שגויים. נסו שנית.",
+    noAccount: "?אין לך חשבון",
+    createAccountLink: "צור חשבון",
     genericError: "משהו השתבש. נסו שנית.",
   },
   register: {

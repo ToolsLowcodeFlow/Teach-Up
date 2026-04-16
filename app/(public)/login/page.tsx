@@ -36,9 +36,13 @@ export default function LoginPage() {
       if (authError) { setError(t.login.invalidCredentials); return; }
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).single();
-        if (!profile) {
-          // No profile yet — go to role selection
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("role, first_name, company_name")
+          .eq("id", user.id)
+          .single();
+        const onboardingDone = !!(profile?.first_name || profile?.company_name);
+        if (!profile || !onboardingDone) {
           router.push("/select-role");
         } else {
           switch (profile.role) {
@@ -195,9 +199,17 @@ export default function LoginPage() {
               </div>
 
               {error && (
-                <div className="w-full rounded-[10px] px-4 py-3" style={{ background: "#FEF2F2", color: "#EF4444", fontFamily: "'Abel', sans-serif", fontSize: 14 }}>
+                <p
+                  style={{
+                    color: "#DC2626",
+                    fontFamily: "'Abel', sans-serif",
+                    fontSize: 14,
+                    lineHeight: 1.4,
+                    margin: 0,
+                  }}
+                >
                   {error}
-                </div>
+                </p>
               )}
 
               {/* Login button */}
@@ -235,6 +247,14 @@ export default function LoginPage() {
               </div>
             </button>
           </div>
+
+          {/* Create account */}
+          <p style={{ fontFamily: "'Abel', sans-serif", fontSize: 16, color: "#647787", textAlign: "center", lineHeight: 1.1 }}>
+            {t.login.noAccount}{" "}
+            <Link href="/register" style={{ color: "#4C96FF", textDecoration: "underline" }}>
+              {t.login.createAccountLink}
+            </Link>
+          </p>
 
           {/* Terms */}
           <p style={{ fontFamily: "'Abel', sans-serif", fontSize: 14, color: "#647787", textAlign: "center", lineHeight: 1.1 }}>

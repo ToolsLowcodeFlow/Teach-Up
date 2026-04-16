@@ -39,19 +39,20 @@ export function useUser() {
         // Try to get profile from profiles table
         const { data: profile } = await supabase
           .from("profiles")
-          .select("role, full_name")
+          .select("role, full_name, first_name, last_name, avatar_url, company_name, phone, mobile, number_of_employees, employer_type, website, company_description, social_media_links, company_logo_url")
           .eq("id", authUser.id)
           .single();
 
         const email = authUser.email || "";
         const fullName = profile?.full_name
+          || (profile?.first_name ? `${profile.first_name} ${profile.last_name || ""}`.trim() : "")
           || authUser.user_metadata?.full_name
           || authUser.user_metadata?.name
           || email.split("@")[0]
           || "";
 
         const meta = authUser.user_metadata || {};
-        const avatarUrl = meta.avatar_url || meta.picture || meta.company_logo_url || null;
+        const avatarUrl = profile?.avatar_url || profile?.company_logo_url || meta.avatar_url || meta.picture || meta.company_logo_url || null;
 
         const initial = fullName
           ? fullName.charAt(0).toUpperCase()
@@ -64,14 +65,14 @@ export function useUser() {
           avatarUrl,
           role: profile?.role || null,
           initial,
-          companyName: meta.company_name || fullName || "",
-          phone: meta.phone || "",
-          numberOfEmployees: meta.number_of_employees || "",
-          employerType: meta.employer_type || "",
-          website: meta.website || "",
-          companyDescription: meta.company_description || "",
-          socialMediaLinks: meta.social_media_links || [],
-          companyLogoUrl: meta.company_logo_url || null,
+          companyName: profile?.company_name || meta.company_name || fullName || "",
+          phone: profile?.phone || profile?.mobile || meta.phone || "",
+          numberOfEmployees: profile?.number_of_employees || meta.number_of_employees || "",
+          employerType: profile?.employer_type || meta.employer_type || "",
+          website: profile?.website || meta.website || "",
+          companyDescription: profile?.company_description || meta.company_description || "",
+          socialMediaLinks: profile?.social_media_links || meta.social_media_links || [],
+          companyLogoUrl: profile?.company_logo_url || meta.company_logo_url || null,
         });
       } catch {
         setUser(null);

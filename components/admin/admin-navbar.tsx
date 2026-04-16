@@ -32,7 +32,7 @@ export function AdminNavbar() {
       <div style={{ background: "#0E1117" }}>
         <div className="flex items-end justify-between" style={{ padding: "0 40px" }}>
           {/* Left: Logo */}
-          <div className="flex items-center gap-1.5 text-2xl" style={{ lineHeight: 1.2, padding: "18px 0" }}>
+          <div onClick={() => router.push("/admin/dashboard")} className="flex cursor-pointer items-center gap-1.5 text-2xl" style={{ lineHeight: 1.2, padding: "18px 0" }}>
             <span className="text-white">TEACH</span>
             <span className="text-[#2C7AEA]">UP</span>
           </div>
