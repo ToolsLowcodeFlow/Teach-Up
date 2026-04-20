@@ -42,13 +42,23 @@ export default function RegisterPage() {
     setError(null);
     try {
       const supabase = createClient();
-      const { error: authError } = await supabase.auth.signUp({
+      const { data: signUpData, error: authError } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,
         options: { emailRedirectTo: `${window.location.origin}/api/auth/callback` },
       });
       if (authError) {
         setError(authError.message.includes("already registered") ? t.register.alreadyRegistered : authError.message);
+        return;
+      }
+      // Supabase returns identities: [] when the email is already registered but unconfirmed.
+      if (signUpData.user && signUpData.user.identities && signUpData.user.identities.length === 0) {
+        setError(t.register.alreadyRegistered);
+        return;
+      }
+      // If email confirmation is required, no session is returned — ask the user to verify first.
+      if (!signUpData.session) {
+        router.push(`/check-email?email=${encodeURIComponent(data.email)}`);
         return;
       }
       router.push("/select-role");
