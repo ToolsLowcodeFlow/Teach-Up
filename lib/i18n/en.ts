@@ -52,16 +52,6 @@ const en = {
       symbol: "Special symbol",
     },
   },
-  checkEmail: {
-    title: "Check your email",
-    subtitle: "We've sent a confirmation link to",
-    instructions:
-      "Click the link in the email to verify your account. If you don't see it, check your spam folder.",
-    resend: "Resend confirmation email",
-    resending: "Sending...",
-    resent: "Sent — check your inbox",
-    backToLogin: "Back to login",
-  },
   selectRole: {
     title: "Welcome to TEACH UP!",
     subtitle:

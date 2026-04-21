@@ -52,16 +52,6 @@ const he = {
       symbol: "סימן מיוחד",
     },
   },
-  checkEmail: {
-    title: "בדקו את הדוא״ל שלכם",
-    subtitle: "שלחנו קישור אימות אל",
-    instructions:
-      "לחצו על הקישור בדוא״ל כדי לאמת את החשבון. אם לא רואים אותו, בדקו בתיקיית הספאם.",
-    resend: "שליחת דוא״ל אימות מחדש",
-    resending: "שולח...",
-    resent: "נשלח — בדקו את תיבת הדואר",
-    backToLogin: "חזרה להתחברות",
-  },
   selectRole: {
     title: "!TEACH UP ברוכים הבאים ל",
     subtitle:

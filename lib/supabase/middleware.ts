@@ -8,7 +8,7 @@ export async function updateSession(request: NextRequest) {
 
   // Public routes — no auth needed, skip Supabase entirely
   const publicRoutes = [
-    "/", "/jobs", "/login", "/register", "/check-email",
+    "/", "/jobs", "/login", "/register",
     "/forgot-password", "/reset-password", "/select-role",
     "/institution/onboarding", "/institution/onboarding/success",
     "/supplier/onboarding",

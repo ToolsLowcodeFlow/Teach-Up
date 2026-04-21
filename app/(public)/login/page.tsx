@@ -33,25 +33,7 @@ export default function LoginPage() {
     try {
       const supabase = createClient();
       const { error: authError } = await supabase.auth.signInWithPassword({ email: data.email, password: data.password });
-      if (authError) {
-        if (authError.code === "email_not_confirmed") {
-          router.push(`/check-email?email=${encodeURIComponent(data.email)}`);
-          return;
-        }
-        // Some Supabase configs mask unconfirmed accounts as invalid_credentials to prevent
-        // email enumeration. Probe with resend — if it succeeds, the account exists and is unconfirmed.
-        const { error: resendError } = await supabase.auth.resend({
-          type: "signup",
-          email: data.email,
-          options: { emailRedirectTo: `${window.location.origin}/api/auth/callback` },
-        });
-        if (!resendError) {
-          router.push(`/check-email?email=${encodeURIComponent(data.email)}`);
-          return;
-        }
-        setError(t.login.invalidCredentials);
-        return;
-      }
+      if (authError) { setError(t.login.invalidCredentials); return; }
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         const { data: profile } = await supabase
