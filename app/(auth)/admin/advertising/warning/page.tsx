@@ -11,7 +11,7 @@ export default function BannerWarningPage() {
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center"
-      style={{ fontFamily: "'Abel', sans-serif" }}
+      style={{ fontFamily: "'Heebo', sans-serif" }}
     >
       {/* Background: render advertising page behind with blur */}
       <iframe

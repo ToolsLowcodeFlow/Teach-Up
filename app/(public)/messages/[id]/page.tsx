@@ -65,7 +65,7 @@ export default function MessageDetailPage() {
   }, []);
 
   return (
-    <div className="flex h-screen flex-col bg-[#F7F9FC]" style={{ fontFamily: "'Abel', sans-serif" }}>
+    <div className="flex h-screen flex-col bg-[#F7F9FC]" style={{ fontFamily: "'Heebo', sans-serif" }}>
       <SeekerNavbar />
 
       {/* Content */}

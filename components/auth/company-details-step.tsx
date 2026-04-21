@@ -51,7 +51,7 @@ export function CompanyDetailsStep({
     border: "1px solid #F3F3F6",
     background: "#FFFFFF",
     outline: "none",
-    fontFamily: "'Abel', sans-serif",
+    fontFamily: "'Heebo', sans-serif",
     fontSize: "clamp(13px, 1vw, 14px)",
     color: "#0E1117",
   };
@@ -64,7 +64,7 @@ export function CompanyDetailsStep({
         <div className="flex flex-col" style={{ gap: "clamp(20px, 3vh, 40px)" }}>
 
           {/* Title */}
-          <h1 style={{ fontSize: "clamp(28px, 3vw, 42px)", color: "#0E1117", lineHeight: 1.1, margin: 0, fontFamily: "'Abel', sans-serif" }}>
+          <h1 style={{ fontSize: "clamp(28px, 3vw, 42px)", color: "#0E1117", lineHeight: 1.1, margin: 0, fontFamily: "'Heebo', sans-serif" }}>
             {t.companyDetails.title}
           </h1>
 
@@ -73,7 +73,7 @@ export function CompanyDetailsStep({
 
             {/* Company Name */}
             <div className="flex flex-col" style={{ gap: 6 }}>
-              <label style={{ fontFamily: "'Abel', sans-serif", fontSize: "clamp(14px, 1.2vw, 18px)", color: "#414042", lineHeight: 1.1 }}>
+              <label style={{ fontFamily: "'Heebo', sans-serif", fontSize: "clamp(14px, 1.2vw, 18px)", color: "#414042", lineHeight: 1.1 }}>
                 {t.companyDetails.companyName}
               </label>
               <input
@@ -86,7 +86,7 @@ export function CompanyDetailsStep({
 
             {/* Phone */}
             <div className="flex flex-col" style={{ gap: 6 }}>
-              <label style={{ fontFamily: "'Abel', sans-serif", fontSize: "clamp(14px, 1.2vw, 18px)", color: "#414042", lineHeight: 1.1 }}>
+              <label style={{ fontFamily: "'Heebo', sans-serif", fontSize: "clamp(14px, 1.2vw, 18px)", color: "#414042", lineHeight: 1.1 }}>
                 {t.companyDetails.phone}
               </label>
               <input
@@ -100,7 +100,7 @@ export function CompanyDetailsStep({
 
             {/* Number of Employees */}
             <div className="flex flex-col" style={{ gap: 6 }}>
-              <label style={{ fontFamily: "'Abel', sans-serif", fontSize: "clamp(14px, 1.2vw, 18px)", color: "#414042", lineHeight: 1.1 }}>
+              <label style={{ fontFamily: "'Heebo', sans-serif", fontSize: "clamp(14px, 1.2vw, 18px)", color: "#414042", lineHeight: 1.1 }}>
                 {t.companyDetails.numberOfEmployees}
               </label>
               <input
@@ -113,7 +113,7 @@ export function CompanyDetailsStep({
 
             {/* Employer Type — dropdown with chevron */}
             <div className="flex flex-col" style={{ gap: 6 }}>
-              <label style={{ fontFamily: "'Abel', sans-serif", fontSize: "clamp(14px, 1.2vw, 18px)", color: "#414042", lineHeight: 1.1 }}>
+              <label style={{ fontFamily: "'Heebo', sans-serif", fontSize: "clamp(14px, 1.2vw, 18px)", color: "#414042", lineHeight: 1.1 }}>
                 {t.companyDetails.employerType}
               </label>
               <div className="relative">
@@ -148,7 +148,7 @@ export function CompanyDetailsStep({
             <div className="flex items-center" style={{ gap: 10 }}>
               <label
                 htmlFor="privacy"
-                style={{ fontFamily: "'Abel', sans-serif", fontSize: "clamp(12px, 1vw, 14px)", color: "#647787", cursor: "pointer", lineHeight: 1.4 }}
+                style={{ fontFamily: "'Heebo', sans-serif", fontSize: "clamp(12px, 1vw, 14px)", color: "#647787", cursor: "pointer", lineHeight: 1.4 }}
               >
                 {t.companyDetails.privacyCheckbox}{" "}
                 <Link href="/privacy" style={{ color: "#4C96FF", textDecoration: "underline" }} target="_blank">
@@ -176,7 +176,7 @@ export function CompanyDetailsStep({
               style={{
                 width: 162, height: 40, borderRadius: 10,
                 backgroundImage: "linear-gradient(168.47deg, rgb(76, 150, 255) 12.19%, rgb(22, 103, 219) 93.76%)",
-                border: "none", fontSize: 16, color: "#FFFFFF", fontFamily: "'Abel', sans-serif",
+                border: "none", fontSize: 16, color: "#FFFFFF", fontFamily: "'Heebo', sans-serif",
               }}
             >
               continuation
@@ -187,14 +187,14 @@ export function CompanyDetailsStep({
               style={{
                 width: 140, height: 40, borderRadius: 10,
                 background: "#FFFFFF", border: "1px solid #EAEBEB",
-                fontSize: 16, color: "#647787", fontFamily: "'Abel', sans-serif",
+                fontSize: 16, color: "#647787", fontFamily: "'Heebo', sans-serif",
               }}
             >
               return
             </button>
           </div>
           {!isValid && (
-            <p style={{ fontSize: 12, color: "#FF676A", fontFamily: "'Abel', sans-serif", lineHeight: 1.3, margin: 0 }}>
+            <p style={{ fontSize: 12, color: "#FF676A", fontFamily: "'Heebo', sans-serif", lineHeight: 1.3, margin: 0 }}>
               {t.common.fillAllFields}
             </p>
           )}

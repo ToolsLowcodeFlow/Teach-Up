@@ -26,7 +26,7 @@ export default function OnboardingSuccessPage() {
   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("yearly");
 
   return (
-    <div className="w-screen h-screen flex flex-col overflow-hidden" style={{ fontFamily: "'Abel', sans-serif" }}>
+    <div className="w-screen h-screen flex flex-col overflow-hidden" style={{ fontFamily: "'Heebo', sans-serif" }}>
 
       {/* Background split */}
       <div className="absolute inset-0 flex">
@@ -149,7 +149,7 @@ export default function OnboardingSuccessPage() {
             style={{
               width: "70%", maxWidth: 420, height: 40,
               borderRadius: 20, background: "linear-gradient(90deg, #F59E0B 0%, #D97706 100%)",
-              border: "none", fontSize: 13, color: "#FFFFFF", fontFamily: "'Abel', sans-serif",
+              border: "none", fontSize: 13, color: "#FFFFFF", fontFamily: "'Heebo', sans-serif",
               marginBottom: 16,
             }}
           >
@@ -160,14 +160,14 @@ export default function OnboardingSuccessPage() {
           <div className="flex items-center" style={{ gap: 10 }}>
             <button
               className="flex items-center justify-center cursor-pointer"
-              style={{ width: 120, height: 32, borderRadius: 8, backgroundImage: "linear-gradient(168deg, #4C96FF 12%, #1667DB 94%)", border: "none", fontSize: 13, color: "#FFFFFF", fontFamily: "'Abel', sans-serif" }}
+              style={{ width: 120, height: 32, borderRadius: 8, backgroundImage: "linear-gradient(168deg, #4C96FF 12%, #1667DB 94%)", border: "none", fontSize: 13, color: "#FFFFFF", fontFamily: "'Heebo', sans-serif" }}
             >
               continuation
             </button>
             <button
               onClick={() => router.push("/institution/dashboard")}
               className="flex items-center justify-center cursor-pointer"
-              style={{ width: 100, height: 32, borderRadius: 8, background: "#FFFFFF", border: "1px solid #EAEBEB", fontSize: 13, color: "#647787", fontFamily: "'Abel', sans-serif" }}
+              style={{ width: 100, height: 32, borderRadius: 8, background: "#FFFFFF", border: "1px solid #EAEBEB", fontSize: 13, color: "#647787", fontFamily: "'Heebo', sans-serif" }}
             >
               return
             </button>

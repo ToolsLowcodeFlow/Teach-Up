@@ -69,7 +69,7 @@ export function MoreInfoStep({ onSubmit, onBack, onSkip, defaultValues }: MoreIn
     border: "1px solid #F3F3F6",
     background: "#FFFFFF",
     outline: "none",
-    fontFamily: "'Abel', sans-serif",
+    fontFamily: "'Heebo', sans-serif",
     fontSize: "clamp(13px, 1vw, 14px)",
     color: "#0E1117",
   };
@@ -83,17 +83,17 @@ export function MoreInfoStep({ onSubmit, onBack, onSkip, defaultValues }: MoreIn
 
           {/* Title + Subtitle */}
           <div className="flex flex-col" style={{ gap: 8 }}>
-            <h1 style={{ fontSize: "clamp(26px, 2.8vw, 40px)", color: "#0E1117", lineHeight: 1.1, margin: 0, fontFamily: "'Abel', sans-serif" }}>
+            <h1 style={{ fontSize: "clamp(26px, 2.8vw, 40px)", color: "#0E1117", lineHeight: 1.1, margin: 0, fontFamily: "'Heebo', sans-serif" }}>
               {t.moreInfo.title}
             </h1>
-            <p style={{ fontSize: "clamp(12px, 0.9vw, 14px)", color: "#647787", lineHeight: 1.4, margin: 0, fontFamily: "'Abel', sans-serif" }}>
+            <p style={{ fontSize: "clamp(12px, 0.9vw, 14px)", color: "#647787", lineHeight: 1.4, margin: 0, fontFamily: "'Heebo', sans-serif" }}>
               {t.moreInfo.subtitle}
             </p>
           </div>
 
           {/* Company Logo */}
           <div className="flex flex-col" style={{ gap: 6 }}>
-            <label style={{ fontFamily: "'Abel', sans-serif", fontSize: "clamp(14px, 1.2vw, 18px)", color: "#414042", lineHeight: 1.1 }}>
+            <label style={{ fontFamily: "'Heebo', sans-serif", fontSize: "clamp(14px, 1.2vw, 18px)", color: "#414042", lineHeight: 1.1 }}>
               {t.moreInfo.companyLogo}
             </label>
             <div className="flex flex-col items-center" style={{ gap: 8 }}>
@@ -106,14 +106,14 @@ export function MoreInfoStep({ onSubmit, onBack, onSkip, defaultValues }: MoreIn
                 ) : (
                   <>
                     <ImageIcon size={24} style={{ color: "#D1D5DB" }} />
-                    <span style={{ fontSize: 11, color: "#9CA3AF", marginTop: 4, fontFamily: "'Abel', sans-serif" }}>290X288</span>
+                    <span style={{ fontSize: 11, color: "#9CA3AF", marginTop: 4, fontFamily: "'Heebo', sans-serif" }}>290X288</span>
                   </>
                 )}
               </div>
               <label className="cursor-pointer">
                 <span
                   className="flex items-center justify-center"
-                  style={{ height: 32, padding: "0 16px", borderRadius: 8, border: "1px solid #EAEBEB", background: "#FFFFFF", fontFamily: "'Abel', sans-serif", fontSize: 13, color: "#414042" }}
+                  style={{ height: 32, padding: "0 16px", borderRadius: 8, border: "1px solid #EAEBEB", background: "#FFFFFF", fontFamily: "'Heebo', sans-serif", fontSize: 13, color: "#414042" }}
                 >
                   {t.moreInfo.changeImage}
                 </span>
@@ -124,7 +124,7 @@ export function MoreInfoStep({ onSubmit, onBack, onSkip, defaultValues }: MoreIn
 
           {/* Company Website */}
           <div className="flex flex-col" style={{ gap: 6 }}>
-            <label style={{ fontFamily: "'Abel', sans-serif", fontSize: "clamp(14px, 1.2vw, 18px)", color: "#414042", lineHeight: 1.1 }}>
+            <label style={{ fontFamily: "'Heebo', sans-serif", fontSize: "clamp(14px, 1.2vw, 18px)", color: "#414042", lineHeight: 1.1 }}>
               {t.moreInfo.companyWebsite}
             </label>
             <input
@@ -138,7 +138,7 @@ export function MoreInfoStep({ onSubmit, onBack, onSkip, defaultValues }: MoreIn
 
           {/* Social Media Links */}
           <div className="flex flex-col" style={{ gap: 6 }}>
-            <label style={{ fontFamily: "'Abel', sans-serif", fontSize: "clamp(14px, 1.2vw, 18px)", color: "#414042", lineHeight: 1.1 }}>
+            <label style={{ fontFamily: "'Heebo', sans-serif", fontSize: "clamp(14px, 1.2vw, 18px)", color: "#414042", lineHeight: 1.1 }}>
               {t.moreInfo.socialMediaLinks}
             </label>
             <div className="flex flex-col" style={{ gap: 8 }}>
@@ -158,7 +158,7 @@ export function MoreInfoStep({ onSubmit, onBack, onSkip, defaultValues }: MoreIn
               type="button"
               onClick={addSocialLink}
               className="flex items-center cursor-pointer self-end"
-              style={{ gap: 4, background: "none", border: "none", fontFamily: "'Abel', sans-serif", fontSize: 14, color: "#4C96FF", padding: 0 }}
+              style={{ gap: 4, background: "none", border: "none", fontFamily: "'Heebo', sans-serif", fontSize: 14, color: "#4C96FF", padding: 0 }}
             >
               Add another field <Plus size={14} />
             </button>
@@ -166,7 +166,7 @@ export function MoreInfoStep({ onSubmit, onBack, onSkip, defaultValues }: MoreIn
 
           {/* Company Description */}
           <div className="flex flex-col" style={{ gap: 6 }}>
-            <label style={{ fontFamily: "'Abel', sans-serif", fontSize: "clamp(14px, 1.2vw, 18px)", color: "#414042", lineHeight: 1.1 }}>
+            <label style={{ fontFamily: "'Heebo', sans-serif", fontSize: "clamp(14px, 1.2vw, 18px)", color: "#414042", lineHeight: 1.1 }}>
               {t.moreInfo.companyDescription}
             </label>
             <textarea
@@ -181,7 +181,7 @@ export function MoreInfoStep({ onSubmit, onBack, onSkip, defaultValues }: MoreIn
                 border: "1px solid #F3F3F6",
                 background: "#FFFFFF",
                 outline: "none",
-                fontFamily: "'Abel', sans-serif",
+                fontFamily: "'Heebo', sans-serif",
                 fontSize: "clamp(13px, 1vw, 14px)",
                 color: "#0E1117",
                 resize: "none",
@@ -200,7 +200,7 @@ export function MoreInfoStep({ onSubmit, onBack, onSkip, defaultValues }: MoreIn
               style={{
                 width: 162, height: 40, borderRadius: 10,
                 backgroundImage: "linear-gradient(168.47deg, rgb(76, 150, 255) 12.19%, rgb(22, 103, 219) 93.76%)",
-                border: "none", fontSize: 16, color: "#FFFFFF", fontFamily: "'Abel', sans-serif",
+                border: "none", fontSize: 16, color: "#FFFFFF", fontFamily: "'Heebo', sans-serif",
                 cursor: isFormValid ? "pointer" : "not-allowed",
                 opacity: isFormValid ? 1 : 0.4,
               }}
@@ -214,14 +214,14 @@ export function MoreInfoStep({ onSubmit, onBack, onSkip, defaultValues }: MoreIn
               style={{
                 width: 140, height: 40, borderRadius: 10,
                 background: "#FFFFFF", border: "1px solid #EAEBEB",
-                fontSize: 16, color: "#647787", fontFamily: "'Abel', sans-serif",
+                fontSize: 16, color: "#647787", fontFamily: "'Heebo', sans-serif",
               }}
             >
               return
             </button>
           </div>
           {!isFormValid && (
-            <p style={{ fontSize: 12, color: "#FF676A", fontFamily: "'Abel', sans-serif", lineHeight: 1.3, margin: 0 }}>
+            <p style={{ fontSize: 12, color: "#FF676A", fontFamily: "'Heebo', sans-serif", lineHeight: 1.3, margin: 0 }}>
               {t.common.fillAllFields}
             </p>
           )}

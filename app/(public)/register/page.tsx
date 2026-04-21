@@ -55,6 +55,14 @@ export default function RegisterPage() {
         setError(t.register.alreadyRegistered);
         return;
       }
+      // When "Confirm email" is enabled in Supabase, signUp returns a user
+      // but no session. Onboarding requires a session, so stop here and tell
+      // the user to confirm before proceeding instead of dropping them into
+      // a flow that will fail with "Auth session missing!".
+      if (!signUpData.session) {
+        setError(`We sent a confirmation link to ${data.email}. Please confirm your email, then come back and log in.`);
+        return;
+      }
       router.push("/select-role");
     } catch { setError(t.login.genericError); }
     finally { setIsLoading(false); }
@@ -79,7 +87,7 @@ export default function RegisterPage() {
               {/* Title */}
               <div
                 className="w-[418px] max-w-full flex flex-col gap-[6px] items-center text-center"
-                style={{ fontFamily: "'Abel', sans-serif", lineHeight: "normal" }}
+                style={{ fontFamily: "'Heebo', sans-serif", lineHeight: "normal" }}
               >
                 <p className="text-[32px] text-[#0E1117] tracking-[-0.64px] min-w-full">
                   {t.register.title}
@@ -94,7 +102,7 @@ export default function RegisterPage() {
 
                 {/* Email */}
                 <div className="w-full flex flex-col gap-[11px] items-start">
-                  <p className="text-[18px] text-[#414042] text-start whitespace-nowrap" style={{ fontFamily: "'Abel', sans-serif", lineHeight: 1.1 }}>
+                  <p className="text-[18px] text-[#414042] text-start whitespace-nowrap" style={{ fontFamily: "'Heebo', sans-serif", lineHeight: 1.1 }}>
                     {t.register.email}
                   </p>
                   <div
@@ -108,18 +116,18 @@ export default function RegisterPage() {
                       className="placeholder:opacity-30 placeholder:text-[#647787] text-start flex-1 h-full"
                       style={{
                         border: "none", outline: "none", background: "transparent",
-                        fontFamily: "'Abel', sans-serif", fontSize: 14, color: "#0E1117",
+                        fontFamily: "'Heebo', sans-serif", fontSize: 14, color: "#0E1117",
                         letterSpacing: "-0.28px", lineHeight: "normal",
                         padding: "0 20px", borderRadius: 10,
                       }}
                     />
                   </div>
-                  {errors.email && <p style={{ fontFamily: "'Abel', sans-serif", fontSize: 12, color: "#EF4444" }}>{errors.email.message}</p>}
+                  {errors.email && <p style={{ fontFamily: "'Heebo', sans-serif", fontSize: 12, color: "#EF4444" }}>{errors.email.message}</p>}
                 </div>
 
                 {/* Password */}
                 <div className="w-full flex flex-col gap-[11px] items-start">
-                  <p className="text-[18px] text-[#414042] text-start whitespace-nowrap" style={{ fontFamily: "'Abel', sans-serif", lineHeight: 1.1 }}>
+                  <p className="text-[18px] text-[#414042] text-start whitespace-nowrap" style={{ fontFamily: "'Heebo', sans-serif", lineHeight: 1.1 }}>
                     {t.register.password}
                   </p>
                   <div
@@ -147,7 +155,7 @@ export default function RegisterPage() {
                       {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                     </button>
                   </div>
-                  {errors.password && <p style={{ fontFamily: "'Abel', sans-serif", fontSize: 12, color: "#EF4444" }}>{errors.password.message}</p>}
+                  {errors.password && <p style={{ fontFamily: "'Heebo', sans-serif", fontSize: 12, color: "#EF4444" }}>{errors.password.message}</p>}
 
                   {/* Password rules */}
                   {passwordValue.length > 0 && (
@@ -155,7 +163,7 @@ export default function RegisterPage() {
                       {passwordRules.map((rule) => {
                         const passed = rule.test(passwordValue);
                         return (
-                          <div key={rule.label} className="flex items-center gap-[8px]" style={{ fontFamily: "'Abel', sans-serif", fontSize: 14, color: passed ? "#22C55E" : "#0E1117" }}>
+                          <div key={rule.label} className="flex items-center gap-[8px]" style={{ fontFamily: "'Heebo', sans-serif", fontSize: 14, color: passed ? "#22C55E" : "#0E1117" }}>
                             {passed ? <Check size={14} /> : <X size={14} style={{ color: "#D1D5DB" }} />}
                             <span>{rule.label}</span>
                           </div>
@@ -168,7 +176,7 @@ export default function RegisterPage() {
 
               {/* Error */}
               {error && (
-                <div className="w-full rounded-[10px] px-4 py-3" style={{ background: "#FEF2F2", color: "#EF4444", fontFamily: "'Abel', sans-serif", fontSize: 14 }}>
+                <div className="w-full rounded-[10px] px-4 py-3" style={{ background: "#FEF2F2", color: "#EF4444", fontFamily: "'Heebo', sans-serif", fontSize: 14 }}>
                   {error}
                 </div>
               )}
@@ -180,7 +188,7 @@ export default function RegisterPage() {
                 className="w-full h-[50px] rounded-[10px] flex items-center justify-center cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                 style={{
                   backgroundImage: "linear-gradient(175.27deg, rgb(76, 150, 255) 12.19%, rgb(22, 103, 219) 93.76%)",
-                  border: "none", fontFamily: "'Abel', sans-serif", fontSize: 16, color: "#FFFFFF",
+                  border: "none", fontFamily: "'Heebo', sans-serif", fontSize: 16, color: "#FFFFFF",
                 }}
               >
                 {isLoading ? t.register.creatingAccount : t.register.createAccount}
@@ -201,7 +209,7 @@ export default function RegisterPage() {
               className="w-[499px] max-w-full h-[48px] bg-white border border-[#F3F3F6] rounded-[10px] overflow-hidden px-[10px] py-[12px] flex flex-col items-center justify-center cursor-pointer hover:bg-[#FAFBFC] transition-colors"
             >
               <div className="flex gap-[4px] items-center justify-center w-full">
-                <span style={{ fontFamily: "'Abel', sans-serif", fontSize: 14, color: "#0E1117", lineHeight: 1.1 }}>
+                <span style={{ fontFamily: "'Heebo', sans-serif", fontSize: 14, color: "#0E1117", lineHeight: 1.1 }}>
                   {t.register.googleButton}
                 </span>
                 <img src="/images/google-icon.png" alt="Google" className="w-[20px] h-[20px] object-cover shrink-0" />
@@ -211,13 +219,13 @@ export default function RegisterPage() {
 
           {/* Already have account + Terms */}
           <div className="w-full flex flex-col gap-[12px] items-center">
-            <p style={{ fontFamily: "'Abel', sans-serif", fontSize: 16, color: "#647787", textAlign: "center", lineHeight: 1.1 }}>
+            <p style={{ fontFamily: "'Heebo', sans-serif", fontSize: 16, color: "#647787", textAlign: "center", lineHeight: 1.1 }}>
               {t.register.haveAccount}{" "}
               <Link href="/login" style={{ color: "#4C96FF", textDecoration: "underline" }}>
                 {t.register.loginLink}
               </Link>
             </p>
-            <p style={{ fontFamily: "'Abel', sans-serif", fontSize: 14, color: "#647787", textAlign: "center", lineHeight: 1.1 }}>
+            <p style={{ fontFamily: "'Heebo', sans-serif", fontSize: 14, color: "#647787", textAlign: "center", lineHeight: 1.1 }}>
               {t.common.termsText} {t.common.termsLink} {t.common.and} <Link href="/privacy" target="_blank" style={{ color: "#4C96FF", textDecoration: "underline" }}>{t.common.privacyLink}</Link>.
             </p>
           </div>

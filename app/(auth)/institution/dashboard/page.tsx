@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/i18n/context";
@@ -13,21 +13,33 @@ import { JobDetailsModal } from "@/components/dashboard/job-details-modal";
 type JobTab = "open" | "all" | "closed";
 
 export default function MyJobsPage() {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
 
-  const [jobs, setJobs] = useState<JobCardData[]>(() => Array.from({ length: 9 }, (_, i) => ({
+  const buildJobs = (): JobCardData[] => Array.from({ length: 9 }, (_, i) => ({
     id: String(i + 1),
-    title: "Computer Science Teacher",
-    subtitle: "with at least 4 years of experience",
-    description: "This is a dummy paragraph about spacer experience and demonstrate how the actual text will look. It can be used.",
+    title: t.admin.sampleJobTitleAdmin,
+    subtitle: t.admin.sampleJobSubtitle,
+    description: t.admin.sampleJobDescription,
     date: "09/12/2026",
-    location: "Jaffa - Tel Aviv",
+    location: t.admin.sampleJobLocation,
     salaryMin: 30000,
     salaryMax: 50000,
     status: i % 3 === 0 ? "closed" as const : "open" as const,
     totalCandidates: 1240,
     isVerified: true,
-  })));
+  }));
+
+  const [jobs, setJobs] = useState<JobCardData[]>(buildJobs);
+  useEffect(() => {
+    setJobs((prev) => prev.map((j) => ({
+      ...j,
+      title: t.admin.sampleJobTitleAdmin,
+      subtitle: t.admin.sampleJobSubtitle,
+      description: t.admin.sampleJobDescription,
+      location: t.admin.sampleJobLocation,
+    })));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [locale]);
   const [activeTab, setActiveTab] = useState<JobTab>("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedJob, setSelectedJob] = useState<JobCardData | null>(null);

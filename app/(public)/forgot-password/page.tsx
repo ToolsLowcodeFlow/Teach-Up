@@ -57,7 +57,7 @@ export default function ForgotPasswordPage() {
           {/* Title */}
           <div
             className="flex w-[418px] max-w-full flex-col items-center gap-[6px] text-center"
-            style={{ fontFamily: "'Abel', sans-serif", lineHeight: "normal" }}
+            style={{ fontFamily: "'Heebo', sans-serif", lineHeight: "normal" }}
           >
             <p className="min-w-full text-[32px] tracking-[-0.64px] text-[#0E1117]">
               {t.forgotPassword.title}
@@ -71,13 +71,13 @@ export default function ForgotPasswordPage() {
             <div className="flex w-full flex-col items-center gap-[24px]">
               <p
                 className="w-full text-center"
-                style={{ color: "#22C55E", fontFamily: "'Abel', sans-serif", fontSize: 14, margin: 0, lineHeight: 1.4 }}
+                style={{ color: "#22C55E", fontFamily: "'Heebo', sans-serif", fontSize: 14, margin: 0, lineHeight: 1.4 }}
               >
                 {t.forgotPassword.successMessage}
               </p>
               <Link
                 href="/login"
-                style={{ fontFamily: "'Abel', sans-serif", fontSize: 16, color: "#4C96FF", textDecoration: "underline" }}
+                style={{ fontFamily: "'Heebo', sans-serif", fontSize: 16, color: "#4C96FF", textDecoration: "underline" }}
               >
                 {t.forgotPassword.backToLogin}
               </Link>
@@ -88,7 +88,7 @@ export default function ForgotPasswordPage() {
               <div className="flex w-full flex-col items-start gap-[11px]">
                 <p
                   className="whitespace-nowrap text-start text-[18px] text-[#414042]"
-                  style={{ fontFamily: "'Abel', sans-serif", lineHeight: 1.1 }}
+                  style={{ fontFamily: "'Heebo', sans-serif", lineHeight: 1.1 }}
                 >
                   {t.forgotPassword.email}
                 </p>
@@ -105,7 +105,7 @@ export default function ForgotPasswordPage() {
                       border: "none",
                       outline: "none",
                       background: "transparent",
-                      fontFamily: "'Abel', sans-serif",
+                      fontFamily: "'Heebo', sans-serif",
                       fontSize: 14,
                       color: "#0E1117",
                       letterSpacing: "-0.28px",
@@ -116,7 +116,7 @@ export default function ForgotPasswordPage() {
                   />
                 </div>
                 {errors.email && (
-                  <p style={{ fontFamily: "'Abel', sans-serif", fontSize: 12, color: "#EF4444" }}>
+                  <p style={{ fontFamily: "'Heebo', sans-serif", fontSize: 12, color: "#EF4444" }}>
                     {errors.email.message}
                   </p>
                 )}
@@ -125,7 +125,7 @@ export default function ForgotPasswordPage() {
               {error && (
                 <div
                   className="w-full rounded-[10px] px-4 py-3"
-                  style={{ background: "#FEF2F2", color: "#EF4444", fontFamily: "'Abel', sans-serif", fontSize: 14 }}
+                  style={{ background: "#FEF2F2", color: "#EF4444", fontFamily: "'Heebo', sans-serif", fontSize: 14 }}
                 >
                   {error}
                 </div>
@@ -139,7 +139,7 @@ export default function ForgotPasswordPage() {
                 style={{
                   backgroundImage: "linear-gradient(175.27deg, rgb(76, 150, 255) 12.19%, rgb(22, 103, 219) 93.76%)",
                   border: "none",
-                  fontFamily: "'Abel', sans-serif",
+                  fontFamily: "'Heebo', sans-serif",
                   fontSize: 16,
                   color: "#FFFFFF",
                 }}
@@ -152,7 +152,7 @@ export default function ForgotPasswordPage() {
                 <Link
                   href="/login"
                   style={{
-                    fontFamily: "'Abel', sans-serif",
+                    fontFamily: "'Heebo', sans-serif",
                     fontSize: 16,
                     color: "#4C96FF",
                     textDecoration: "underline",

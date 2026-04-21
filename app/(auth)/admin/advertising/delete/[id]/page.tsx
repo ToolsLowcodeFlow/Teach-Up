@@ -11,7 +11,7 @@ export default function DeleteBannerPage() {
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center"
-      style={{ fontFamily: "'Abel', sans-serif" }}
+      style={{ fontFamily: "'Heebo', sans-serif" }}
     >
       <iframe
         src="/admin/advertising"

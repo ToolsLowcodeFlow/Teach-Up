@@ -15,7 +15,7 @@
   --color-border-light: #F3F3F6;
   --color-background: #EFF5FE;
   --color-background-white: #FFFFFF;
-  --font-sans: 'Abel', sans-serif;
+  --font-sans: 'Heebo', sans-serif;
 }
 
 * {
@@ -25,7 +25,7 @@
 }
 
 body {
-  font-family: 'Abel', sans-serif;
+  font-family: 'Heebo', sans-serif;
   background: #EFF5FE;
   color: #0E1117;
   -webkit-font-smoothing: antialiased;

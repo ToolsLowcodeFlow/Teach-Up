@@ -13,19 +13,27 @@ export default function SelectRolePage() {
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // If user already has a completed profile, redirect to their dashboard
+  // Require a session: if the user has no Supabase session, send them to login.
+  // If they have a session AND a completed profile, jump straight to their dashboard.
   useEffect(() => {
     const checkProfile = async () => {
       const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-      const { data: profile } = await supabase
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      if (userError || !user) {
+        console.warn("[select-role] no session, redirecting to /login", userError);
+        router.push("/login");
+        return;
+      }
+      const { data: profile, error: profileError } = await supabase
         .from("profiles")
         .select("role, first_name, company_name")
         .eq("id", user.id)
-        .single();
+        .maybeSingle();
+      if (profileError) {
+        console.error("[select-role] profile fetch failed", profileError);
+        return;
+      }
       if (!profile) return;
-      // Onboarding is complete if they have a first_name (seeker) or company_name (institution)
       const onboardingDone = !!(profile.first_name || profile.company_name);
       if (!onboardingDone) return;
       switch (profile.role) {
@@ -52,7 +60,7 @@ export default function SelectRolePage() {
     <div
       className="w-screen h-screen overflow-hidden flex"
       dir={direction}
-      style={{ fontFamily: "'Abel', sans-serif", background: "#F7F9FC" }}
+      style={{ fontFamily: "'Heebo', sans-serif", background: "#F7F9FC" }}
     >
       {/* LEFT — Content */}
       <div className="flex-1 flex flex-col h-full">
@@ -165,7 +173,7 @@ export default function SelectRolePage() {
                 {isLoading ? "..." : t.selectRole.continueButton}
               </button>
               {!selectedRole && (
-                <p style={{ fontSize: 12, color: "#FF676A", fontFamily: "'Abel', sans-serif", lineHeight: 1.3, margin: 0 }}>
+                <p style={{ fontSize: 12, color: "#FF676A", fontFamily: "'Heebo', sans-serif", lineHeight: 1.3, margin: 0 }}>
                   {t.common.selectRoleAlert}
                 </p>
               )}

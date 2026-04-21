@@ -377,7 +377,7 @@ export default function SupplierDatabasePage() {
                     height: 50,
                     border: "none",
                     backgroundImage: "linear-gradient(173deg, #4C96FF 12%, #1667DB 94%)",
-                    fontFamily: "'Abel', sans-serif",
+                    fontFamily: "'Heebo', sans-serif",
                   }}
                 >
                   {isHe ? "חיפוש" : "Search"}

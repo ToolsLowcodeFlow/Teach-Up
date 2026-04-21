@@ -74,7 +74,7 @@ export default function ProfileSetupPage() {
   };
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden" style={{ fontFamily: "'Abel', sans-serif", background: "#F7F9FC" }} dir={direction}>
+    <div className="flex h-screen w-screen overflow-hidden" style={{ fontFamily: "'Heebo', sans-serif", background: "#F7F9FC" }} dir={direction}>
       {/* LEFT — Form content */}
       <div className="flex flex-1 flex-col overflow-y-auto">
         <div className="flex shrink-0 items-center justify-between" style={{ padding: "3vh 4vw 0 4vw" }}>

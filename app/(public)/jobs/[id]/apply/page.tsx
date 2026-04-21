@@ -21,7 +21,7 @@ export default function JobApplyPage() {
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center"
-      style={{ fontFamily: "'Abel', sans-serif" }}
+      style={{ fontFamily: "'Heebo', sans-serif" }}
     >
       <div className="fixed inset-0" style={{ background: "rgba(0,0,0,0.4)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }} onClick={() => router.back()} />
 
@@ -102,7 +102,7 @@ export default function JobApplyPage() {
               height: 50,
               border: "none",
               backgroundImage: "linear-gradient(168deg, #4C96FF 12%, #1667DB 94%)",
-              fontFamily: "'Abel', sans-serif",
+              fontFamily: "'Heebo', sans-serif",
               flexShrink: 0,
             }}
           >

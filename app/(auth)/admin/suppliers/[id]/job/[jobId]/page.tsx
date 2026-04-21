@@ -13,7 +13,7 @@ export default function AdminJobDetailPage() {
   return (
     <div
       className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto"
-      style={{ fontFamily: "'Abel', sans-serif" }}
+      style={{ fontFamily: "'Heebo', sans-serif" }}
     >
       <div className="fixed inset-0" style={{ background: "rgba(0,0,0,0.4)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }} onClick={() => router.back()} />
 
@@ -58,35 +58,35 @@ export default function AdminJobDetailPage() {
           <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" /></svg>
           </div>
-          <span className="text-sm text-foreground">Computer Science</span>
+          <span className="text-sm text-foreground">{t.admin.sampleCategory}</span>
         </div>
 
         {/* Title */}
         <h2 className="text-[20px] leading-[1.2] text-foreground" style={{ marginBottom: 6 }}>
-          Computer Science Teacher for a<br />Recognized College
+          {t.admin.sampleJobTitle}
         </h2>
 
         {/* Date + Job number */}
         <div className="flex items-center gap-4 text-xs" style={{ marginBottom: 16 }}>
           <span className="text-primary">08/12/2025</span>
-          <span className="text-muted-foreground">Job number · 84844985</span>
+          <span className="text-muted-foreground">{t.admin.jobNumberPrefix} 84844985</span>
         </div>
 
         {/* Description */}
         <p className="text-xs leading-[1.5] text-muted-foreground" style={{ marginBottom: 20 }}>
-          Lorem Ipsum Dolor Sit Emmet, Consecteur Adipiscing Elite Goler Monferrer Sobert Lorem Shabdach Yehol, Lorem Ipsum Dolor Sit Emmet, Consecteur Adipiscing Elite Goler Monferrer Sobert Lorem Shabdach Yehol, Lorem Ipsum Dolor Sit Emmet, Consecteur Adipiscing Elite Goler Monferrer Sobert Lorem Shabdach Yehol,
+          {t.admin.sampleLoremIpsum}
         </p>
 
         {/* Info grid */}
         <div className="rounded-[10px] border border-border-light" style={{ padding: "14px 18px", marginBottom: 20, background: "linear-gradient(180deg, #F7FAFF 0%, #EEF4FD 100%)" }}>
           <div className="grid grid-cols-6 gap-x-3 gap-y-4 text-center">
             {[
-              ["Hours of operation", "Lunch / Dinner"],
-              ["training", "Morning training"],
-              ["Years of experience", "09"],
-              ["Scope of work", "Full-time"],
-              ["area", "Tel Aviv, Israel"],
-              ["Salary range ₪", "10,000 - 20,000"],
+              [t.admin.hoursOfOperation, t.admin.lunchDinner],
+              [t.admin.training, t.admin.morningTraining],
+              [t.admin.yearsOfExperience, "09"],
+              [t.admin.scopeOfWork, t.admin.fullTime],
+              [t.admin.area, t.admin.sampleLocation],
+              [t.admin.salaryRange, "10,000 - 20,000"],
             ].map(([label, value]) => (
               <div key={label} className="flex flex-col gap-0.5">
                 <span className="text-[10px] text-muted-foreground">{label}</span>
@@ -98,7 +98,7 @@ export default function AdminJobDetailPage() {
 
         {/* Language tags */}
         <div className="flex items-center gap-2" style={{ marginBottom: 20 }}>
-          {["Spanish", "English", "Hebrew"].map((lang) => (
+          {[t.admin.languageSpanish, t.admin.languageEnglish, t.admin.languageHebrew].map((lang) => (
             <span key={lang} className="rounded-full border border-border-light text-xs text-foreground" style={{ padding: "5px 16px" }}>
               {lang}
             </span>
@@ -109,13 +109,13 @@ export default function AdminJobDetailPage() {
         <div className="flex flex-col" style={{ gap: 8, marginBottom: 20 }}>
           <h3 className="text-base text-foreground">{t.admin.companyDescription}</h3>
           <p className="text-xs leading-[1.5] text-muted-foreground">
-            Lorem Ipsum Dolor Sit Emmet, Consecteur Adipiscing Elite Goler Monferrer Sobert Lorem Shabdach Yehol, Lorem Ipsum Dolor Sit Emmet, Consecteur Adipiscing Elite Goler Monferrer Sobert Lorem Shabdach Yehol, Lorem Ipsum Dolor Sit Emmet, Consecteur Adipiscing Elite Goler Monferrer Sobert Lorem Shabdach Yehol,
+            {t.admin.sampleLoremIpsum}
           </p>
           <div className="flex items-center gap-2" style={{ marginTop: 4 }}>
             <div className="h-6 w-6 overflow-hidden rounded-full">
               <img src="/images/job-avatar.png" alt="" className="h-full w-full object-cover" />
             </div>
-            <span className="text-xs text-foreground">Company Name: Lor Ipsum</span>
+            <span className="text-xs text-foreground">{t.admin.companyNameLabel}: {t.admin.sampleCompanyName}</span>
           </div>
         </div>
 
@@ -126,7 +126,7 @@ export default function AdminJobDetailPage() {
             <div key={i} className="flex items-center justify-between rounded-[10px] border border-border-light" style={{ padding: "10px 14px", background: "linear-gradient(180deg, #FFFDF7 0%, #FFF8E8 100%)" }}>
               <div className="flex items-center gap-2">
                 <Link2 size={14} className="shrink-0 text-muted-foreground" />
-                <span className="text-xs text-primary">Computer Science Teacher for a Recognized College</span>
+                <span className="text-xs text-primary">{t.admin.sampleJobTitle}</span>
                 <span className="text-[10px] text-muted-foreground">142 KB</span>
               </div>
             </div>

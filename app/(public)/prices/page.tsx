@@ -192,7 +192,7 @@ export default function PricesPage() {
               backgroundImage: "linear-gradient(174deg, #4C96FF 12%, #1667DB 94%)",
               border: "none",
               fontSize: 16,
-              fontFamily: "'Abel', sans-serif",
+              fontFamily: "'Heebo', sans-serif",
               flexShrink: 0,
             }}
           >

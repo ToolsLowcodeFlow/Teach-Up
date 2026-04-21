@@ -6,17 +6,11 @@ import { MoreHorizontal, Zap, ChevronDown, ChevronRight, Search } from "lucide-r
 import { AdminNavbar } from "@/components/admin/admin-navbar";
 import { useLanguage } from "@/lib/i18n/context";
 
-const suppliers = Array.from({ length: 8 }, (_, i) => ({
-  id: i + 1,
-  company: "Tel Aviv University",
-  joiningDate: "08/10/26",
-  employees: "578954985",
-  serviceType: "Lorem Ipsum",
-  employerType: "Lorem Ipsum",
-  phone: "052-7058732",
-  orbit: "₪100 monthly",
-  status: i === 0 ? "new" : i === 5 ? "inactive" : "active",
-}));
+type SupplierStatus = "new" | "active" | "inactive";
+
+const supplierStatuses: SupplierStatus[] = Array.from({ length: 8 }, (_, i) =>
+  i === 0 ? "new" : i === 5 ? "inactive" : "active"
+);
 
 function exportToCSV(data: Record<string, string>[], filename: string) {
   const headers = Object.keys(data[0]);
@@ -46,8 +40,25 @@ export default function AdminSuppliersPage() {
     { label: t.admin.totalSuppliers, value: "760", change: "+12%", positive: true },
   ];
 
+  const statusLabel: Record<SupplierStatus, string> = {
+    new: t.admin.statusNew,
+    active: t.admin.statusActive,
+    inactive: t.admin.statusInactive,
+  };
+  const suppliers = supplierStatuses.map((status, i) => ({
+    id: i + 1,
+    company: t.admin.sampleSupplierName,
+    joiningDate: "08/10/26",
+    employees: "578954985",
+    serviceType: t.admin.sampleLoremShort,
+    employerType: t.admin.sampleLoremShort,
+    phone: "052-7058732",
+    orbit: `\u20aa100 ${t.admin.monthlyPrice.split("\n")[0]}`,
+    status,
+  }));
+
   return (
-    <div className="min-h-screen bg-[#F7F9FC]" style={{ fontFamily: "'Abel', sans-serif" }}>
+    <div className="min-h-screen bg-[#F7F9FC]" style={{ fontFamily: "'Heebo', sans-serif" }}>
       <AdminNavbar />
 
       <div dir={direction} style={{ padding: "30px 40px 60px" }}>
@@ -155,7 +166,7 @@ export default function AdminSuppliersPage() {
                           background: sup.status === "new" ? "#4C96FF" : sup.status === "active" ? "#20AB7F" : "#FF676A",
                         }}
                       >
-                        {sup.status}
+                        {statusLabel[sup.status]}
                       </span>
                     </td>
                     <td style={{ padding: "14px 28px 14px 16px" }}>

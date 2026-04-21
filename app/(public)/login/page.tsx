@@ -32,30 +32,67 @@ export default function LoginPage() {
     setError(null);
     try {
       const supabase = createClient();
-      const { error: authError } = await supabase.auth.signInWithPassword({ email: data.email, password: data.password });
-      if (authError) { setError(t.login.invalidCredentials); return; }
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("role, first_name, company_name")
-          .eq("id", user.id)
-          .single();
-        const onboardingDone = !!(profile?.first_name || profile?.company_name);
-        if (!profile || !onboardingDone) {
-          router.push("/select-role");
+      const { data: signInData, error: authError } = await supabase.auth.signInWithPassword({ email: data.email, password: data.password });
+      if (authError) {
+        console.error("[login] signIn failed", { code: authError.code, status: authError.status, message: authError.message });
+        if (authError.code === "email_not_confirmed" || /confirm/i.test(authError.message)) {
+          setError("Your email isn't confirmed yet. Check your inbox for the confirmation link.");
         } else {
-          switch (profile.role) {
-            case "admin": router.push("/admin/suppliers"); break;
-            case "institution": router.push("/institution/dashboard"); break;
-            case "supplier": router.push("/supplier/dashboard"); break;
-            case "seeker": router.push("/jobs"); break;
-            default: router.push("/select-role");
-          }
+          setError(`${t.login.invalidCredentials} (${authError.message})`);
+        }
+        return;
+      }
+      const user = signInData?.user;
+      const session = signInData?.session;
+      console.warn("[login] signIn result", {
+        hasUser: !!user,
+        userId: user?.id,
+        hasSession: !!session,
+        accessTokenLen: session?.access_token?.length,
+      });
+      if (!user || !session) {
+        setError(
+          "Sign-in did not establish a session — your email may not be confirmed. " +
+          "Open Supabase → Authentication → Users and confirm the account, then try again."
+        );
+        return;
+      }
+      const { data: sessionCheck } = await supabase.auth.getSession();
+      console.warn("[login] getSession after signIn", {
+        hasSession: !!sessionCheck?.session,
+        userId: sessionCheck?.session?.user?.id,
+      });
+      const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("role, first_name, company_name")
+        .eq("id", user.id)
+        .single();
+      if (profileError) {
+        console.error("[login] profile fetch failed", profileError);
+      }
+      console.log("[login] profile", profile);
+      const onboardingDone = !!(profile?.first_name || profile?.company_name);
+      let target = "/select-role";
+      if (profile && onboardingDone) {
+        switch (profile.role) {
+          case "admin": target = "/admin/suppliers"; break;
+          case "institution": target = "/institution/dashboard"; break;
+          case "supplier": target = "/supplier/dashboard"; break;
+          case "seeker": target = "/jobs"; break;
+          default: target = "/select-role";
         }
       }
-    } catch { setError(t.login.genericError); }
-    finally { setIsLoading(false); }
+      console.warn("[login] redirecting to", target);
+      // Hard navigation: forces the browser to send the freshly set auth cookie
+      // on the next request and avoids the RSC-payload fallback path that was
+      // dropping the session mid-flight.
+      window.location.assign(target);
+    } catch (e) {
+      console.error("[login] unexpected error", e);
+      setError(t.login.genericError);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleGoogleLogin = async () => {
@@ -80,7 +117,7 @@ export default function LoginPage() {
               {/* Title: w-418, gap-6, centered */}
               <div
                 className="w-[418px] max-w-full flex flex-col gap-[6px] items-center text-center"
-                style={{ fontFamily: "'Abel', sans-serif", lineHeight: "normal" }}
+                style={{ fontFamily: "'Heebo', sans-serif", lineHeight: "normal" }}
               >
                 <p className="text-[32px] text-[#0E1117] tracking-[-0.64px] min-w-full">
                   {t.login.title}
@@ -101,7 +138,7 @@ export default function LoginPage() {
                     style={{
                       background: activeTab === "login" ? "rgba(119,191,255,0.17)" : "#F3F3F6",
                       border: activeTab === "login" ? "1px solid #4C96FF" : "none",
-                      fontFamily: "'Abel', sans-serif", fontSize: 16, lineHeight: 1.1,
+                      fontFamily: "'Heebo', sans-serif", fontSize: 16, lineHeight: 1.1,
                       color: activeTab === "login" ? "#4C96FF" : "#647787",
                     }}
                   >
@@ -115,7 +152,7 @@ export default function LoginPage() {
                     style={{
                       background: activeTab === "candidate" ? "rgba(119,191,255,0.17)" : "#F3F3F6",
                       border: activeTab === "candidate" ? "1px solid #4C96FF" : "none",
-                      fontFamily: "'Abel', sans-serif", fontSize: 16, lineHeight: 1.1,
+                      fontFamily: "'Heebo', sans-serif", fontSize: 16, lineHeight: 1.1,
                       color: activeTab === "candidate" ? "#4C96FF" : "#647787",
                     }}
                   >
@@ -129,7 +166,7 @@ export default function LoginPage() {
 
                 {/* Email */}
                 <div className="w-full flex flex-col gap-[11px] items-start">
-                  <p className="text-[18px] text-[#414042] text-start whitespace-nowrap" style={{ fontFamily: "'Abel', sans-serif", lineHeight: 1.1 }}>
+                  <p className="text-[18px] text-[#414042] text-start whitespace-nowrap" style={{ fontFamily: "'Heebo', sans-serif", lineHeight: 1.1 }}>
                     {t.login.email}
                   </p>
                   <div
@@ -143,20 +180,20 @@ export default function LoginPage() {
                       className="placeholder:opacity-30 placeholder:text-[#647787] text-start flex-1 h-full"
                       style={{
                         border: "none", outline: "none", background: "transparent",
-                        fontFamily: "'Abel', sans-serif", fontSize: 14, color: "#0E1117",
+                        fontFamily: "'Heebo', sans-serif", fontSize: 14, color: "#0E1117",
                         letterSpacing: "-0.28px", lineHeight: "normal",
                         padding: "0 20px",
                         borderRadius: 10,
                       }}
                     />
                   </div>
-                  {errors.email && <p style={{ fontFamily: "'Abel', sans-serif", fontSize: 12, color: "#EF4444" }}>{errors.email.message}</p>}
+                  {errors.email && <p style={{ fontFamily: "'Heebo', sans-serif", fontSize: 12, color: "#EF4444" }}>{errors.email.message}</p>}
                 </div>
 
                 {/* Password group: gap-12 */}
                 <div className="w-full flex flex-col gap-[12px] items-start">
                   <div className="w-full flex flex-col gap-[11px] items-start">
-                    <p className="text-[18px] text-[#414042] text-start whitespace-nowrap" style={{ fontFamily: "'Abel', sans-serif", lineHeight: 1.1 }}>
+                    <p className="text-[18px] text-[#414042] text-start whitespace-nowrap" style={{ fontFamily: "'Heebo', sans-serif", lineHeight: 1.1 }}>
                       {t.login.password}
                     </p>
                     <div
@@ -185,13 +222,13 @@ export default function LoginPage() {
                         {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                       </button>
                     </div>
-                    {errors.password && <p style={{ fontFamily: "'Abel', sans-serif", fontSize: 12, color: "#EF4444" }}>{errors.password.message}</p>}
+                    {errors.password && <p style={{ fontFamily: "'Heebo', sans-serif", fontSize: 12, color: "#EF4444" }}>{errors.password.message}</p>}
                   </div>
                   {/* Forgot: text-end, underline */}
                   <Link
                     href="/forgot-password"
                     className="w-full text-start underline"
-                    style={{ fontFamily: "'Abel', sans-serif", fontSize: 16, color: "#4C96FF", lineHeight: 1.1, textDecorationStyle: "solid" }}
+                    style={{ fontFamily: "'Heebo', sans-serif", fontSize: 16, color: "#4C96FF", lineHeight: 1.1, textDecorationStyle: "solid" }}
                   >
                     {t.login.forgotPassword}.
                   </Link>
@@ -202,7 +239,7 @@ export default function LoginPage() {
                 <p
                   style={{
                     color: "#DC2626",
-                    fontFamily: "'Abel', sans-serif",
+                    fontFamily: "'Heebo', sans-serif",
                     fontSize: 14,
                     lineHeight: 1.4,
                     margin: 0,
@@ -219,7 +256,7 @@ export default function LoginPage() {
                 className="w-full h-[50px] rounded-[10px] flex items-center justify-center px-[7px] py-[17px] cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                 style={{
                   backgroundImage: "linear-gradient(175.27deg, rgb(76, 150, 255) 12.19%, rgb(22, 103, 219) 93.76%)",
-                  border: "none", fontFamily: "'Abel', sans-serif", fontSize: 16, color: "#FFFFFF",
+                  border: "none", fontFamily: "'Heebo', sans-serif", fontSize: 16, color: "#FFFFFF",
                 }}
               >
                 {isLoading ? t.login.loggingIn : t.login.loginButton}
@@ -240,7 +277,7 @@ export default function LoginPage() {
               className="w-[499px] max-w-full h-[48px] bg-white border border-[#F3F3F6] rounded-[10px] overflow-hidden px-[10px] py-[12px] flex flex-col items-center justify-center cursor-pointer hover:bg-[#FAFBFC] transition-colors"
             >
               <div className="flex gap-[4px] items-center justify-center w-full">
-                <span style={{ fontFamily: "'Abel', sans-serif", fontSize: 14, color: "#0E1117", lineHeight: 1.1, textAlign: "center" }}>
+                <span style={{ fontFamily: "'Heebo', sans-serif", fontSize: 14, color: "#0E1117", lineHeight: 1.1, textAlign: "center" }}>
                   {t.login.googleButton}
                 </span>
                 <img src="/images/google-icon.png" alt="Google" className="w-[20px] h-[20px] object-cover shrink-0" />
@@ -249,7 +286,7 @@ export default function LoginPage() {
           </div>
 
           {/* Create account */}
-          <p style={{ fontFamily: "'Abel', sans-serif", fontSize: 16, color: "#647787", textAlign: "center", lineHeight: 1.1 }}>
+          <p style={{ fontFamily: "'Heebo', sans-serif", fontSize: 16, color: "#647787", textAlign: "center", lineHeight: 1.1 }}>
             {t.login.noAccount}{" "}
             <Link href="/register" style={{ color: "#4C96FF", textDecoration: "underline" }}>
               {t.login.createAccountLink}
@@ -257,7 +294,7 @@ export default function LoginPage() {
           </p>
 
           {/* Terms */}
-          <p style={{ fontFamily: "'Abel', sans-serif", fontSize: 14, color: "#647787", textAlign: "center", lineHeight: 1.1 }}>
+          <p style={{ fontFamily: "'Heebo', sans-serif", fontSize: 14, color: "#647787", textAlign: "center", lineHeight: 1.1 }}>
             {t.common.termsText} {t.common.termsLink} {t.common.and} <Link href="/privacy" target="_blank" style={{ color: "#4C96FF", textDecoration: "underline" }}>{t.common.privacyLink}</Link>.
           </p>
         </div>

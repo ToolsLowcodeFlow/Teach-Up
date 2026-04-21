@@ -9,7 +9,7 @@ export function OnboardingSplitLayout({ children, step }: OnboardingSplitLayoutP
   return (
     <div
       className="w-screen h-screen overflow-hidden flex"
-      style={{ fontFamily: "'Abel', sans-serif", background: "#F7F9FC" }}
+      style={{ fontFamily: "'Heebo', sans-serif", background: "#F7F9FC" }}
     >
       {/* LEFT — Content */}
       <div className="flex-1 flex flex-col h-full">

@@ -18,7 +18,7 @@ export async function updateSession(request: NextRequest) {
   ) || path.startsWith("/profile") || path.startsWith("/messages")
     || path.startsWith("/contact") || path.startsWith("/favorites")
     || path.startsWith("/supplier-database") || path.startsWith("/about")
-    || path.startsWith("/prices");
+    || path.startsWith("/prices") || path.startsWith("/privacy");
 
   if (isPublicRoute) {
     return supabaseResponse;

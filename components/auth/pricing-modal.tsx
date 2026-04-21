@@ -31,7 +31,7 @@ export function PricingModal({ onContinue, onReturn }: PricingModalProps) {
   return (
     <div
       className="fixed inset-0 z-50 flex flex-col items-center justify-center"
-      style={{ fontFamily: "'Abel', sans-serif", backdropFilter: "blur(4px)", background: "rgba(80, 100, 140, 0.3)" }}
+      style={{ fontFamily: "'Heebo', sans-serif", backdropFilter: "blur(4px)", background: "rgba(80, 100, 140, 0.3)" }}
     >
       {/* Modal card */}
       <div
@@ -114,7 +114,7 @@ export function PricingModal({ onContinue, onReturn }: PricingModalProps) {
           style={{
             width: "65%", maxWidth: 360, height: 38,
             borderRadius: 20, backgroundImage: "linear-gradient(168deg, #4C96FF 12%, #1667DB 94%)",
-            border: "none", fontSize: 13, color: "#FFFFFF", fontFamily: "'Abel', sans-serif",
+            border: "none", fontSize: 13, color: "#FFFFFF", fontFamily: "'Heebo', sans-serif",
           }}
         >
           {t.success.selectPackage}

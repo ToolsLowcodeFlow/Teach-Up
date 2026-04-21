@@ -48,10 +48,10 @@ export function SupplierRegistrationStep({ onSubmit, onBack, onSkip }: SupplierR
   const inputStyle: React.CSSProperties = {
     width: "100%", height: "clamp(36px, 3.5vh, 44px)", borderRadius: 10, padding: "0 20px",
     border: "1px solid #F3F3F6", background: "#FFFFFF", outline: "none",
-    fontFamily: "'Abel', sans-serif", fontSize: "clamp(12px, 1vw, 14px)", color: "#0E1117",
+    fontFamily: "'Heebo', sans-serif", fontSize: "clamp(12px, 1vw, 14px)", color: "#0E1117",
   };
   const selectStyle: React.CSSProperties = { ...inputStyle, appearance: "none" as const, cursor: "pointer", paddingInlineStart: 36 };
-  const labelStyle: React.CSSProperties = { fontFamily: "'Abel', sans-serif", fontSize: "clamp(13px, 1.1vw, 16px)", color: "#414042", lineHeight: 1.1 };
+  const labelStyle: React.CSSProperties = { fontFamily: "'Heebo', sans-serif", fontSize: "clamp(13px, 1.1vw, 16px)", color: "#414042", lineHeight: 1.1 };
 
   return (
     <OnboardingSplitLayout step={{ current: 4, total: 4 }}>
@@ -62,10 +62,10 @@ export function SupplierRegistrationStep({ onSubmit, onBack, onSkip }: SupplierR
 
           {/* Title + Subtitle */}
           <div className="flex flex-col" style={{ gap: 6 }}>
-            <h1 style={{ fontSize: "clamp(22px, 2.5vw, 36px)", color: "#0E1117", lineHeight: 1.1, margin: 0, fontFamily: "'Abel', sans-serif" }}>
+            <h1 style={{ fontSize: "clamp(22px, 2.5vw, 36px)", color: "#0E1117", lineHeight: 1.1, margin: 0, fontFamily: "'Heebo', sans-serif" }}>
               {t.supplierRegistration.title}
             </h1>
-            <p style={{ fontSize: "clamp(11px, 0.85vw, 13px)", color: "#647787", lineHeight: 1.4, margin: 0, fontFamily: "'Abel', sans-serif" }}>
+            <p style={{ fontSize: "clamp(11px, 0.85vw, 13px)", color: "#647787", lineHeight: 1.4, margin: 0, fontFamily: "'Heebo', sans-serif" }}>
               {t.supplierRegistration.subtitle}
             </p>
           </div>
@@ -154,7 +154,7 @@ export function SupplierRegistrationStep({ onSubmit, onBack, onSkip }: SupplierR
               <div className="flex flex-col" style={{ gap: 4 }}>
                 <label style={labelStyle}>{t.supplierRegistration.serviceName}</label>
                 <input {...register(`services.${index}.service_name`)} placeholder="Type here..." className="placeholder:opacity-30 placeholder:text-[#647787]" style={inputStyle} />
-                <button type="button" style={{ background: "none", border: "none", fontFamily: "'Abel', sans-serif", fontSize: 12, color: "#4C96FF", cursor: "pointer", padding: 0, alignSelf: "flex-end" }}>
+                <button type="button" style={{ background: "none", border: "none", fontFamily: "'Heebo', sans-serif", fontSize: 12, color: "#4C96FF", cursor: "pointer", padding: 0, alignSelf: "flex-end" }}>
                   {t.supplierRegistration.serviceDetails}
                 </button>
               </div>
@@ -172,7 +172,7 @@ export function SupplierRegistrationStep({ onSubmit, onBack, onSkip }: SupplierR
 
               {/* Image upload + remove */}
               <div className="flex items-center justify-between">
-                <label className="cursor-pointer flex items-center" style={{ gap: 4, fontFamily: "'Abel', sans-serif", fontSize: 13, color: "#4C96FF" }}>
+                <label className="cursor-pointer flex items-center" style={{ gap: 4, fontFamily: "'Heebo', sans-serif", fontSize: 13, color: "#4C96FF" }}>
                   <Upload size={14} /> {t.supplierRegistration.addImageToPost}
                   <input type="file" accept="image/*" className="hidden" onChange={(e) => handleServiceImageUpload(index, e)} />
                 </label>
@@ -192,7 +192,7 @@ export function SupplierRegistrationStep({ onSubmit, onBack, onSkip }: SupplierR
           <button
             type="button"
             onClick={() => append({ service_type: "", service_name: "", description: "", image_url: "" })}
-            style={{ background: "none", border: "none", fontFamily: "'Abel', sans-serif", fontSize: 14, color: "#4C96FF", cursor: "pointer", padding: 0, alignSelf: "flex-end", display: "flex", alignItems: "center", gap: 4 }}
+            style={{ background: "none", border: "none", fontFamily: "'Heebo', sans-serif", fontSize: 14, color: "#4C96FF", cursor: "pointer", padding: 0, alignSelf: "flex-end", display: "flex", alignItems: "center", gap: 4 }}
           >
             Add another service <Plus size={14} />
           </button>
@@ -200,13 +200,13 @@ export function SupplierRegistrationStep({ onSubmit, onBack, onSkip }: SupplierR
 
         {/* Bottom — Buttons */}
         <div className="flex items-center shrink-0" style={{ gap: 16, paddingTop: "clamp(8px, 1vh, 16px)" }}>
-          <button type="button" onClick={onSkip} style={{ background: "none", border: "none", fontFamily: "'Abel', sans-serif", fontSize: 14, color: "#647787", cursor: "pointer" }}>
+          <button type="button" onClick={onSkip} style={{ background: "none", border: "none", fontFamily: "'Heebo', sans-serif", fontSize: 14, color: "#647787", cursor: "pointer" }}>
             {t.supplierRegistration.hopping}
           </button>
           <button
             type="submit"
             className="flex items-center justify-center cursor-pointer"
-            style={{ width: 162, height: 40, borderRadius: 10, backgroundImage: "linear-gradient(168.47deg, rgb(76, 150, 255) 12.19%, rgb(22, 103, 219) 93.76%)", border: "none", fontSize: 16, color: "#FFFFFF", fontFamily: "'Abel', sans-serif" }}
+            style={{ width: 162, height: 40, borderRadius: 10, backgroundImage: "linear-gradient(168.47deg, rgb(76, 150, 255) 12.19%, rgb(22, 103, 219) 93.76%)", border: "none", fontSize: 16, color: "#FFFFFF", fontFamily: "'Heebo', sans-serif" }}
           >
             continuation
           </button>
@@ -214,7 +214,7 @@ export function SupplierRegistrationStep({ onSubmit, onBack, onSkip }: SupplierR
             type="button"
             onClick={onSkip}
             className="flex items-center justify-center cursor-pointer"
-            style={{ width: 140, height: 40, borderRadius: 10, background: "#FFFFFF", border: "1px solid #EAEBEB", fontSize: 16, color: "#647787", fontFamily: "'Abel', sans-serif" }}
+            style={{ width: 140, height: 40, borderRadius: 10, background: "#FFFFFF", border: "1px solid #EAEBEB", fontSize: 16, color: "#647787", fontFamily: "'Heebo', sans-serif" }}
           >
             return
           </button>

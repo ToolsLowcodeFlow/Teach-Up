@@ -59,7 +59,7 @@ export default function ResetPasswordPage() {
           {/* Title */}
           <div
             className="flex w-[418px] max-w-full flex-col items-center gap-[6px] text-center"
-            style={{ fontFamily: "'Abel', sans-serif", lineHeight: "normal" }}
+            style={{ fontFamily: "'Heebo', sans-serif", lineHeight: "normal" }}
           >
             <p className="min-w-full text-[32px] tracking-[-0.64px] text-[#0E1117]">
               {t.resetPassword.title}
@@ -74,7 +74,7 @@ export default function ResetPasswordPage() {
             <div className="flex w-full flex-col items-start gap-[11px]">
               <p
                 className="whitespace-nowrap text-start text-[18px] text-[#414042]"
-                style={{ fontFamily: "'Abel', sans-serif", lineHeight: 1.1 }}
+                style={{ fontFamily: "'Heebo', sans-serif", lineHeight: 1.1 }}
               >
                 {t.resetPassword.newPassword}
               </p>
@@ -89,7 +89,7 @@ export default function ResetPasswordPage() {
                   className="h-full flex-1 text-start placeholder:text-[#B6B6B6]"
                   style={{
                     border: "none", outline: "none", background: "transparent",
-                    fontFamily: "'Abel', sans-serif", fontSize: 14, color: "#0E1117",
+                    fontFamily: "'Heebo', sans-serif", fontSize: 14, color: "#0E1117",
                     letterSpacing: "-0.28px", lineHeight: "normal",
                     padding: "0 20px", borderRadius: 10,
                   }}
@@ -104,7 +104,7 @@ export default function ResetPasswordPage() {
                 </button>
               </div>
               {errors.password && (
-                <p style={{ fontFamily: "'Abel', sans-serif", fontSize: 12, color: "#EF4444" }}>
+                <p style={{ fontFamily: "'Heebo', sans-serif", fontSize: 12, color: "#EF4444" }}>
                   {errors.password.message}
                 </p>
               )}
@@ -114,7 +114,7 @@ export default function ResetPasswordPage() {
             <div className="flex w-full flex-col items-start gap-[11px]">
               <p
                 className="whitespace-nowrap text-start text-[18px] text-[#414042]"
-                style={{ fontFamily: "'Abel', sans-serif", lineHeight: 1.1 }}
+                style={{ fontFamily: "'Heebo', sans-serif", lineHeight: 1.1 }}
               >
                 {t.resetPassword.confirmPassword}
               </p>
@@ -129,7 +129,7 @@ export default function ResetPasswordPage() {
                   className="h-full flex-1 text-start placeholder:text-[#B6B6B6]"
                   style={{
                     border: "none", outline: "none", background: "transparent",
-                    fontFamily: "'Abel', sans-serif", fontSize: 14, color: "#0E1117",
+                    fontFamily: "'Heebo', sans-serif", fontSize: 14, color: "#0E1117",
                     letterSpacing: "-0.28px", lineHeight: "normal",
                     padding: "0 20px", borderRadius: 10,
                   }}
@@ -144,7 +144,7 @@ export default function ResetPasswordPage() {
                 </button>
               </div>
               {errors.confirmPassword && (
-                <p style={{ fontFamily: "'Abel', sans-serif", fontSize: 12, color: "#EF4444" }}>
+                <p style={{ fontFamily: "'Heebo', sans-serif", fontSize: 12, color: "#EF4444" }}>
                   {errors.confirmPassword.message}
                 </p>
               )}
@@ -153,7 +153,7 @@ export default function ResetPasswordPage() {
             {error && (
               <div
                 className="w-full rounded-[10px] px-4 py-3"
-                style={{ background: "#FEF2F2", color: "#EF4444", fontFamily: "'Abel', sans-serif", fontSize: 14 }}
+                style={{ background: "#FEF2F2", color: "#EF4444", fontFamily: "'Heebo', sans-serif", fontSize: 14 }}
               >
                 {error}
               </div>
@@ -166,7 +166,7 @@ export default function ResetPasswordPage() {
               className="flex h-[50px] w-full cursor-pointer items-center justify-center rounded-[10px] disabled:cursor-not-allowed disabled:opacity-70"
               style={{
                 backgroundImage: "linear-gradient(175.27deg, rgb(76, 150, 255) 12.19%, rgb(22, 103, 219) 93.76%)",
-                border: "none", fontFamily: "'Abel', sans-serif", fontSize: 16, color: "#FFFFFF",
+                border: "none", fontFamily: "'Heebo', sans-serif", fontSize: 16, color: "#FFFFFF",
               }}
             >
               {isLoading ? t.resetPassword.updating : t.resetPassword.updateButton}

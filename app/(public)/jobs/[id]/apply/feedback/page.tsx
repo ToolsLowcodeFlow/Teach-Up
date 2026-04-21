@@ -22,7 +22,7 @@ export default function FeedbackPage() {
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center"
-      style={{ fontFamily: "'Abel', sans-serif" }}
+      style={{ fontFamily: "'Heebo', sans-serif" }}
     >
       <div className="fixed inset-0" style={{ background: "rgba(0,0,0,0.4)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }} onClick={() => router.push("/jobs")} />
 

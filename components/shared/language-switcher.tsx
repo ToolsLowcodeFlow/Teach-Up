@@ -13,7 +13,7 @@ export function LanguageSwitcher() {
       style={{
         border: "1px solid #EAEBEB",
         color: "#414042",
-        fontFamily: "'Abel', sans-serif",
+        fontFamily: "'Heebo', sans-serif",
       }}
       title={locale === "en" ? "Switch to Hebrew" : "Switch to English"}
     >

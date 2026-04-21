@@ -17,15 +17,15 @@ interface Conversation {
 
 const avatars = ["/images/avatar-1.jpg", "/images/avatar-2.jpg", "/images/avatar-3.jpg"];
 
-function getMockConversations(name: string): Conversation[] {
+function getMockConversations(name: string, preview: string, time1: string, time2: string): Conversation[] {
   return [
-    { id: "1", name, preview: "Lorem Ipsum Dolor Lorem Ipsum...", time: "Today at 16:40", avatar: avatars[0] },
-    { id: "2", name, preview: "Lorem Ipsum Dolor Lorem Ipsum...", time: "Today at 16:40", unread: true, avatar: avatars[1] },
-    { id: "3", name, preview: "Lorem Ipsum Dolor Lorem Ipsum...", time: "Today at 16:40", avatar: avatars[2] },
-    { id: "4", name, preview: "Lorem Ipsum Dolor Lorem Ipsum...", time: "Today at 16:40", avatar: avatars[0] },
-    { id: "5", name, preview: "Lorem Ipsum Dolor Lorem Ipsum...", time: "Today at 4:40 PM", avatar: avatars[1] },
-    { id: "6", name, preview: "Lorem Ipsum Dolor Lorem Ipsum...", time: "Today at 4:40 PM", avatar: avatars[2] },
-    { id: "7", name, preview: "Lorem Ipsum Dolor Lorem Ipsum...", time: "Today at 4:40 PM", avatar: avatars[0] },
+    { id: "1", name, preview, time: time1, avatar: avatars[0] },
+    { id: "2", name, preview, time: time1, unread: true, avatar: avatars[1] },
+    { id: "3", name, preview, time: time1, avatar: avatars[2] },
+    { id: "4", name, preview, time: time1, avatar: avatars[0] },
+    { id: "5", name, preview, time: time2, avatar: avatars[1] },
+    { id: "6", name, preview, time: time2, avatar: avatars[2] },
+    { id: "7", name, preview, time: time2, avatar: avatars[0] },
   ];
 }
 
@@ -70,7 +70,7 @@ export default function MessagesPage() {
     if (file) setAttachments((prev) => [...prev, { name: file.name, type: "file" }]);
     e.target.value = "";
   };
-  const mockConversations = getMockConversations(cs.candidateName);
+  const mockConversations = getMockConversations(cs.candidateName, t.admin.sampleLoremMessage, `${t.admin.todayAt} 16:40`, `${t.admin.todayAt} 16:40`);
 
   return (
     <div style={{ padding: "24px 40px 0" }} className="flex min-h-0 w-full flex-1 gap-5 bg-[#F7F9FC]">
@@ -168,12 +168,12 @@ export default function MessagesPage() {
           </div>
 
           {/* Timestamp */}
-          <p className="text-center text-xs text-muted-foreground">April 15, 2024, 3:00 PM</p>
+          <p className="text-center text-xs text-muted-foreground">{t.admin.sampleMessageTimestamp}</p>
 
           {/* Received message */}
           <div className="flex items-end justify-end gap-2">
             <div style={{ padding: "12px 16px" }} className="max-w-md rounded-2xl rounded-ee-sm bg-primary-light text-sm text-foreground">
-              Blah blah
+              {t.admin.sampleLoremReply}
             </div>
             <div className="h-8 w-8 shrink-0 overflow-hidden rounded-full">
               <img src="/images/avatar-2.jpg" alt="Yotam Israeli" className="h-full w-full object-cover" />

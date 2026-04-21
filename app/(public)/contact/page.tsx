@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Phone } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/context";
-import { SeekerNavbar } from "@/components/seeker/seeker-navbar";
+import { PublicNavbar } from "@/components/home/public-navbar";
 import { PublicFooter } from "@/components/home/public-footer";
 
 export default function ContactPage() {
@@ -17,11 +17,11 @@ export default function ContactPage() {
   }, []);
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#F7F9FC]" style={{ fontFamily: "'Abel', sans-serif" }}>
-      <SeekerNavbar activeNav="contactUs" />
+    <div className="flex min-h-screen flex-col bg-[#F7F9FC]" style={{ fontFamily: "'Heebo', sans-serif" }}>
+      <PublicNavbar />
 
       {/* Content */}
-      <div className="flex w-full flex-1 gap-12" style={{ padding: "40px 40px 60px" }} dir={direction}>
+      <div className="flex w-full flex-1 gap-12" style={{ padding: "120px 40px 60px" }} dir={direction}>
         {/* Left — Contact info */}
         <div className="flex flex-col" style={{ width: 480, gap: 24 }}>
           <h1 className="text-[36px] leading-[1.2] text-foreground">{t.contactUs.title}</h1>

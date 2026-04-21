@@ -13,7 +13,7 @@ export default function AdminBlockedPage() {
   const { t, direction } = useLanguage();
 
   return (
-    <div className="min-h-screen bg-[#F7F9FC]" style={{ fontFamily: "'Abel', sans-serif" }}>
+    <div className="min-h-screen bg-[#F7F9FC]" style={{ fontFamily: "'Heebo', sans-serif" }}>
       <AdminNavbar />
 
       <div dir={direction} style={{ padding: "30px 40px 60px" }}>

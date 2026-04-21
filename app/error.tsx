@@ -10,7 +10,7 @@ export default function Error({
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-center gap-4"
-      style={{ background: "#EFF5FE", fontFamily: "'Abel', sans-serif" }}
+      style={{ background: "#EFF5FE", fontFamily: "'Heebo', sans-serif" }}
     >
       <h2 className="text-[24px] text-[#0E1117]">Something went wrong</h2>
       <p className="text-[16px] text-[#647787]">{error.message}</p>

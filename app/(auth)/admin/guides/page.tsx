@@ -6,22 +6,10 @@ import { MoreHorizontal, Zap, ChevronDown, Search } from "lucide-react";
 import { AdminNavbar } from "@/components/admin/admin-navbar";
 import { useLanguage } from "@/lib/i18n/context";
 
-const roles = ["teacher", "Assistant", "lecturer", "+2 teacher"];
-const fields = ["Computer Science", "English", "Physics"];
-const areas = ["Tel Aviv", "Jerusalem", "Haifa"];
-const genders = ["female", "male"];
-
-const guides = Array.from({ length: 8 }, (_, i) => ({
-  id: i + 1,
-  name: i === 2 ? "Tel Aviv University" : "Lorem Ipsum",
-  joiningDate: "08/10/26",
-  area: areas[i % 3],
-  role: roles[i % 4],
-  fieldOfKnowledge: fields[i % 3],
-  phone: "052-7058732",
-  gender: genders[i % 2],
-  status: i === 0 ? "new" : i === 6 ? "inactive" : "active",
-}));
+type GuideStatus = "new" | "active" | "inactive";
+const guideStatuses: GuideStatus[] = Array.from({ length: 8 }, (_, i) =>
+  i === 0 ? "new" : i === 6 ? "inactive" : "active"
+);
 
 function exportToCSV(data: Record<string, string>[], filename: string) {
   const headers = Object.keys(data[0]);
@@ -50,8 +38,31 @@ export default function AdminGuidesPage() {
     { label: t.admin.totalInstructors, value: "760", change: "+12%", positive: true },
   ];
 
+  const roles = [t.admin.guideRoleTeacher, t.admin.guideRoleAssistant, t.admin.guideRoleLecturer, t.admin.guideRolePlus2];
+  const fields = [t.admin.guideFieldComputerScience, t.admin.guideFieldEnglish, t.admin.guideFieldPhysics];
+  const areas = [t.admin.guideAreaTelAviv, t.admin.guideAreaJerusalem, t.admin.guideAreaHaifa];
+  const genders = [t.admin.guideGenderFemale, t.admin.guideGenderMale];
+
+  const statusLabel: Record<GuideStatus, string> = {
+    new: t.admin.statusNew,
+    active: t.admin.statusActive,
+    inactive: t.admin.statusInactive,
+  };
+
+  const guides = guideStatuses.map((status, i) => ({
+    id: i + 1,
+    name: i === 2 ? t.admin.sampleSupplierName : t.admin.sampleLoremShort,
+    joiningDate: "08/10/26",
+    area: areas[i % 3],
+    role: roles[i % 4],
+    fieldOfKnowledge: fields[i % 3],
+    phone: "052-7058732",
+    gender: genders[i % 2],
+    status,
+  }));
+
   return (
-    <div className="min-h-screen bg-[#F7F9FC]" style={{ fontFamily: "'Abel', sans-serif" }}>
+    <div className="min-h-screen bg-[#F7F9FC]" style={{ fontFamily: "'Heebo', sans-serif" }}>
       <AdminNavbar />
 
       <div dir={direction} style={{ padding: "30px 40px 60px" }}>
@@ -152,7 +163,7 @@ export default function AdminGuidesPage() {
                           background: g.status === "new" ? "#4C96FF" : g.status === "active" ? "#20AB7F" : "#FF676A",
                         }}
                       >
-                        {g.status}
+                        {statusLabel[g.status]}
                       </span>
                     </td>
                     <td style={{ padding: "14px 28px 14px 16px" }}>

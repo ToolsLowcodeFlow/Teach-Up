@@ -210,7 +210,7 @@ function JobsPage() {
   const trainingOptions = [d.bEd, d.mEd, d.teachingCertificate, d.montessori, d.waldorf, d.specialEdCertificate];
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#F7F9FC]" style={{ fontFamily: "'Abel', sans-serif" }}>
+    <div className="flex min-h-screen flex-col bg-[#F7F9FC]" style={{ fontFamily: "'Heebo', sans-serif" }}>
       <SeekerNavbar activeNav={activeTab === "all" ? "jobSearch" : (activeTab === "my" || activeTab === "my-empty") ? "myJobs" : ""} />
 
       {/* Content */}
@@ -423,7 +423,7 @@ function JobsPage() {
           <h2 className="relative text-center text-white" style={{ fontSize: "clamp(26px, 2.8vw, 38px)", lineHeight: 1.3, marginBottom: 28 }}>
             Lorem Ipsum Dolor Sit<br />Emet, Consectetur Dollar
           </h2>
-          <button className="relative cursor-pointer rounded-full border-none bg-white text-base text-foreground transition-colors hover:bg-white/90" style={{ padding: "12px 36px", fontFamily: "'Abel', sans-serif" }}>
+          <button className="relative cursor-pointer rounded-full border-none bg-white text-base text-foreground transition-colors hover:bg-white/90" style={{ padding: "12px 36px", fontFamily: "'Heebo', sans-serif" }}>
             Lorem Ipsum
           </button>
         </div>

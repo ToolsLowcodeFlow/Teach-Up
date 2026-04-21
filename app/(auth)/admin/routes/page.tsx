@@ -19,7 +19,7 @@ export default function AdminRoutesPage() {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-[#F7F9FC]" style={{ fontFamily: "'Abel', sans-serif" }}>
+    <div className="flex h-screen flex-col overflow-hidden bg-[#F7F9FC]" style={{ fontFamily: "'Heebo', sans-serif" }}>
       <AdminNavbar />
 
       <div dir={direction} className="flex flex-1 flex-col" style={{ padding: "20px 40px 20px" }}>

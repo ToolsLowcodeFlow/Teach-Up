@@ -5,27 +5,35 @@ import { useRouter } from "next/navigation";
 import { X, MoreHorizontal, MapPin, BadgeCheck, Calendar } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/context";
 
-const postedJobs = Array.from({ length: 6 }, (_, i) => ({
-  id: i + 1,
-  title: "Computer Science Teacher",
-  badge: "with at least 4 years of experience",
-  description: "This is a dummy paragraph text that aims to fill a space in the website design and demonstrate how the actual text will look. It can be used...",
-  date: "09/12/2026",
-  location: "Jaffa - Tel Aviv",
-  salary: "30,000 - 50,000",
-  status: i < 2 ? "Open position" : "Closed position",
-  candidates: "1,240",
-}));
+type JobStatus = "open" | "closed";
+const postedJobStatuses: JobStatus[] = Array.from({ length: 6 }, (_, i) =>
+  i < 2 ? "open" : "closed"
+);
 
 export default function SupplierDetailPage() {
   const router = useRouter();
   const { t, direction } = useLanguage();
   const [jobMenuOpen, setJobMenuOpen] = useState<number | null>(null);
+  const jobStatusLabel: Record<JobStatus, string> = {
+    open: t.admin.statusOpen,
+    closed: t.admin.statusClosed,
+  };
+  const postedJobs = postedJobStatuses.map((status, i) => ({
+    id: i + 1,
+    title: t.admin.sampleJobTitleAdmin,
+    badge: t.admin.sampleJobSubtitle,
+    description: t.admin.sampleJobDescription,
+    date: "09/12/2026",
+    location: t.admin.sampleJobLocation,
+    salary: "30,000 - 50,000",
+    status,
+    candidates: "1,240",
+  }));
 
   return (
     <div
       className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto"
-      style={{ fontFamily: "'Abel', sans-serif" }}
+      style={{ fontFamily: "'Heebo', sans-serif" }}
     >
       <div className="fixed inset-0" style={{ background: "rgba(0,0,0,0.4)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }} onClick={() => router.back()} />
 
@@ -42,10 +50,10 @@ export default function SupplierDetailPage() {
           </div>
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-2">
-              <h1 className="text-[22px] leading-[1.1] text-foreground">Tel Aviv University</h1>
-              <span className="rounded-full bg-primary text-[10px] text-white" style={{ padding: "2px 10px" }}>new</span>
+              <h1 className="text-[22px] leading-[1.1] text-foreground">{t.admin.sampleSupplierName}</h1>
+              <span className="rounded-full bg-primary text-[10px] text-white" style={{ padding: "2px 10px" }}>{t.admin.statusNew}</span>
             </div>
-            <p className="text-xs text-muted-foreground">Service Type: Lorem Ipsum | Employer Type: Lorem Ipsum</p>
+            <p className="text-xs text-muted-foreground">{t.admin.serviceTypeLabel}: {t.admin.sampleLoremShort} | {t.admin.employerTypeLabel}: {t.admin.sampleLoremShort}</p>
           </div>
         </div>
           <button onClick={() => router.back()} className="flex shrink-0 cursor-pointer items-center justify-center border-none bg-transparent text-muted-foreground hover:text-foreground">
@@ -55,8 +63,8 @@ export default function SupplierDetailPage() {
 
         {/* Contact info */}
         <div className="flex items-center gap-6 text-xs text-foreground" style={{ marginBottom: 20 }}>
-          <span>Email address: mayffd@gmail.com 📋</span>
-          <span>Phone number: 052-7049494 📋</span>
+          <span>{t.admin.emailAddressLabel}: mayffd@gmail.com 📋</span>
+          <span>{t.admin.phoneNumberLabel}: 052-7049494 📋</span>
         </div>
 
         </div>
@@ -77,15 +85,15 @@ export default function SupplierDetailPage() {
         <h3 className="text-base text-foreground" style={{ marginBottom: 12 }}>{t.admin.systemActivity}</h3>
         <div className="grid grid-cols-3 gap-3" style={{ marginBottom: 28 }}>
           <div className="flex flex-col items-center gap-1 rounded-xl border border-border-light bg-white" style={{ padding: "14px 10px" }}>
-            <span className="text-[10px] text-muted-foreground">orbit</span>
-            <span className="text-lg text-foreground">₪100 monthly</span>
+            <span className="text-[10px] text-muted-foreground">{t.admin.orbit}</span>
+            <span className="text-lg text-foreground">{`\u20aa100 ${t.admin.monthlyPrice.split("\n")[0]}`}</span>
           </div>
           <div className="flex flex-col items-center gap-1 rounded-xl border border-border-light bg-white" style={{ padding: "14px 10px" }}>
-            <span className="text-[10px] text-muted-foreground">Jobs filled</span>
+            <span className="text-[10px] text-muted-foreground">{t.admin.jobsFilled}</span>
             <span className="text-lg text-foreground">380</span>
           </div>
           <div className="flex flex-col items-center gap-1 rounded-xl border border-border-light bg-white" style={{ padding: "14px 10px" }}>
-            <span className="text-[10px] text-muted-foreground">Jobs in the system</span>
+            <span className="text-[10px] text-muted-foreground">{t.admin.jobsInSystem}</span>
             <span className="text-lg text-foreground">260/1000</span>
           </div>
         </div>
@@ -131,13 +139,13 @@ export default function SupplierDetailPage() {
 
               {/* Date + Location */}
               <div className="flex items-center gap-3 text-[9px] text-foreground" style={{ marginBottom: 6 }}>
-                <span className="flex items-center gap-1"><Calendar size={8} className="text-muted-foreground" /> Date: {job.date}</span>
+                <span className="flex items-center gap-1"><Calendar size={8} className="text-muted-foreground" /> {t.admin.dateLabel}: {job.date}</span>
                 <span className="flex items-center gap-1"><MapPin size={8} className="text-primary" /> {job.location}</span>
               </div>
 
               {/* Salary */}
               <div className="flex items-center justify-between text-[9px]" style={{ marginBottom: 8 }}>
-                <span className="text-muted-foreground">Salary ₪</span>
+                <span className="text-muted-foreground">{t.admin.salaryLabel}</span>
                 <span className="text-sm text-foreground">{job.salary}</span>
               </div>
 
@@ -146,12 +154,12 @@ export default function SupplierDetailPage() {
                 className="self-start rounded-full text-[9px]"
                 style={{
                   padding: "3px 10px",
-                  color: job.status === "Open position" ? "#20AB7F" : "#FF676A",
-                  border: `1px solid ${job.status === "Open position" ? "#20AB7F" : "#FF676A"}`,
+                  color: job.status === "open" ? "#20AB7F" : "#FF676A",
+                  border: `1px solid ${job.status === "open" ? "#20AB7F" : "#FF676A"}`,
                   marginBottom: 8,
                 }}
               >
-                {job.status}
+                {jobStatusLabel[job.status]}
               </span>
 
               {/* Total candidates */}

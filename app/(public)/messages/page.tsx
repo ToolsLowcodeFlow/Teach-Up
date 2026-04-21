@@ -19,7 +19,7 @@ export default function MessagesPage() {
   const isHe = locale === "he";
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#F7F9FC]" style={{ fontFamily: "'Abel', sans-serif" }}>
+    <div className="flex min-h-screen flex-col bg-[#F7F9FC]" style={{ fontFamily: "'Heebo', sans-serif" }}>
       <SeekerNavbar />
 
       <div className="flex w-full flex-1 gap-5" style={{ padding: "20px 40px" }} dir={direction}>

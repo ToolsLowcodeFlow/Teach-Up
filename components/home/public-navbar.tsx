@@ -21,7 +21,7 @@ export function PublicNavbar() {
               <Link href="/about" className="text-sm text-foreground transition-colors hover:text-primary">
                 {t.home.about}
               </Link>
-              <Link href="/about#contact" className="text-sm text-foreground transition-colors hover:text-primary">
+              <Link href="/contact" className="text-sm text-foreground transition-colors hover:text-primary">
                 {t.home.contactUs}
               </Link>
               <Link href="/supplier-database" className="text-sm text-foreground transition-colors hover:text-primary">

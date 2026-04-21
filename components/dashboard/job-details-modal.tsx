@@ -17,16 +17,16 @@ interface Applicant {
   status: ApplicantStatus;
 }
 
-const mockApplicants: Applicant[] = [
-  { id: "1", name: "Yotam Israeli", status: "in_progress" },
-  { id: "2", name: "Yotam Israeli", status: "in_progress" },
-  { id: "3", name: "Yotam Israeli", status: "accepted" },
-  { id: "4", name: "Yotam Israeli", status: "in_progress" },
-  { id: "5", name: "Yotam Israeli", status: "rejected" },
-  { id: "6", name: "Yotam Israeli", status: "in_progress" },
-  { id: "7", name: "Yotam Israeli", status: "in_progress" },
-  { id: "8", name: "Yotam Israeli", status: "rejected" },
-  { id: "9", name: "Yotam Israeli", status: "rejected" },
+const mockApplicantStatuses: { id: string; status: ApplicantStatus }[] = [
+  { id: "1", status: "in_progress" },
+  { id: "2", status: "in_progress" },
+  { id: "3", status: "accepted" },
+  { id: "4", status: "in_progress" },
+  { id: "5", status: "rejected" },
+  { id: "6", status: "in_progress" },
+  { id: "7", status: "in_progress" },
+  { id: "8", status: "rejected" },
+  { id: "9", status: "rejected" },
 ];
 
 interface JobDetailsModalProps {
@@ -128,18 +128,18 @@ export function JobDetailsModal({ open, onOpenChange, job }: JobDetailsModalProp
   if (!job) return null;
 
   const detailsRow1 = [
-    { label: t.jobDetails.hoursOfOperation, value: "Lunch / Dinner" },
-    { label: t.jobDetails.role, value: "Lorem Ipsum" },
-    { label: t.jobDetails.transactionType, value: "Lorem Ipsum" },
-    { label: t.jobDetails.educationStage, value: "Lorem Ipsum" },
+    { label: t.jobDetails.hoursOfOperation, value: t.admin.lunchDinner },
+    { label: t.jobDetails.role, value: t.admin.sampleLoremShort },
+    { label: t.jobDetails.transactionType, value: t.admin.sampleLoremShort },
+    { label: t.jobDetails.educationStage, value: t.admin.sampleLoremShort },
     { label: t.jobDetails.startDate, value: "08/10/2026" },
   ];
 
   const detailsRow2 = [
-    { label: t.jobDetails.training, value: "Morning training" },
+    { label: t.jobDetails.training, value: t.admin.morningTraining },
     { label: t.jobDetails.yearsOfExperience, value: "09" },
-    { label: t.jobDetails.scopeOfWork, value: "Full-time" },
-    { label: t.jobDetails.area, value: "Tel Aviv, Israel" },
+    { label: t.jobDetails.scopeOfWork, value: t.admin.fullTime },
+    { label: t.jobDetails.area, value: t.admin.sampleLocation },
     { label: `${t.jobDetails.salaryRange} \u20AA`, value: "10,000 - 20,000" },
   ];
 
@@ -160,8 +160,8 @@ export function JobDetailsModal({ open, onOpenChange, job }: JobDetailsModalProp
             </div>
 
             <div className="flex-1 overflow-y-auto">
-              {mockApplicants.map((applicant) => (
-                <ApplicantRow key={applicant.id} applicant={applicant} />
+              {mockApplicantStatuses.map((a) => (
+                <ApplicantRow key={a.id} applicant={{ ...a, name: t.admin.sampleApplicantName }} />
               ))}
             </div>
           </div>
@@ -191,14 +191,14 @@ export function JobDetailsModal({ open, onOpenChange, job }: JobDetailsModalProp
                   <Heart className="h-4 w-4" />
                 </button>
                 <div className="flex items-center gap-1.5 text-sm text-foreground">
-                  Computer Science
+                  {t.admin.sampleCategory}
                   <BadgeCheck className="h-5 w-5 text-primary" />
                 </div>
               </div>
 
               {/* Job title */}
               <h4 className="mb-1 text-center text-xl font-medium text-foreground">
-                Computer Science Teacher for a Recognized College
+                {t.admin.sampleJobTitle}
               </h4>
               <p style={{ marginBottom: 10 }} className="text-center text-xs text-muted-foreground">
                 08/12/2025 &middot; {t.jobDetails.jobNumber} &middot; 84844065
@@ -206,11 +206,7 @@ export function JobDetailsModal({ open, onOpenChange, job }: JobDetailsModalProp
 
               {/* Description */}
               <p style={{ marginBottom: 28 }} className="text-center text-sm leading-relaxed text-foreground">
-                Lorem Ipsum Dolor Sit Emmet, Consectetur Adipiscing Elite Goler Monferrer
-                Sobert Lorem Shabdach Yehol, Lorem Ipsum Dolor Sit Emmet, Consectetur
-                Adipiscing Elite Goler Monferrer Sobert Lorem Shabdach Yehol, Lorem Ipsum
-                Dolor Sit Emmet, Consectetur Adipiscing Elite Goler Monferrer Sobert Lorem
-                Shabdach Yehol,
+                {t.admin.sampleLoremIpsum}
               </p>
 
               {/* Details grid - light grey background */}
@@ -233,7 +229,7 @@ export function JobDetailsModal({ open, onOpenChange, job }: JobDetailsModalProp
 
               {/* Language tags */}
               <div style={{ marginBottom: 28 }} className="flex items-center gap-3">
-                {["Spanish", "English", "Hebrew"].map((lang) => (
+                {[t.admin.languageSpanish, t.admin.languageEnglish, t.admin.languageHebrew].map((lang) => (
                   <span
                     key={lang}
                     style={{ padding: "10px 20px" }}
@@ -252,11 +248,7 @@ export function JobDetailsModal({ open, onOpenChange, job }: JobDetailsModalProp
                 {t.jobDetails.companyDescription}
               </h5>
               <p style={{ marginBottom: 22 }} className="text-center text-sm leading-relaxed text-muted-foreground">
-                Lorem Ipsum Dolor Sit Emmet, Consectetur Adipiscing Elite Goler Monferrer
-                Sobert Lorem Shabdach Yehol, Lorem Ipsum Dolor Sit Emmet, Consectetur
-                Adipiscing Elite Goler Monferrer Sobert Lorem Shabdach Yehol, Lorem Ipsum
-                Dolor Sit Emmet, Consectetur Adipiscing Elite Goler Monferrer Sobert Lorem
-                Shabdach Yehol,
+                {t.admin.sampleLoremIpsum}
               </p>
 
               {/* Company name */}
@@ -267,7 +259,7 @@ export function JobDetailsModal({ open, onOpenChange, job }: JobDetailsModalProp
                   </div>
                 </div>
                 <span className="text-sm text-foreground">
-                  {t.jobDetails.companyName}: Lor Ipsum
+                  {t.jobDetails.companyName}: {t.admin.sampleCompanyName}
                 </span>
               </div>
 
@@ -287,7 +279,7 @@ export function JobDetailsModal({ open, onOpenChange, job }: JobDetailsModalProp
                   >
                     <div className="flex flex-col gap-0.5">
                       <span className="text-sm text-primary">
-                        Computer Science Teacher for a Recognized College
+                        {t.admin.sampleJobTitle}
                       </span>
                       <span className="text-xs text-muted-foreground">142 KB</span>
                     </div>

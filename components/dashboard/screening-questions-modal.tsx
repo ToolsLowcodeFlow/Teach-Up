@@ -4,17 +4,6 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { ChevronRight, Trash2, Link2, X } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/context";
 
-const mockQuestions = [
-  {
-    question: "Lorem Ipsum Dolor Lorem Ipsum for you?",
-    answer: "Lorem Ipsum Dolores Lorem Ipsum Lorem",
-  },
-  {
-    question: "Lorem Ipsum Dolor Lorem Ipsum for you?",
-    answer: "Lorem Ipsum Dolores Lorem Ipsum Lorem",
-  },
-];
-
 interface ScreeningQuestionsModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -22,6 +11,10 @@ interface ScreeningQuestionsModalProps {
 
 export function ScreeningQuestionsModal({ open, onOpenChange }: ScreeningQuestionsModalProps) {
   const { t } = useLanguage();
+  const mockQuestions = [
+    { question: t.admin.sampleScreeningQuestion, answer: t.admin.sampleScreeningAnswer },
+    { question: t.admin.sampleScreeningQuestion, answer: t.admin.sampleScreeningAnswer },
+  ];
 
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
@@ -55,12 +48,7 @@ export function ScreeningQuestionsModal({ open, onOpenChange }: ScreeningQuestio
               style={{ padding: 20, marginBottom: 28 }}
               className="rounded-xl bg-[#F7F9FC] text-start text-sm leading-relaxed text-muted-foreground"
             >
-              Lorem Ipsum Dolor Sit Emmet, Consectetur Adipiscing Elite Goler Monferrer
-              Sobert Lorem Shabdach Yehol, Lorem Ipsum Dolor Sit Emmet, Consectetur
-              Adipiscing Elite Goler Monferrer Sobert Lorem Shabdach Yehol, Lorem Ipsum
-              Dolor Sit Emmet, Consectetur Adipiscing Elite Goler Monferrer Sobert Lorem
-              Shabdach Yehol, Lorem Ipsum Dolor Sit Emmet, Consectetur Adipiscing Elite
-              Goler Monferrer Sobert Lorem Shabdach Yehol, Lorem Ipsum Dolor Habindtham&apos;s,
+              {t.admin.sampleLoremIpsum}
             </div>
 
             {/* Q&A pairs */}
@@ -90,7 +78,7 @@ export function ScreeningQuestionsModal({ open, onOpenChange }: ScreeningQuestio
                 <Trash2 className="h-4 w-4" />
               </button>
               <div className="flex flex-1 flex-col items-end gap-0.5">
-                <span className="text-sm text-primary">May Bozo&apos;s resume file</span>
+                <span className="text-sm text-primary">{t.admin.sampleApplicantResume}</span>
                 <span className="text-xs text-muted-foreground">142 KB</span>
               </div>
               <Link2 className="h-5 w-5 shrink-0 text-primary/60" />

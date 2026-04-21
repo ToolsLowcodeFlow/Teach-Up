@@ -148,7 +148,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#F7F9FC]" style={{ fontFamily: "'Abel', sans-serif" }}>
+    <div className="flex min-h-screen flex-col bg-[#F7F9FC]" style={{ fontFamily: "'Heebo', sans-serif" }}>
       <SeekerNavbar />
 
       {/* Content */}

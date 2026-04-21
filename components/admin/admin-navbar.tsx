@@ -52,7 +52,7 @@ export function AdminNavbar() {
                       background: isActive ? "#F7F9FC" : "transparent",
                       color: isActive ? "#0E1117" : "rgba(255,255,255,0.6)",
                       borderRadius: isActive ? "10px 10px 0 0" : 0,
-                      fontFamily: "'Abel', sans-serif",
+                      fontFamily: "'Heebo', sans-serif",
                     }}
                   >
                     {item.label}

@@ -8,11 +8,12 @@ import { ReviewModal } from "@/components/dashboard/review-modal";
 function getMockWork(isHe: boolean) {
   const title = isHe ? "מרצה בכיר" : "Senior Lecturer";
   const inst = isHe ? "המכללה למנהל" : "College of Management";
+  const period = isHe ? "ינואר 2020 - אוגוסט 2023" : "Jan 2020 - Aug 2023";
   return [
-    { period: "Jan 2020 - Aug 2023", title, institution: inst },
-    { period: "Jan 2020 - Aug 2023", title, institution: inst },
-    { period: "Jan 2020 - Aug 2023", title, institution: inst },
-    { period: "Jan 2020 - Aug 2023", title, institution: inst },
+    { period, title, institution: inst },
+    { period, title, institution: inst },
+    { period, title, institution: inst },
+    { period, title, institution: inst },
   ];
 }
 
@@ -85,8 +86,8 @@ export default function CandidateProfilePage() {
   const mockCertificates = getMockCerts(isHe);
 
   const detailsGrid = [
-    { label: t.candidateProfile.teachingPreferences, value: "Lorem Ipsum" },
-    { label: t.candidateProfile.dealerType, value: "Lorem Ipsum" },
+    { label: t.candidateProfile.teachingPreferences, value: t.admin.sampleLoremShort },
+    { label: t.candidateProfile.dealerType, value: t.admin.sampleLoremShort },
     { label: t.candidateProfile.mobileWithCar, value: isHe ? "כן" : "yes" },
     { label: t.candidateProfile.yearsOfExperience, value: "04" },
     { label: t.candidateProfile.gender, value: isHe ? "נקבה" : "female" },

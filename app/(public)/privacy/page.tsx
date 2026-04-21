@@ -10,11 +10,18 @@ export default function PrivacyPolicyPage() {
   const isHe = locale === "he";
 
   return (
-    <div className="min-h-screen bg-[#F7F9FC]" dir={direction} style={{ fontFamily: "'Abel', sans-serif" }}>
+    <div className="min-h-screen bg-[#F7F9FC]" dir={direction} style={{ fontFamily: "'Heebo', sans-serif" }}>
       <div className="mx-auto w-full" style={{ padding: "40px 40px 80px" }}>
         {/* Back button */}
         <button
-          onClick={() => router.back()}
+          onClick={() => {
+            if (window.history.length > 1) {
+              router.back();
+            } else {
+              window.close();
+              setTimeout(() => router.push("/"), 100);
+            }
+          }}
           className="mb-8 flex cursor-pointer items-center gap-2 border-none bg-transparent text-sm text-muted-foreground hover:text-foreground"
         >
           <ArrowLeft size={16} />

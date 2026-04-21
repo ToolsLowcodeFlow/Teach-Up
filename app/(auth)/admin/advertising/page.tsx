@@ -8,25 +8,33 @@ import { useLanguage } from "@/lib/i18n/context";
 
 const bannerImages = ["/images/banner-1.jpg", "/images/banner-2.jpg", "/images/banner-3.jpg"];
 
-const banners = Array.from({ length: 6 }, (_, i) => ({
-  id: i + 1,
-  name: "Teacher recruitment banner",
-  creationDate: "08/10/26",
-  content: "Lorem Ipsum Dolores...",
-  placement: "upper",
-  status: i === 0 || i === 5 ? "active" : "inactive",
-  image: bannerImages[i % 3],
-}));
+type BannerStatus = "active" | "inactive";
+const bannerStatuses: BannerStatus[] = Array.from({ length: 6 }, (_, i) =>
+  i === 0 || i === 5 ? "active" : "inactive"
+);
 
 export default function AdminAdvertisingPage() {
   const { t, direction } = useLanguage();
+  const statusLabel: Record<BannerStatus, string> = {
+    active: t.admin.statusActive,
+    inactive: t.admin.statusInactive,
+  };
+  const banners = bannerStatuses.map((status, i) => ({
+    id: i + 1,
+    name: t.admin.sampleBannerName,
+    creationDate: "08/10/26",
+    content: t.admin.sampleBannerContent,
+    placement: t.admin.placementUpper,
+    status,
+    image: bannerImages[i % 3],
+  }));
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
   const [activeTab, setActiveTab] = useState<"website" | "advertisement">("website");
   const [openMenu, setOpenMenu] = useState<number | null>(null);
 
   return (
-    <div className="min-h-screen bg-[#F7F9FC]" style={{ fontFamily: "'Abel', sans-serif" }}>
+    <div className="min-h-screen bg-[#F7F9FC]" style={{ fontFamily: "'Heebo', sans-serif" }}>
       <AdminNavbar />
 
       <div dir={direction} style={{ padding: "30px 40px 60px" }}>
@@ -127,7 +135,7 @@ export default function AdminAdvertisingPage() {
                           background: b.status === "active" ? "#20AB7F" : "#FF676A",
                         }}
                       >
-                        {b.status}
+                        {statusLabel[b.status]}
                       </span>
                     </td>
                     <td style={{ padding: "14px 28px 14px 16px" }}>
