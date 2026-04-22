@@ -24,9 +24,10 @@ interface JobCardProps {
   onView?: () => void;
   onEdit?: () => void;
   onStatusToggle?: () => void;
+  onDelete?: () => void;
 }
 
-export function JobCard({ job, onView, onEdit, onStatusToggle }: JobCardProps) {
+export function JobCard({ job, onView, onEdit, onStatusToggle, onDelete }: JobCardProps) {
   const { t } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -73,9 +74,14 @@ export function JobCard({ job, onView, onEdit, onStatusToggle }: JobCardProps) {
                 {t.jobCard.jobActivation}
               </button>
               <div className="my-1 h-px bg-border-light" />
-              <button className="flex w-full px-4 py-2 text-start text-sm text-danger transition-colors hover:bg-red-50" onClick={(e) => { e.stopPropagation(); setMenuOpen(false); onStatusToggle?.(); }}>
-                {job.status === "open" ? t.jobCard.closeJob : t.jobCard.deleteJob}
+              <button className="flex w-full px-4 py-2 text-start text-sm text-foreground transition-colors hover:bg-gray-50" onClick={(e) => { e.stopPropagation(); setMenuOpen(false); onStatusToggle?.(); }}>
+                {t.jobCard.closeJob}
               </button>
+              {onDelete && (
+                <button className="flex w-full px-4 py-2 text-start text-sm text-danger transition-colors hover:bg-red-50" onClick={(e) => { e.stopPropagation(); setMenuOpen(false); onDelete(); }}>
+                  {t.jobCard.deleteJob}
+                </button>
+              )}
             </div>
             </>
           )}

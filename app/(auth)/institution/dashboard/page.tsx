@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/i18n/context";
@@ -9,40 +9,68 @@ import { EmptyJobsIllustration } from "@/components/dashboard/empty-jobs-illustr
 import { JobCard, type JobCardData } from "@/components/dashboard/job-card";
 import { Pagination } from "@/components/dashboard/pagination";
 import { JobDetailsModal } from "@/components/dashboard/job-details-modal";
+import { useMyJobs, type Job, JOBS_REFRESH_EVENT } from "@/lib/hooks/use-my-jobs";
+import { createClient } from "@/lib/supabase/client";
 
 type JobTab = "open" | "all" | "closed";
 
+const PAGE_SIZE = 9;
+
+function formatDate(value: string | null): string {
+  if (!value) return "";
+  const d = new Date(value);
+  if (isNaN(d.getTime())) return value;
+  const dd = String(d.getDate()).padStart(2, "0");
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  return `${dd}/${mm}/${d.getFullYear()}`;
+}
+
+function toCardData(job: Job): JobCardData {
+  const subtitleParts = [job.field_of_knowledge, job.role].filter(Boolean) as string[];
+  return {
+    id: job.id,
+    title: job.title,
+    subtitle: subtitleParts.join(" · "),
+    description: job.description,
+    date: formatDate(job.start_date || job.created_at),
+    location: job.area || "",
+    salaryMin: job.salary_min ?? 0,
+    salaryMax: job.salary_max ?? 0,
+    status: job.status,
+    totalCandidates: 0,
+    isVerified: job.is_verified,
+  };
+}
+
 export default function MyJobsPage() {
-  const { t, locale } = useLanguage();
+  const { t } = useLanguage();
+  const { jobs, loading } = useMyJobs();
 
-  const buildJobs = (): JobCardData[] => Array.from({ length: 9 }, (_, i) => ({
-    id: String(i + 1),
-    title: t.admin.sampleJobTitleAdmin,
-    subtitle: t.admin.sampleJobSubtitle,
-    description: t.admin.sampleJobDescription,
-    date: "09/12/2026",
-    location: t.admin.sampleJobLocation,
-    salaryMin: 30000,
-    salaryMax: 50000,
-    status: i % 3 === 0 ? "closed" as const : "open" as const,
-    totalCandidates: 1240,
-    isVerified: true,
-  }));
-
-  const [jobs, setJobs] = useState<JobCardData[]>(buildJobs);
-  useEffect(() => {
-    setJobs((prev) => prev.map((j) => ({
-      ...j,
-      title: t.admin.sampleJobTitleAdmin,
-      subtitle: t.admin.sampleJobSubtitle,
-      description: t.admin.sampleJobDescription,
-      location: t.admin.sampleJobLocation,
-    })));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locale]);
   const [activeTab, setActiveTab] = useState<JobTab>("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedJob, setSelectedJob] = useState<JobCardData | null>(null);
+  const [selectedDetail, setSelectedDetail] = useState<Job | null>(null);
+
+  const openJob = (card: JobCardData, detail: Job | null) => {
+    setSelectedJob(card);
+    setSelectedDetail(detail);
+  };
+
+  const deleteJob = async (id: string) => {
+    const supabase = createClient();
+    const { error } = await supabase.from("jobs").delete().eq("id", id);
+    if (error) {
+      console.error("Failed to delete job:", error);
+      return;
+    }
+    window.dispatchEvent(new Event(JOBS_REFRESH_EVENT));
+  };
+
+  const jobsById = useMemo(() => {
+    const map = new Map<string, Job>();
+    jobs.forEach((j) => map.set(j.id, j));
+    return map;
+  }, [jobs]);
 
   const tabs: { key: JobTab; label: string }[] = [
     { key: "open", label: t.dashboard.openJobs },
@@ -50,18 +78,39 @@ export default function MyJobsPage() {
     { key: "closed", label: t.dashboard.closedJobs },
   ];
 
-  const filteredJobs =
-    activeTab === "all"
-      ? jobs
-      : jobs.filter((j) => j.status === activeTab);
+  const templateJobs: JobCardData[] = useMemo(
+    () =>
+      Array.from({ length: 9 }, (_, i) => ({
+        id: `template-${i + 1}`,
+        title: t.admin.sampleJobTitleAdmin,
+        subtitle: t.admin.sampleJobSubtitle,
+        description: t.admin.sampleJobDescription,
+        date: "09/12/2026",
+        location: t.admin.sampleJobLocation,
+        salaryMin: 30000,
+        salaryMax: 50000,
+        status: i % 3 === 0 ? ("closed" as const) : ("open" as const),
+        totalCandidates: 1240,
+        isVerified: true,
+      })),
+    [t]
+  );
 
+  const filteredJobs = useMemo(() => {
+    const allCards = [...jobs.map(toCardData), ...templateJobs];
+    return activeTab === "all"
+      ? allCards
+      : allCards.filter((j) => j.status === activeTab);
+  }, [jobs, templateJobs, activeTab]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredJobs.length / PAGE_SIZE));
+  const safePage = Math.min(currentPage, totalPages);
+  const pageJobs = filteredJobs.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
   const hasJobs = filteredJobs.length > 0;
 
   return (
     <div style={{ padding: "24px 40px 64px" }} className="w-full">
-      {/* Top bar: Tabs on left, Sort by on right */}
       <div style={{ marginBottom: 16 }} className="flex items-center justify-between">
-        {/* Job tabs - left */}
         <div className="flex items-baseline gap-5">
           {tabs.map((tab) => (
             <button
@@ -82,39 +131,41 @@ export default function MyJobsPage() {
           ))}
         </div>
 
-        {/* Sort by - right */}
         <button className="flex items-center gap-3 text-sm tracking-tight text-foreground">
           <ChevronDown className="h-3 w-3" />
           <span>{t.dashboard.sortBy}</span>
         </button>
       </div>
 
-      {/* Content area: Jobs on left, Filters on right */}
       <div className="flex flex-col-reverse gap-8 lg:flex-row lg:gap-10">
-        {/* Jobs content - left side */}
         <div className="min-w-0 flex-1">
-          {hasJobs ? (
+          {loading ? (
+            <div className="flex min-h-100 items-center justify-center text-sm text-muted-foreground">
+              Loading...
+            </div>
+          ) : hasJobs ? (
             <>
               <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-                {filteredJobs.map((job) => (
-                  <div key={job.id} className="cursor-pointer" onClick={() => setSelectedJob(job)}>
-                    <JobCard
-                      job={job}
-                      onView={() => setSelectedJob(job)}
-                      onEdit={() => setSelectedJob(job)}
-                      onStatusToggle={() => {
-                        setJobs((prev) => prev.map((j) => j.id === job.id ? { ...j, status: j.status === "open" ? "closed" as const : "open" as const } : j));
-                      }}
-                    />
-                  </div>
-                ))}
+                {pageJobs.map((job) => {
+                  const detail = jobsById.get(job.id) ?? null;
+                  const isReal = !!detail;
+                  return (
+                    <div key={job.id} className="cursor-pointer" onClick={() => openJob(job, detail)}>
+                      <JobCard
+                        job={job}
+                        onView={() => openJob(job, detail)}
+                        onEdit={() => openJob(job, detail)}
+                        onDelete={isReal ? () => deleteJob(job.id) : undefined}
+                      />
+                    </div>
+                  );
+                })}
               </div>
 
-              {/* Pagination */}
               <div style={{ marginTop: 40 }}>
                 <Pagination
-                  currentPage={currentPage}
-                  totalPages={8}
+                  currentPage={safePage}
+                  totalPages={totalPages}
                   onPageChange={setCurrentPage}
                 />
               </div>
@@ -126,14 +177,19 @@ export default function MyJobsPage() {
           )}
         </div>
 
-        {/* Filter sidebar - right side */}
         <JobsFilterSidebar />
       </div>
 
       <JobDetailsModal
         open={!!selectedJob}
-        onOpenChange={(open) => { if (!open) setSelectedJob(null); }}
+        onOpenChange={(open) => {
+          if (!open) {
+            setSelectedJob(null);
+            setSelectedDetail(null);
+          }
+        }}
         job={selectedJob}
+        detail={selectedDetail}
       />
     </div>
   );

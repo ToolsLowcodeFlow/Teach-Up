@@ -62,7 +62,7 @@ export function MyCandidateCard({ candidate }: MyCandidateCardProps) {
       </div>
 
       {/* Status banner + field badge */}
-      <div style={{ marginBottom: 12 }} className="flex flex-col gap-2">
+      <div style={{ marginBottom: 12, paddingInlineEnd: 48 }} className="flex flex-col gap-2">
         <span className="text-xs text-muted-foreground">{candidate.status}</span>
         <div className="flex items-center gap-1 text-xs text-foreground">
           {candidate.field}

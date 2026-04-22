@@ -7,6 +7,7 @@ import { Heart, BadgeCheck, MoreHorizontal, Link2, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/i18n/context";
 import type { JobCardData } from "./job-card";
+import type { Job } from "@/lib/hooks/use-my-jobs";
 import { ScreeningQuestionsModal } from "./screening-questions-modal";
 
 type ApplicantStatus = "in_progress" | "accepted" | "rejected";
@@ -33,6 +34,16 @@ interface JobDetailsModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   job: JobCardData | null;
+  detail?: Job | null;
+}
+
+function formatDate(value: string | null | undefined): string {
+  if (!value) return "";
+  const d = new Date(value);
+  if (isNaN(d.getTime())) return value;
+  const dd = String(d.getDate()).padStart(2, "0");
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  return `${dd}/${mm}/${d.getFullYear()}`;
 }
 
 function StatusBadge({ status }: { status: ApplicantStatus }) {
@@ -122,26 +133,43 @@ function ApplicantRow({ applicant }: { applicant: Applicant }) {
   );
 }
 
-export function JobDetailsModal({ open, onOpenChange, job }: JobDetailsModalProps) {
+export function JobDetailsModal({ open, onOpenChange, job, detail }: JobDetailsModalProps) {
   const { t } = useLanguage();
 
   if (!job) return null;
 
+  const jobTitle = detail?.title ?? t.admin.sampleJobTitle;
+  const jobDescription = detail?.description ?? t.admin.sampleLoremIpsum;
+  const jobCategory = detail?.field_of_knowledge || t.admin.sampleCategory;
+  const jobDate = detail ? formatDate(detail.created_at) : "08/12/2025";
+  const jobNumber = detail ? detail.id.slice(0, 8).toUpperCase() : "84844065";
+
+  const salaryValue =
+    detail && (detail.salary_min || detail.salary_max)
+      ? `${(detail.salary_min ?? 0).toLocaleString()} - ${(detail.salary_max ?? 0).toLocaleString()}`
+      : "10,000 - 20,000";
+
   const detailsRow1 = [
-    { label: t.jobDetails.hoursOfOperation, value: t.admin.lunchDinner },
-    { label: t.jobDetails.role, value: t.admin.sampleLoremShort },
-    { label: t.jobDetails.transactionType, value: t.admin.sampleLoremShort },
-    { label: t.jobDetails.educationStage, value: t.admin.sampleLoremShort },
-    { label: t.jobDetails.startDate, value: "08/10/2026" },
+    { label: t.jobDetails.hoursOfOperation, value: detail?.hours_of_operation || t.admin.lunchDinner },
+    { label: t.jobDetails.role, value: detail?.role || t.admin.sampleLoremShort },
+    { label: t.jobDetails.transactionType, value: detail?.transaction_type || t.admin.sampleLoremShort },
+    { label: t.jobDetails.educationStage, value: detail?.education_stage || t.admin.sampleLoremShort },
+    { label: t.jobDetails.startDate, value: detail?.start_date || "08/10/2026" },
   ];
 
   const detailsRow2 = [
-    { label: t.jobDetails.training, value: t.admin.morningTraining },
-    { label: t.jobDetails.yearsOfExperience, value: "09" },
-    { label: t.jobDetails.scopeOfWork, value: t.admin.fullTime },
-    { label: t.jobDetails.area, value: t.admin.sampleLocation },
-    { label: `${t.jobDetails.salaryRange} \u20AA`, value: "10,000 - 20,000" },
+    { label: t.jobDetails.training, value: detail?.training || t.admin.morningTraining },
+    { label: t.jobDetails.yearsOfExperience, value: detail?.years_of_experience || "09" },
+    { label: t.jobDetails.scopeOfWork, value: detail?.scope_of_work || t.admin.fullTime },
+    { label: t.jobDetails.area, value: detail?.area || t.admin.sampleLocation },
+    { label: `${t.jobDetails.salaryRange} \u20AA`, value: salaryValue },
   ];
+
+  const defaultLanguages = [t.admin.languageSpanish, t.admin.languageEnglish, t.admin.languageHebrew];
+  const parsedLanguages = detail?.languages
+    ? detail.languages.split(",").map((s) => s.trim()).filter(Boolean)
+    : [];
+  const languageList = parsedLanguages.length ? parsedLanguages : defaultLanguages;
 
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
@@ -174,7 +202,7 @@ export function JobDetailsModal({ open, onOpenChange, job }: JobDetailsModalProp
                 <X className="h-4 w-4" />
               </Dialog.Close>
               <Dialog.Description className="sr-only">
-                {job.title} - {t.jobDetails.title}
+                {jobTitle} - {t.jobDetails.title}
               </Dialog.Description>
               <h3 className="text-2xl font-medium text-foreground">
                 {t.jobDetails.title}
@@ -191,22 +219,22 @@ export function JobDetailsModal({ open, onOpenChange, job }: JobDetailsModalProp
                   <Heart className="h-4 w-4" />
                 </button>
                 <div className="flex items-center gap-1.5 text-sm text-foreground">
-                  {t.admin.sampleCategory}
+                  {jobCategory}
                   <BadgeCheck className="h-5 w-5 text-primary" />
                 </div>
               </div>
 
               {/* Job title */}
               <h4 className="mb-1 text-center text-xl font-medium text-foreground">
-                {t.admin.sampleJobTitle}
+                {jobTitle}
               </h4>
               <p style={{ marginBottom: 10 }} className="text-center text-xs text-muted-foreground">
-                08/12/2025 &middot; {t.jobDetails.jobNumber} &middot; 84844065
+                {jobDate} &middot; {t.jobDetails.jobNumber} &middot; {jobNumber}
               </p>
 
               {/* Description */}
               <p style={{ marginBottom: 28 }} className="text-center text-sm leading-relaxed text-foreground">
-                {t.admin.sampleLoremIpsum}
+                {jobDescription}
               </p>
 
               {/* Details grid - light grey background */}
@@ -229,7 +257,7 @@ export function JobDetailsModal({ open, onOpenChange, job }: JobDetailsModalProp
 
               {/* Language tags */}
               <div style={{ marginBottom: 28 }} className="flex items-center gap-3">
-                {[t.admin.languageSpanish, t.admin.languageEnglish, t.admin.languageHebrew].map((lang) => (
+                {languageList.map((lang) => (
                   <span
                     key={lang}
                     style={{ padding: "10px 20px" }}
