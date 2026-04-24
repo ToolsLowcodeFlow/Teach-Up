@@ -143,6 +143,7 @@ const he = {
     allJobs: "כל המשרות",
     closedJobs: "משרות סגורות",
     filters: "סינונים",
+    clearFilters: "נקה",
     freeSearch: "חיפוש חופשי...",
     role: "תפקיד",
     fieldOfKnowledge: "תחום ידע",

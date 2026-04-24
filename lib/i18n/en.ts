@@ -143,6 +143,7 @@ const en = {
     allJobs: "All jobs",
     closedJobs: "Closed jobs",
     filters: "Filters",
+    clearFilters: "Clear",
     freeSearch: "Free search...",
     role: "Role",
     fieldOfKnowledge: "Field of knowledge",

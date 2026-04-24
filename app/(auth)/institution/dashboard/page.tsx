@@ -4,7 +4,12 @@ import { useMemo, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/i18n/context";
-import { JobsFilterSidebar } from "@/components/dashboard/jobs-filter-sidebar";
+import {
+  JobsFilterSidebar,
+  DEFAULT_FILTERS,
+  MAX_SALARY,
+  type JobFilters,
+} from "@/components/dashboard/jobs-filter-sidebar";
 import { EmptyJobsIllustration } from "@/components/dashboard/empty-jobs-illustration";
 import { JobCard, type JobCardData } from "@/components/dashboard/job-card";
 import { Pagination } from "@/components/dashboard/pagination";
@@ -42,6 +47,21 @@ function toCardData(job: Job): JobCardData {
   };
 }
 
+function parseMinYears(value: string | null): number {
+  if (!value) return 0;
+  const match = value.match(/\d+/);
+  return match ? Number(match[0]) : 0;
+}
+
+function uniqueValues(jobs: Job[], key: keyof Job): string[] {
+  const set = new Set<string>();
+  jobs.forEach((j) => {
+    const v = j[key];
+    if (typeof v === "string" && v.trim() !== "") set.add(v);
+  });
+  return Array.from(set).sort();
+}
+
 export default function MyJobsPage() {
   const { t } = useLanguage();
   const { jobs, loading } = useMyJobs();
@@ -50,6 +70,7 @@ export default function MyJobsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedJob, setSelectedJob] = useState<JobCardData | null>(null);
   const [selectedDetail, setSelectedDetail] = useState<Job | null>(null);
+  const [filters, setFilters] = useState<JobFilters>(DEFAULT_FILTERS);
 
   const openJob = (card: JobCardData, detail: Job | null) => {
     setSelectedJob(card);
@@ -96,17 +117,76 @@ export default function MyJobsPage() {
     [t]
   );
 
+  const roleOptions = useMemo(() => uniqueValues(jobs, "role"), [jobs]);
+  const fieldOptions = useMemo(() => uniqueValues(jobs, "field_of_knowledge"), [jobs]);
+  const scopeOptions = useMemo(() => uniqueValues(jobs, "scope_of_work"), [jobs]);
+  const regionOptions = useMemo(() => uniqueValues(jobs, "area"), [jobs]);
+  const languageOptions = useMemo(() => uniqueValues(jobs, "languages"), [jobs]);
+  const trainingOptions = useMemo(() => uniqueValues(jobs, "training"), [jobs]);
+
   const filteredJobs = useMemo(() => {
     const allCards = [...jobs.map(toCardData), ...templateJobs];
-    return activeTab === "all"
-      ? allCards
-      : allCards.filter((j) => j.status === activeTab);
-  }, [jobs, templateJobs, activeTab]);
+    const query = filters.freeSearch.trim().toLowerCase();
+
+    return allCards.filter((card) => {
+      if (activeTab !== "all" && card.status !== activeTab) return false;
+
+      if (query) {
+        const haystack = [card.title, card.subtitle, card.description, card.location]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
+        if (!haystack.includes(query)) return false;
+      }
+
+      // Salary overlap: job salary range must intersect the filter salary range.
+      const jobMin = card.salaryMin ?? 0;
+      const jobMax = card.salaryMax ?? 0;
+      const [filterMin, filterMax] = filters.salary;
+      if (jobMax > 0 && (jobMax < filterMin || jobMin > filterMax)) return false;
+
+      const raw = jobsById.get(card.id);
+
+      // Region uses either card.location (templates) or raw area.
+      if (filters.region) {
+        const loc = raw?.area || card.location || "";
+        if (loc !== filters.region) return false;
+      }
+
+      // Fields below come from raw Job only; templates don't carry them → excluded when filter set.
+      const dropdownChecks: { value: string; actual: string | null | undefined }[] = [
+        { value: filters.role, actual: raw?.role },
+        { value: filters.fieldOfKnowledge, actual: raw?.field_of_knowledge },
+        { value: filters.scopeOfWork, actual: raw?.scope_of_work },
+        { value: filters.languages, actual: raw?.languages },
+        { value: filters.training, actual: raw?.training },
+      ];
+      for (const { value, actual } of dropdownChecks) {
+        if (value && actual !== value) return false;
+      }
+
+      if (filters.minExperience > 0) {
+        const years = parseMinYears(raw?.years_of_experience ?? null);
+        if (years < filters.minExperience) return false;
+      }
+
+      return true;
+    });
+  }, [jobs, templateJobs, activeTab, filters, jobsById]);
 
   const totalPages = Math.max(1, Math.ceil(filteredJobs.length / PAGE_SIZE));
   const safePage = Math.min(currentPage, totalPages);
   const pageJobs = filteredJobs.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
   const hasJobs = filteredJobs.length > 0;
+
+  const handleFiltersChange = (next: JobFilters) => {
+    setFilters(next);
+    setCurrentPage(1);
+  };
+  const handleClearFilters = () => {
+    setFilters({ ...DEFAULT_FILTERS, salary: [0, MAX_SALARY] });
+    setCurrentPage(1);
+  };
 
   return (
     <div style={{ padding: "24px 40px 64px" }} className="w-full">
@@ -177,7 +257,17 @@ export default function MyJobsPage() {
           )}
         </div>
 
-        <JobsFilterSidebar />
+        <JobsFilterSidebar
+          filters={filters}
+          onChange={handleFiltersChange}
+          onClear={handleClearFilters}
+          roleOptions={roleOptions}
+          fieldOptions={fieldOptions}
+          scopeOptions={scopeOptions}
+          regionOptions={regionOptions}
+          languageOptions={languageOptions}
+          trainingOptions={trainingOptions}
+        />
       </div>
 
       <JobDetailsModal

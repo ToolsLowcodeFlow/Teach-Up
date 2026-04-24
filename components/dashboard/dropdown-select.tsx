@@ -14,7 +14,12 @@ interface DropdownSelectProps {
 
 export function DropdownSelect({ label, options, placeholder, value, onChange }: DropdownSelectProps) {
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState(value || "");
+  const [internal, setInternal] = useState(value || "");
+  const isControlled = value !== undefined;
+  const selected = isControlled ? value : internal;
+  const setSelected = (v: string) => {
+    if (!isControlled) setInternal(v);
+  };
 
   return (
     <div className="relative w-full">
